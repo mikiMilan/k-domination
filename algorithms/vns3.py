@@ -1,0 +1,108 @@
+from time import time
+from random import shuffle, random
+from math import sqrt
+from networkx import \
+    DiGraph, \
+    Graph, \
+    gnp_random_graph as rand_graph, \
+    is_connected
+from unit import fitness, is_acceptable_solution, fitness_rec_rem
+
+
+def shaking(s: list, div: int, nodes: list):
+    shuffle(s)
+    shak = s[:len(s)-div]
+
+    shuffle(nodes)
+    shak += nodes[:div]
+
+    return shak
+
+
+def random_nodes(g: Graph or DiGraph) -> list:
+    s = []
+
+    for v in g.nodes:
+        if random() < 0.5:
+            s.append(v)
+
+    return s
+
+
+def local_search(s: list, g: Graph or DiGraph, nodes: list, k: int):
+    improved = True
+    curr_fit = fitness(s, g, k)
+
+    while improved:
+        improved = False
+
+        shuffle(nodes)
+        for v in nodes:
+            if v in s:
+                s.remove(v)
+                new_fit = fitness(s, g, k)
+                if new_fit > curr_fit:
+                    curr_fit = new_fit
+                    improved = True
+                    break
+                else:
+                    s.append(v)
+            else:
+                s.append(v)
+                new_fit = fitness(s, g, k)
+                if new_fit > curr_fit:
+                    curr_fit = new_fit
+                    improved = True
+                    break
+                else:
+                    s.remove(v)
+
+    return curr_fit
+
+
+def vns(graph: DiGraph or Graph, k: int) -> list:
+    divmin = 1
+    divmax = min(20, len(g)/5)
+    div = divmin
+    iteration = 0
+    iteration_max = 3900
+    start_time = time()
+    time_execution = 600 #sec
+    nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
+
+    s = random_nodes(graph)
+    fit = fitness(s, graph, k)
+
+    s_accept = list(graph.nodes)
+    while iteration < iteration_max and time()-start_time < time_execution:
+        s_new = shaking(s, div, nodes)
+        fit_new = local_search(s_new, graph, nodes, k)
+
+        if fit_new > fit:
+            s = s_new
+            div = divmin
+            fit = fit_new
+
+            print("Fit: ", fit, "velicine ", len(s), " od ", s)
+            if is_acceptable_solution(graph, s, k) and len(s_accept) > len(s):
+                print("Pronadjen!!!!!!!!!")
+                print("+Fit: ", fit, "velicine ", len(s), " od ", s)
+                s_accept = list(s)
+        else:
+            div += 1
+            if div >= divmax:
+                div = divmin
+
+        iteration += 1
+    return s_accept
+
+
+if __name__ == '__main__':
+    g = rand_graph(200, 0.5, seed=1)
+    # for i in range(10):
+    #     print(i, " - ", list(g[i]))
+    print("Connected: {}".format(is_connected(g)))
+    curr = time()
+    d1 = vns(g, 3)
+    time_execute = time() - curr
+    print(time_execute, d1, len(d1))

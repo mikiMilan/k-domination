@@ -1,0 +1,18 @@
+**Kreiranje grafova>
+pomocu vjerovatnoce
+------------ovaj je osnovni------------
+ - https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.gnp_random_graph.html#networkx.generators.random_graphs.gnp_random_graph
+ ---------------------------------------
+https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.fast_gnp_random_graph.html#networkx.generators.random_graphs.fast_gnp_random_graph
+na osnovu broja grana
+https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.gnm_random_graph.html#networkx.generators.random_graphs.gnm_random_graph
+https://networkx.org/documentation/stable/reference/generated/networkx.generators.random_graphs.dense_gnm_random_graph.html#networkx.generators.random_graphs.dense_gnm_random_graph
+
+** Kolicina grafova
+|V| = {250, 500, 1000}
+p = {0.2, 0.5, 0.8}
+
+
+Pitanja:
+-Da li graf nad kojim se izvršava algoritam treba da bude povezan?
+nx.is_connected(g) - provjeravamo da li je graf povezan
