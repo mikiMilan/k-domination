@@ -9,27 +9,28 @@ from networkx import \
 from unit import fitness, is_acceptable_solution, fitness_rec_rem
 
 
-def shaking(s: list, div: int, nodes: list):
-    shuffle(s)
-    shak = s[:len(s)-div]
+def shaking(s: set, div: int, nodes: list) -> set:
+    sl = list(s)
+    shuffle(sl)
+    shak = set(sl[:len(sl)-div])
 
     shuffle(nodes)
-    shak += nodes[:div]
+    shak.union(set(nodes[:div]))
 
     return shak
 
 
-def random_nodes(g: Graph or DiGraph) -> list:
-    s = []
+def random_nodes(g: Graph or DiGraph) -> set:
+    s = set()
 
     for v in g.nodes:
         if random() < 0.5:
-            s.append(v)
+            s.add(v)
 
     return s
 
 
-def local_search(s: list, g: Graph or DiGraph, nodes: list, k: int):
+def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
     improved = True
     curr_fit = fitness(s, g, k)
 
@@ -46,9 +47,9 @@ def local_search(s: list, g: Graph or DiGraph, nodes: list, k: int):
                     improved = True
                     break
                 else:
-                    s.append(v)
+                    s.add(v)
             else:
-                s.append(v)
+                s.add(v)
                 new_fit = fitness(s, g, k)
                 if new_fit > curr_fit:
                     curr_fit = new_fit
@@ -70,10 +71,10 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
     time_execution = 600 #sec
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
-    s = random_nodes(graph)
+    s: set = random_nodes(graph)
     fit = fitness(s, graph, k)
 
-    s_accept = list(graph.nodes)
+    s_accept = set(graph.nodes)
     while iteration < iteration_max and time()-start_time < time_execution:
         s_new = shaking(s, div, nodes)
         fit_new = local_search(s_new, graph, nodes, k)

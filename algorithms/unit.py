@@ -8,7 +8,7 @@ def is_acceptable_solution(graph: DiGraph or Graph, D: list, k: int) -> bool:
     return True
 
 
-def number_same_elements(nv: set, d: list) -> int:
+def number_same_elements(nv: set, d: set) -> int:
     counter = 0
     for element in d:
         if element in nv:
@@ -38,7 +38,7 @@ def violating(s: list, g: Graph or DiGraph, k: int) -> float:
     return len(g) - counter #- len(s)/2.0 - bolje radi bez ovog
 
 
-def obj_voi(s: list, g: Graph or DiGraph, k: int) -> (int, int):
+def obj_voi(s: set, g: Graph or DiGraph, k: int) -> (int, int):
     objective_sum: int = 0
     counter: int = 0
 
@@ -55,7 +55,7 @@ def obj_voi(s: list, g: Graph or DiGraph, k: int) -> (int, int):
     return objective_sum, len(g) - counter - len(s)/4.0
 
 
-def fitness(s: list, g: Graph or DiGraph, k: int) -> float:
+def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
     objective_function, violating = obj_voi(s, g, k)
     return violating + float(objective_function) / (k*len(g))
 
