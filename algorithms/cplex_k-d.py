@@ -1,81 +1,44 @@
-from docplex.cp.model import CpoModel
-from collections import namedtuple
+from time import time
+from networkx import \
+    DiGraph, \
+    Graph, \
+    gnp_random_graph as rand_graph, \
+    is_connected
 
-# -----------------------------------------------------------------------------
-# Initialize the problem data
-# -----------------------------------------------------------------------------
+from pulp import * #LpProblem, lpSum, LpVariable
 
-Warehouse = namedtuple('Warehouse', ('city',  # Name of the city
-                                     'capacity',  # Capacity of the warehouse
-                                     'cost',  # Warehouse building cost
-                                     ))
 
-# List of warehouses
-WAREHOUSES = (Warehouse("Bonn", 3, 480),
-              Warehouse("Bordeaux", 1, 200),
-              Warehouse("London", 2, 320),
-              Warehouse("Paris", 4, 340),
-              Warehouse("Rome", 1, 300))
-NB_WAREHOUSES = len(WAREHOUSES)
+def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
-# Number of stores
-NB_STORES = 8
+	model = LpProblem("k-domination", LpMinimize)
+	y = LpVariable.dicts("x", list(graph.nodes),  0, 1, LpBinary)
+	#objective function: 
+	model += lpSum([ y[i] for i in list(graph.nodes) ] )
+	#constraints for each vertex i \in V:
+	for i in list(graph.nodes):
+		model += (k * y[i] + lpSum( [ y[j]  for j in list(g[i])  ]) >= k)
+		
+	## run model:
+	model.solve(PULP_CBC_CMD(maxSeconds = timelimit, msg=1, fracGap=0))		
+	## stats:
+	print("Status solving: ", LpStatus[ model.status ])
+	#print("Vars:")
+	#for v in model.variables():	
+	#	print(v.name, "===> ", v.varValue)
+        
+	print("Obj value: ", value(model.objective))
+	return value(model.objective) 
+	
 
-# Supply cost for each store and warehouse
-SUPPLY_COST = ((24, 74, 31, 51, 84),
-               (57, 54, 86, 61, 68),
-               (57, 67, 29, 91, 71),
-               (54, 54, 65, 82, 94),
-               (98, 81, 16, 61, 27),
-               (13, 92, 34, 94, 87),
-               (54, 72, 41, 12, 78),
-               (54, 64, 65, 89, 89))
+if __name__ == '__main__':
+    size: int = 200
+    timelimit: float = 30
+    g = rand_graph(size, 0.5, seed=1)
+    # for i in range(10):
+    #     print(i, " - ", list(g[i]))
+    print("Connected: {}".format(is_connected(g)))
+    curr = time()
+    d1 = ILP(g, 3, timelimit)
+    time_execute = time() - curr
+    print(time_execute, d1 )
 
-# -----------------------------------------------------------------------------
-# Build the model
-# -----------------------------------------------------------------------------
-
-# Create CPO model
-mdl = CpoModel()
-
-# Create one variable per store to contain the index of its supplying warehouse
-NB_WAREHOUSES = len(WAREHOUSES)
-supplier = mdl.integer_var_list(NB_STORES, 0, NB_WAREHOUSES - 1, "supplier")
-
-# Create one variable per warehouse to indicate if it is open (1) or not (0)
-open = mdl.integer_var_list(NB_WAREHOUSES, 0, 1, "open")
-
-# Add constraints stating that the supplying warehouse of each store must be open
-for s in supplier:
-    mdl.add(mdl.element(open, s) == 1)
-
-# Add constraints stating that the number of stores supplied by each warehouse must not exceed its capacity
-for wx in range(NB_WAREHOUSES):
-    mdl.add(mdl.count(supplier, wx) <= WAREHOUSES[wx].capacity)
-
-# Build an expression that computes total cost
-total_cost = mdl.scal_prod(open, [w.cost for w in WAREHOUSES])
-for sx in range(NB_STORES):
-    total_cost = total_cost + mdl.element(supplier[sx], SUPPLY_COST[sx])
-
-# Minimize total cost
-mdl.add(mdl.minimize(total_cost))
-
-# -----------------------------------------------------------------------------
-# Solve the model and display the result
-# -----------------------------------------------------------------------------
-
-# Solve model
-print("\nSolving model....")
-msol = mdl.solve(TimeLimit=10)
-
-# Print solution
-if msol:
-    for wx in range(NB_WAREHOUSES):
-        if msol[open[wx]] == 1:
-            print("Warehouse '{}' open to supply stores: {}"
-                  .format(WAREHOUSES[wx].city,
-                          ", ".join(str(sx) for sx in range(NB_STORES) if msol[supplier[sx]] == wx)))
-    print("Total cost is: {}".format(msol.get_objective_values()[0]))
-else:
-    print("No solution found.")
