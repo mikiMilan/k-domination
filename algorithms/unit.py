@@ -52,7 +52,7 @@ def obj_voi(s: set, g: Graph or DiGraph, k: int) -> (int, int):
             if nse < k:
                 counter += 1
 
-    return objective_sum, len(g) - counter - len(s)/4.0
+    return objective_sum, len(g) - counter #- len(s)/4.0
 
 
 def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
@@ -62,33 +62,88 @@ def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
 
 def fitness_rec_rem(s: list, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
 
+    obj_neg: float = 0
+    vio_neg: int = 0
+
     for u in g[v]:
         if u not in s:
             neighbors = set(g[u])
             nse = number_same_elements(neighbors, s)
 
-            fit -= min(k, nse)/float(k*len(g))
+            obj_neg += min(k, nse)
 
             if nse < k:
-                fit += 1
+                vio_neg += 1
+
+    fit += vio_neg - obj_neg/(k*len(g))
 
     srem = list(s)
     srem.remove(v)
+    srem = set(srem)
+    obj_neg = 0.0
+    vio_neg = 0
+
+    for u in g[v]:
+        if u not in srem:
+            neighbors = set(g[u])
+            nse = number_same_elements(neighbors, srem)
+
+            obj_neg += min(k, nse)
+
+            if nse < k:
+                vio_neg += 1
+
+    fit += -vio_neg + obj_neg/(k*len(g))
+
+    neighbors = set(g[v])
+    nse = number_same_elements(neighbors, srem)
+
+    fit += min(k, nse) / float(k * len(g))
+    if nse < k:
+        fit -= 1
+
+    return fit
+
+
+def fitness_rec_add(s: list, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+    neighbors = set(g[v])
+    nse = number_same_elements(neighbors, s)
+
+    fit -= min(k, nse) / float(k * len(g))
+    if nse < k:
+        fit += 1
+
+    obj_neg: float = 0
+    vio_neg: int = 0
 
     for u in g[v]:
         if u not in s:
             neighbors = set(g[u])
             nse = number_same_elements(neighbors, s)
 
-            fit += min(k, nse)/float(k*len(g))
+            obj_neg += min(k, nse)
 
             if nse < k:
-                fit -= 1
+                vio_neg += 1
 
-    neighbors = set(g[v])
-    nse = number_same_elements(neighbors, s)
-    fit += min(k, nse) / float(k * len(g))
-    if nse < k:
-        fit -= 1
+    fit += vio_neg - obj_neg/(k*len(g))
+
+    srem = list(s)
+    srem.append(v)
+    srem = set(srem)
+    obj_neg = 0.0
+    vio_neg = 0
+
+    for u in g[v]:
+        if u not in srem:
+            neighbors = set(g[u])
+            nse = number_same_elements(neighbors, srem)
+
+            obj_neg += min(k, nse)
+
+            if nse < k:
+                vio_neg += 1
+
+    fit += -vio_neg + obj_neg/(k*len(g))
 
     return fit
