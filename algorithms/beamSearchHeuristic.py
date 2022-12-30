@@ -4,10 +4,9 @@ from networkx import \
     Graph, \
     gnp_random_graph as rand_graph, \
     is_connected
-from greedy import found_d
+from unit import is_acceptable_solution, number_same_elements
 from random import shuffle
 from math import sqrt
-from unit import number_same_elements
 
 
 def eqauls(l1, l2):
@@ -29,6 +28,17 @@ def remove_duplication(s):
                 # print(s[i], s[j])
                 del s[i]
                 break
+
+
+def objective_function(s: list) -> int:
+    objective_sum: int = 0
+
+    for v in objective_function.graph.nodes:
+        if v not in s:
+            neighbors = set(g[v])
+            objective_sum += min(objective_function.k, number_same_elements(neighbors, s))
+
+    return objective_sum
 
 
 def beam_search_heuristic(graph: DiGraph or Graph, k: int) -> list:
@@ -70,7 +80,7 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int) -> list:
         # print(s)
 
         for parcial_s in s:
-            if found_d(graph, parcial_s, k):
+            if is_acceptable_solution(graph, parcial_s, k):
                 d = parcial_s
 
     return d

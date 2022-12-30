@@ -6,7 +6,7 @@ from networkx import \
     Graph, \
     gnp_random_graph as rand_graph, \
     is_connected
-from unit import fitness, is_acceptable_solution, fitness_rec_rem
+from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
 
 
 def shaking(s: set, div: int, nodes: list) -> set:
@@ -40,30 +40,26 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
         shuffle(nodes)
         for v in nodes:
             if v in s:
-                s.remove(v)
-                new_fit = fitness(s, g, k)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, k)
                 if new_fit > curr_fit:
                     curr_fit = new_fit
-                    improved = True
-                    break
-                else:
-                    s.add(v)
-            else:
-                s.add(v)
-                new_fit = fitness(s, g, k)
-                if new_fit > curr_fit:
-                    curr_fit = new_fit
-                    improved = True
-                    break
-                else:
                     s.remove(v)
+                    improved = True
+                    break
+            else:
+                new_fit = fitness_rec_add(s, v, curr_fit, g, k)
+                if new_fit > curr_fit:
+                    curr_fit = new_fit
+                    s.add(v)
+                    improved = True
+                    break
 
     return curr_fit
 
 
 def vns(graph: DiGraph or Graph, k: int) -> list:
     divmin = 1
-    divmax = min(20, len(g)/5)
+    divmax = min(20, len(graph)/5)
     div = divmin
     iteration = 0
     iteration_max = 3900
@@ -84,10 +80,10 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
             div = divmin
             fit = fit_new
 
-            print("Fit: ", fit, "velicine ", len(s), " od ", s)
-            if is_acceptable_solution(graph, s, k) and len(s_accept) > len(s):
+            # print("Fit: ", fit, "velicine ", len(s), " od ", s)
+            if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
                 print("Pronadjen!!!!!!!!!")
-                print("+Fit: ", fit, "velicine ", len(s), " od ", s)
+                print("Fit: ", fit, "velicine ", len(s), " od ", s)
                 s_accept = list(s)
         else:
             div += 1
@@ -99,7 +95,7 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
 
 
 if __name__ == '__main__':
-    g = rand_graph(200, 0.5, seed=1)
+    g = rand_graph(300, 0.2, seed=1)
     # for i in range(10):
     #     print(i, " - ", list(g[i]))
     print("Connected: {}".format(is_connected(g)))
