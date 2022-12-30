@@ -6,7 +6,8 @@ from networkx import \
     Graph, \
     gnp_random_graph as rand_graph, \
     is_connected
-from beamSearchHeuristic import objective_function, found_d
+from beamSearchHeuristic import objective_function
+from unit import is_acceptable_solution
 
 
 def add_in_s(s, complemant, s_len):
@@ -92,7 +93,7 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
 
         # print(s)
 
-        if found_d(graph, s, k) and len(s_opt) > len(s):
+        if is_acceptable_solution(graph, s, k) and len(s_opt) > len(s):
             print("Pronadjen!!!!!!!!!")
             obj = objective_function(s)
             print("Obj: ", obj, " od ", s)

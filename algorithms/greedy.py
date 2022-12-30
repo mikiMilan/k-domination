@@ -6,13 +6,7 @@ from networkx import \
     gnp_random_graph as rand_graph, \
     is_connected, \
     draw_networkx
-
-
-
-
-
-
-
+from unit import is_acceptable_solution, number_same_elements
 
 def found_u(graph: DiGraph or Graph, D: list, k: int) -> int:
     node = -1
@@ -37,7 +31,7 @@ def found_u(graph: DiGraph or Graph, D: list, k: int) -> int:
 
 def greedy(graph: DiGraph or Graph, k: int) -> list:
     D = list()
-    while not found_d(graph, D, k):
+    while not is_acceptable_solution(graph, D, k):
         # print("I am looking for a node...")
         node = found_u(graph, D, k)
         D.append(node)
