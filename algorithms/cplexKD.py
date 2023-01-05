@@ -15,7 +15,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
         model += (k * y[i] + lpSum([y[j] for j in list(g[i])]) >= k)
 
     # run model:
-    model.solve(PULP_CBC_CMD(maxSeconds=timelimit, msg=1, fracGap=0))
+    model.solve(PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
     print("Status solving: ", LpStatus[model.status])
     # print("Vars:")
