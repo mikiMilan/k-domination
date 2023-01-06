@@ -1,7 +1,8 @@
 from time import time
 from networkx import DiGraph, Graph, gnp_random_graph as rand_graph
-from unit import is_acceptable_solution, objective_function
-import pickle
+from unit import is_acceptable_solution, objective_function, number_same_elements
+from read_graph import read_graph
+from random import shuffle
 
 
 def get_0(s: tuple) -> int:
@@ -16,21 +17,59 @@ def remove_duplication(s: list):
                 break
 
 
+def obj_rec_add(s: set, v: int, obj: int, g: Graph or DiGraph, k: int) -> float:
+    """
+
+    :rtype: object
+    """
+    neighbors = set(g[v])
+    nse = number_same_elements(neighbors, s)
+    obj -= min(k, nse)
+
+    obj_neg: int = 0
+
+    for u in g[v]:
+        if u not in s:
+            neighbors = set(g[u])
+            nse = number_same_elements(neighbors, s)
+            obj_neg += min(k, nse)
+    obj -= obj_neg
+
+    srem = list(s)
+    srem.append(v)
+    srem = set(srem)
+    obj_neg = 0
+
+    for u in g[v]:
+        if u not in srem:
+            neighbors = set(g[u])
+            nse = number_same_elements(neighbors, srem)
+            obj_neg += min(k, nse)
+    obj += obj_neg
+
+    return obj
+
+
 def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
     d = []
     s = [(0, set())]
 
+    nodes = list(graph.nodes)
     while not d:
         s_prim = []
 
+        shuffle(nodes)
         for parcial_s in s:
-            for v in graph.nodes:
+            for v in nodes:
                 if v not in parcial_s[1]:
                     new_s = set(parcial_s[1])
+                    new_rec_obj = obj_rec_add(parcial_s[1], v, parcial_s[0], graph, k)
                     new_s.add(v)
-                    s_prim.append((objective_function(list(new_s), graph, k), new_s))
+                    # new_obj = objective_function(list(new_s), graph, k)
+                    s_prim.append((new_rec_obj, new_s))
 
         s = s_prim
+        print("Current len: ", len(s[0][1]))
         remove_duplication(s)
         s.sort(key=get_0, reverse=True)
 
@@ -48,13 +87,13 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
 if __name__ == '__main__':
     # n = 300
     # g = rand_graph(n, 0.2, seed=2)
-    f = open("cities_small_instances/bath_pickle", "rb")
-    st_obj = pickle.load(f)
-    print(st_obj)
+    g = read_graph("cities_small_instances/bath.txt")
 
+    print("The graph has been loaded!!!")
 
-    # curr = time()
-    # d1 = beam_search_heuristic(g, 1, b=4)
-    # time_execute = time() - curr
-    #
-    # print(len(d1), time_execute)
+    for i in range(10):
+        curr = time()
+        d1 = beam_search_heuristic(g, 2, b=1)
+        time_execute = time() - curr
+
+        print(len(d1), time_execute)

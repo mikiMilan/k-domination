@@ -7,6 +7,7 @@ from networkx import \
     gnp_random_graph as rand_graph, \
     is_connected
 from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
+from read_graph import read_graph
 
 
 def shaking(s: set, div: int, nodes: list) -> set:
@@ -64,7 +65,7 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
     iteration = 0
     iteration_max = 3900
     start_time = time()
-    time_execution = 600 #sec
+    time_execution = 100 #sec
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
     s: set = random_nodes(graph)
@@ -98,8 +99,19 @@ if __name__ == '__main__':
     g = rand_graph(300, 0.2, seed=1)
     # for i in range(10):
     #     print(i, " - ", list(g[i]))
-    print("Connected: {}".format(is_connected(g)))
-    curr = time()
-    d1 = vns(g, 3)
-    time_execute = time() - curr
-    print(time_execute, d1, len(d1))
+    # print("Connected: {}".format(is_connected(g)))
+    # curr = time()
+    # d1 = vns(g, 3)
+    # time_execute = time() - curr
+    # print(time_execute, d1, len(d1))
+
+    g = read_graph("cities_small_instances/bath.txt")
+
+    print("The graph has been loaded!!!")
+
+    for i in range(10):
+        curr = time()
+        d1 = vns(g, 2)
+        time_execute = time() - curr
+
+        print(len(d1), time_execute)
