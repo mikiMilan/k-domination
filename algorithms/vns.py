@@ -1,86 +1,117 @@
 from time import time
-from random import randint, choice, shuffle
+from random import shuffle, random
 from math import sqrt
 from networkx import \
     DiGraph, \
     Graph, \
     gnp_random_graph as rand_graph, \
     is_connected
-from beamSearchHeuristic import objective_function, found_d
+from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
+from read_graph import read_graph
+
+
+def shaking(s: set, div: int, nodes: list) -> set:
+    sl = list(s)
+    shuffle(sl)
+    shak = set(sl[:len(sl)-div])
+
+    shuffle(nodes)
+    shak.union(set(nodes[:div]))
+
+    return shak
+
+
+def random_nodes(g: Graph or DiGraph) -> set:
+    s = set()
+
+    for v in g.nodes:
+        if random() < 0.5:
+            s.add(v)
+
+    return s
+
+
+def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
+    improved = True
+    curr_fit = fitness(s, g, k)
+
+    while improved:
+        improved = False
+
+        shuffle(nodes)
+        for v in nodes:
+            if v in s:
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, k)
+                if new_fit > curr_fit:
+                    curr_fit = new_fit
+                    s.remove(v)
+                    improved = True
+                    break
+            else:
+                new_fit = fitness_rec_add(s, v, curr_fit, g, k)
+                if new_fit > curr_fit:
+                    curr_fit = new_fit
+                    s.add(v)
+                    improved = True
+                    break
+
+    return curr_fit
 
 
 def vns(graph: DiGraph or Graph, k: int) -> list:
-    s_len: int = int(sqrt(len(graph)))
-
-    nodes = list(graph.nodes)
-    shuffle(nodes)
-    s = nodes[:s_len]
-    s_complement = nodes[s_len:]
-
-    for i in s_complement:
-        if len(list(graph[i])) < k:
-            s.append(i)
-
+    divmin = 1
+    divmax = min(20, len(graph)/5)
+    div = divmin
     iteration = 0
-    iteration_max = 100
+    iteration_max = 3900
     start_time = time()
-    objective_function.graph = graph
-    objective_function.k = k
+    time_execution = 100 #sec
+    nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
-    s_opt = nodes
-    while iteration < iteration_max and time()-start_time < 60 and len(s_complement)>0:
+    s: set = random_nodes(graph)
+    fit = fitness(s, graph, k)
 
-        obj = objective_function(s)
+    s_accept = set(graph.nodes)
+    while iteration < iteration_max and time()-start_time < time_execution:
+        s_new = shaking(s, div, nodes)
+        fit_new = local_search(s_new, graph, nodes, k)
 
-        # -- ubacujemo novi cvor ako poboljsavamo rjesenje
-        rand_node_out = s_complement[0]
-        del s_complement[0]
+        if fit_new > fit:
+            s = s_new
+            div = divmin
+            fit = fit_new
 
-        s.append(rand_node_out)
-        obj_new = objective_function(s)
-        if obj_new < obj:
-            s.pop()
-            s_complement.append(rand_node_out)
+            # print("Fit: ", fit, "velicine ", len(s), " od ", s)
+            if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
+                print("Pronadjen!!!!!!!!!")
+                print("Fit: ", fit, "velicine ", len(s), " od ", s)
+                s_accept = list(s)
         else:
-            obj = obj_new
-        # ubacujemo novi cvor ako poboljsavamo rjesenje - end
-
-        # -- uklanjamo prvi ili mjenjemo sa nekim njegovim susjedom ako je to bolje
-        rand_node_in = s[0]
-        del s[0]
-
-        obj_new = objective_function(s)
-
-        node_new = -1
-        for v in set(graph[rand_node_in]):
-            s.append(v)
-            obj_new2 = objective_function(s)
-            if obj_new2 > obj_new:
-                obj_new = obj_new2
-                node_new = v
-            s.pop()
-
-        if obj > obj_new:
-            s.append(rand_node_in)
-        elif obj < obj_new and node_new != -1:
-            s.append(node_new)
-
-        # -- uklanjamo prvi ili mjenjemo sa nekim njegovim susjedom ako je to bolje - end
-
-        print(s)
-
-        if found_d(graph, s, k) and len(s_opt) >= len(s):
-            print("Pronadjen!!!")
-            s_opt = list(s)
+            div += 1
+            if div >= divmax:
+                div = divmin
 
         iteration += 1
-    return s_opt
+    return s_accept
 
 
 if __name__ == '__main__':
-    g = rand_graph(200, 0.2, seed=1)
-    print("Connected: {}".format(is_connected(g)))
-    curr = time()
-    d1 = vns(g, 1)
-    time_execute = time() - curr
-    print(time_execute, d1)
+    g = rand_graph(300, 0.2, seed=1)
+    # for i in range(10):
+    #     print(i, " - ", list(g[i]))
+    # print("Connected: {}".format(is_connected(g)))
+    # curr = time()
+    # d1 = vns(g, 3)
+    # time_execute = time() - curr
+    # print(time_execute, d1, len(d1))
+
+    g = read_graph("cities_small_instances/bath.txt")
+
+    print("The graph has been loaded!!!")
+
+    for i in range(10):
+        curr = time()
+        d1 = vns(g, 2)
+        time_execute = time() - curr
+
+        print(len(d1), time_execute)
