@@ -18,10 +18,6 @@ def remove_duplication(s: list):
 
 
 def obj_rec_add(s: set, v: int, obj: int, g: Graph or DiGraph, k: int) -> float:
-    """
-
-    :rtype: object
-    """
     neighbors = set(g[v])
     nse = number_same_elements(neighbors, s)
     obj -= min(k, nse)
@@ -58,7 +54,7 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
     while not d:
         s_prim = []
 
-        shuffle(nodes)
+        #shuffle(nodes)
         for parcial_s in s:
             for v in nodes:
                 if v not in parcial_s[1]:
@@ -69,13 +65,12 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
                     s_prim.append((new_rec_obj, new_s))
 
         s = s_prim
-        print("Current len: ", len(s[0][1]))
+        # print(len(s))
         remove_duplication(s)
+        shuffle(s)
         s.sort(key=get_0, reverse=True)
 
-        while len(s) > b:
-            s.pop()
-        # print(s)
+        s = s[:b]
 
         for parcial_s in s:
             if is_acceptable_solution(graph, list(parcial_s[1]), k):
@@ -93,7 +88,7 @@ if __name__ == '__main__':
 
     for i in range(10):
         curr = time()
-        d1 = beam_search_heuristic(g, 2, b=1)
+        d1 = beam_search_heuristic(g, 2, b=2)
         time_execute = time() - curr
 
         print(len(d1), time_execute)
