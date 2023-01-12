@@ -1,6 +1,6 @@
 from time import time
-from networkx import DiGraph, Graph, gnp_random_graph as rand_graph
-from pulp import LpProblem, lpSum, LpVariable, LpMinimize, LpBinary, PULP_CBC_CMD, LpStatus, value
+from networkx import DiGraph, Graph
+from pulp import LpProblem, lpSum, LpVariable, LpMinimize, LpBinary, PULP_CBC_CMD, LpStatus, value, LpSolution
 from read_graph import read_graph
 import pulp as pl 
 import orloge # pip install orloge
@@ -8,10 +8,9 @@ from os import remove
 from math import ceil 
 
 # define cplex path 
-cplex_path = r'/home/marko/Desktop/CPLEX_Studio127/cplex/bin/x86-64_linux/cplex'
+# cplex_path = r'C:\Program Files\IBM\ILOG\CPLEX_Studio221\cplex\bin\x64_win64\cplex.exe'
     
-    
-    
+
 def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
     model = LpProblem("k-domination", LpMinimize)
@@ -24,10 +23,11 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
         model += (k * y[i] + lpSum([y[j] for j in list(g[i])]) >= k)
 
     # run model:
-    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info.log")
+    solver = pl.CPLEX_CMD(timelimit=timelimit, logPath="log_info.log")
     model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
-    print("Status solving: ", LpStatus[model.status])
+    print("Problem status: ", LpStatus[model.status])
+    print("Solution status: ", LpSolution[model.sol_status])
     # print("Vars:")
     # for v in model.variables():
     # 	print(v.name, "===> ", v.varValue)
@@ -45,10 +45,10 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
 if __name__ == '__main__':
     size: int = 200
-    timelimit: float = 10
-    #g = read_graph("cities_small_instances/bath.txt")
-    g = read_graph("random_instances/NEW-V1000-P0.5-G1.txt")
+    timelimit: float = 60
+    g = read_graph("cities_small_instances/bath.txt")
+    # g = read_graph("random_instances/NEW-V1000-P0.2-G0.txt")
     curr = time()
-    primal, dual = ILP(g, 3, timelimit)
+    primal, dual = ILP(g, 1, timelimit)
     time_execute = time() - curr
     print(time_execute, primal, dual)

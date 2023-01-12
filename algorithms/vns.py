@@ -1,11 +1,7 @@
 from time import time
 from random import shuffle, random
 from math import sqrt
-from networkx import \
-    DiGraph, \
-    Graph, \
-    gnp_random_graph as rand_graph, \
-    is_connected
+from networkx import DiGraph, Graph, gnp_random_graph as rand_graph
 from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
 from read_graph import read_graph
 
@@ -63,9 +59,10 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
     divmax = min(20, len(graph)/5)
     div = divmin
     iteration = 0
-    iteration_max = 3900
+    iteration_max = 999900 #3900
     start_time = time()
-    time_execution = 100 #sec
+    time_execution = 30 # 3600 #sec
+    best_time = 0
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
     s: set = random_nodes(graph)
@@ -83,35 +80,26 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
 
             # print("Fit: ", fit, "velicine ", len(s), " od ", s)
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
-                print("Pronadjen!!!!!!!!!")
-                print("Fit: ", fit, "velicine ", len(s), " od ", s)
+                print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
+                print("Fit: ", fit, "velicina dominacije ", len(s))
                 s_accept = list(s)
+                best_time = time() - start_time
         else:
             div += 1
             if div >= divmax:
                 div = divmin
 
         iteration += 1
-    return s_accept
+    return s_accept, best_time
 
 
 if __name__ == '__main__':
-    g = rand_graph(300, 0.2, seed=1)
-    # for i in range(10):
-    #     print(i, " - ", list(g[i]))
-    # print("Connected: {}".format(is_connected(g)))
-    # curr = time()
-    # d1 = vns(g, 3)
-    # time_execute = time() - curr
-    # print(time_execute, d1, len(d1))
-
     g = read_graph("cities_small_instances/bath.txt")
 
     print("The graph has been loaded!!!")
 
-    for i in range(10):
-        curr = time()
-        d1 = vns(g, 2)
-        time_execute = time() - curr
+    curr = time()
+    d1, bt = vns(g, 2, curr)
+    time_execute = time() - curr
 
-        print(len(d1), time_execute)
+    print(len(d1), bt, time_execute)
