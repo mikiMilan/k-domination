@@ -54,14 +54,12 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
     return curr_fit
 
 
-def vns(graph: DiGraph or Graph, k: int) -> list:
+def vns(instance_name, graph: DiGraph or Graph, k: int, time_execution: int, iteration_max: int) -> list:
     divmin = 1
     divmax = min(20, len(graph)/5)
     div = divmin
     iteration = 0
-    iteration_max = 999900 #3900
     start_time = time()
-    time_execution = 3600 # 3600 #sec
     best_time = 0
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
@@ -80,8 +78,8 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
 
             # print("Fit: ", fit, "velicine ", len(s), " od ", s)
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
-                print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
-                print("Fit: ", fit, "velicina dominacije ", len(s))
+                #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
+                #print("Fit: ", fit, "velicina dominacije ", len(s))
                 s_accept = list(s)
                 best_time = time() - start_time
         else:
@@ -90,6 +88,8 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
                 div = divmin
 
         iteration += 1
+        if iteration%10==0:
+            print("it={}\tinst={}\tk={}\tsize={}\tfit={:.2f}".format(iteration, instance_name, k, len(s), fit))
     return s_accept, best_time
 
 
