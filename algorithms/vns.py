@@ -61,7 +61,7 @@ def vns(graph: DiGraph or Graph, k: int) -> list:
     iteration = 0
     iteration_max = 999900 #3900
     start_time = time()
-    time_execution = 30 # 3600 #sec
+    time_execution = 3600 # 3600 #sec
     best_time = 0
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
 
