@@ -54,7 +54,7 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
     while not d:
         s_prim = []
 
-        #shuffle(nodes)
+        # shuffle(nodes)
         for parcial_s in s:
             for v in nodes:
                 if v not in parcial_s[1]:
@@ -65,11 +65,9 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
                     s_prim.append((new_rec_obj, new_s))
 
         s = s_prim
-        # print(len(s))
         remove_duplication(s)
         shuffle(s)
         s.sort(key=get_0, reverse=True)
-
         s = s[:b]
 
         for parcial_s in s:
@@ -82,13 +80,13 @@ def beam_search_heuristic(graph: DiGraph or Graph, k: int, b: int) -> list:
 if __name__ == '__main__':
     # n = 300
     # g = rand_graph(n, 0.2, seed=2)
-    g = read_graph("cities_small_instances/bath.txt")
+    g = read_graph("cities_small_instances/belfast.txt")
 
     print("The graph has been loaded!!!")
 
-    for i in range(10):
+    for i in range(1):
         curr = time()
-        d1 = beam_search_heuristic(g, 2, b=2)
+        d1 = beam_search_heuristic(g, 4, b=4)
         time_execute = time() - curr
 
         print(len(d1), time_execute)
