@@ -56,94 +56,56 @@ def obj_voi(s: set, g: Graph or DiGraph, k: int) -> (int, int):
 
 
 def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
-    objective_function, violating = obj_voi(s, g, k)
-    return violating + float(objective_function) / (k*len(g))
-
-
-def fitness_rec_rem(s: list, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
-
-    obj_neg: float = 0
-    vio_neg: int = 0
-
-    for u in g[v]:
-        if u not in s:
-            neighbors = set(g[u])
+    viol = 0
+    for v in g.nodes:
+        if v not in s:
+            neighbors = set(g[v])
             nse = number_same_elements(neighbors, s)
-
-            obj_neg += min(k, nse)
-
             if nse < k:
-                vio_neg += 1
+                viol += 1
 
-    fit += vio_neg - obj_neg/(k*len(g))
+    return viol + float(len(s))/len(g)
 
-    srem = list(s)
+
+def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+    srem = set(s)
     srem.remove(v)
-    srem = set(srem)
-    obj_neg = 0.0
-    vio_neg = 0
 
     for u in g[v]:
-        if u not in srem:
+        if u not in s: # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
             neighbors = set(g[u])
-            nse = number_same_elements(neighbors, srem)
+            nse_s = number_same_elements(neighbors, s) # TODO: optimisation
+            if nse_s < k:
+                fit -= 1
 
-            obj_neg += min(k, nse)
+            nse_srem = number_same_elements(neighbors, srem) # TODO: optimisation
+            if nse_srem < k:
+                fit += 1
 
-            if nse < k:
-                vio_neg += 1
-
-    fit += -vio_neg + obj_neg/(k*len(g))
-
-    neighbors = set(g[v])
-    nse = number_same_elements(neighbors, srem)
-
-    fit += min(k, nse) / float(k * len(g))
-    if nse < k:
-        fit -= 1
-
-    return fit
-
-
-def fitness_rec_add(s: list, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
-    neighbors = set(g[v])
-    nse = number_same_elements(neighbors, s)
-
-    fit -= min(k, nse) / float(k * len(g))
-    if nse < k:
+    nse_srem = number_same_elements(set(g[v]), srem)
+    if nse_srem < k:
         fit += 1
 
-    obj_neg: float = 0
-    vio_neg: int = 0
+    return fit - 1.0/len(g)
+
+
+def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+    sadd = set(s)
+    sadd.add(v)
 
     for u in g[v]:
-        if u not in s:
+        if u not in s:  # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
             neighbors = set(g[u])
-            nse = number_same_elements(neighbors, s)
+            nse_s = number_same_elements(neighbors, s)  # TODO: optimisation
+            if nse_s < k:
+                fit -= 1
 
-            obj_neg += min(k, nse)
+            nse_sadd = number_same_elements(neighbors, sadd)  # TODO: optimisation
+            if nse_sadd < k:
+                fit += 1
 
-            if nse < k:
-                vio_neg += 1
+    nse_s = number_same_elements(set(g[v]), s)
+    if nse_s < k:
+        fit -= 1
 
-    fit += vio_neg - obj_neg/(k*len(g))
-
-    srem = list(s)
-    srem.append(v)
-    srem = set(srem)
-    obj_neg = 0.0
-    vio_neg = 0
-
-    for u in g[v]:
-        if u not in srem:
-            neighbors = set(g[u])
-            nse = number_same_elements(neighbors, srem)
-
-            obj_neg += min(k, nse)
-
-            if nse < k:
-                vio_neg += 1
-
-    fit += -vio_neg + obj_neg/(k*len(g))
-
-    return fit
+    return fit + 1.0/len(g)
