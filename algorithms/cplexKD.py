@@ -5,11 +5,15 @@ from read_graph import read_graph
 import pulp as pl 
 import orloge # pip install orloge
 from os import remove
-from math import ceil 
+from math import ceil
+from os import name
 
-# define cplex path 
-#cplex_path = r'C:\Program Files\IBM\ILOG\CPLEX_Studio221\cplex\bin\x64_win64\cplex.exe'
-cplex_path= r'/home/marko/Desktop/CPLEX_Studio127/cplex/bin/x86-64_linux/cplex'   
+# define cplex path
+if name == 'nt': # windows
+    cplex_path = r'C:\Program Files\IBM\ILOG\CPLEX_Studio221\cplex\bin\x64_win64\cplex.exe'
+else:
+    cplex_path= r'/home/marko/Desktop/CPLEX_Studio127/cplex/bin/x86-64_linux/cplex'
+
 
 def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
@@ -20,10 +24,10 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
     model += lpSum([y[i] for i in list(graph.nodes)])
     # constraints for each vertex i in V:
     for i in list(graph.nodes):
-        model += (k * y[i] + lpSum([y[j] for j in list(g[i])]) >= k)
+        model += (k * y[i] + lpSum([y[j] for j in list(graph[i])]) >= k)
 
     # run model:
-    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info.log")
+    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info.log", msg=True)
     model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
     
@@ -41,8 +45,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
 
 if __name__ == '__main__':
-    size: int = 200
-    timelimit: float = 10
+    timelimit: float = 60 #sec
     g = read_graph("cities_small_instances/manchester.txt")
     # g = read_graph("random_instances/NEW-V1000-P0.2-G0.txt")
     curr = time()
