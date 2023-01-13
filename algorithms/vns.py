@@ -54,9 +54,9 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
     return curr_fit
 
 
-def vns(instance_name, graph: DiGraph or Graph, k: int, time_execution: int, iteration_max: int) -> list:
-    divmin = 1
-    divmax = min(20, len(graph)/5)
+def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, time_execution: int, iteration_max: int) -> list:
+    divmin = d_min
+    divmax = min(d_max, len(graph)/5)
     div = divmin
     iteration = 0
     start_time = time()
@@ -79,7 +79,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, time_execution: int, ite
             # print("Fit: ", fit, "velicine ", len(s), " od ", s)
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
                 #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
-                #print("Fit: ", fit, "velicina dominacije ", len(s))
+                print("Fit: ", fit, "velicina dominacije ", len(s))
                 s_accept = list(s)
                 best_time = time() - start_time
         else:
@@ -87,9 +87,9 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, time_execution: int, ite
             if div >= divmax:
                 div = divmin
 
-        iteration += 1
-        if iteration%10==0:
-            print("it={}\tinst={}\tk={}\tsize={}\tfit={:.2f}".format(iteration, instance_name, k, len(s), fit))
+        iteration += 10
+        if iteration%1==0:
+            print("it={}\tt={}\td={}\tinst={}\tk={}\tsize={}\tfit={:.5f}".format(iteration, int(time() - start_time),div, instance_name, k, len(s), fit))
     return s_accept, best_time
 
 
