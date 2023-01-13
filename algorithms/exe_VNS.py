@@ -6,8 +6,8 @@ from multiprocessing import Process, Manager
 from math import ceil
 
 
-def task(fun, instance_name, g, k, time_limit, iteration_max, r, i):
-    d, time_execute = fun(instance_name, g, k, time_limit, iteration_max)
+def task(fun, instance_name, g, k, d_min, d_max, time_limit, iteration_max, r, i):
+    d, time_execute = fun(instance_name, g, k, d_min, d_max, time_limit, iteration_max)
     # print(len(d), time_execute)
     r[i] = [len(d), time_execute]
 
@@ -17,16 +17,19 @@ if __name__ == '__main__':
     paralellism = 10
     iteration_max = 1000000
     time_limit = 3600
+    d_min = 1
+    d_max = 20
     
-    city_instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+    city_instances = ['manchester.txt'
+    ,'bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
-                      'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
+                      'leeds.txt', 'leicester.txt', 'liverpool.txt', 
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
                       'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
     batches = ceil(len(city_instances)/paralellism)
 
     for k in [1, 2, 4]:
-        file_name_res = 'results/VNS/k' + str(k) + '.txt'
+        file_name_res = 'results/VNS/k' + str(k) + '_dmin'+str(d_min)+'_dmax'+str(d_max)+ '_tl'+str(time_limit)+ '.txt'
         times = []
         results = []
         manager = Manager()
@@ -40,7 +43,7 @@ if __name__ == '__main__':
             g = read_graph(graph_open)
             print("Creating process: ", graph_open)
 
-            p = Process(target=task, args=(vns, instance, g, k, time_limit, iteration_max, return_dict, instance))
+            p = Process(target=task, args=(vns, instance, g, k, d_min, d_max, time_limit, iteration_max, return_dict, instance))
             procs.append(p)
 
         for b in range(batches):
