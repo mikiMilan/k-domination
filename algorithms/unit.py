@@ -67,13 +67,13 @@ def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
     return viol + float(len(s))/len(g)
 
 
-def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
     srem = set(s)
     srem.remove(v)
 
     for u in g[v]:
         if u not in s: # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
-            neighbors = set(g[u])
+            neighbors = all_neighbors[u] # set(g[u])
             nse_s = number_same_elements(neighbors, s) # TODO: optimisation
             if nse_s < k:
                 fit -= 1
@@ -89,13 +89,13 @@ def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> 
     return fit - 1.0/len(g)
 
 
-def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
     sadd = set(s)
     sadd.add(v)
 
     for u in g[v]:
         if u not in s:  # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
-            neighbors = set(g[u])
+            neighbors = all_neighbors[u] # set(g[u])
             nse_s = number_same_elements(neighbors, s)  # TODO: optimisation
             if nse_s < k:
                 fit -= 1

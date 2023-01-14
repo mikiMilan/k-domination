@@ -68,7 +68,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
     return curr_fit
     
     
-def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
+def local_search(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
     improved = True
     curr_fit = fitness(s, g, k)
 
@@ -80,14 +80,14 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
 
         for v in nodes:
             if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, k)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
                     best_rem = True
                     improved = True
             else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, k)
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
@@ -103,7 +103,7 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
                 raise Exception("Unexpected value for best_rem +"+str(best_rem))
             curr_fit = best_fit
             #if curr_fit<1:
-            #    print("Improved to feasible "+str(curr_fit) + " with size "+str(len(s)))
+            #print("Improved to "+str(curr_fit) + " with size "+str(len(s)) +" out of "+str(len(g)))
             check_fit =  fitness(s, g, k)
             if abs(check_fit-curr_fit)>0.000001:
                 print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
@@ -120,6 +120,10 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
     start_time = time()
     best_time = 0
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
+    
+    neighbors = {}
+    for v in graph.nodes:
+        neighbors[v] = set(graph[v])
 
     s: set = random_nodes(graph)
     fit = fitness(s, graph, k)
@@ -130,7 +134,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
         # print("Fit: ", fitness(s_new, g, k), "velicine ", len(s_new))
         # if(is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
-        fit_new = local_search(s_new, graph, nodes, k)
+        fit_new = local_search(s_new, graph, nodes, neighbors, k)
         # print("Fit_New: ", fit_new, "velicine ", len(s_new))
         # if (is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")

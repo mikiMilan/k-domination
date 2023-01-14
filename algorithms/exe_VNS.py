@@ -17,14 +17,15 @@ if __name__ == '__main__':
     paralellism = 10
     iteration_max = 1000000
     time_limit = 3600
-    d_min = 1
-    d_max = 20
+    d_min = 20
+    d_max = 100
     
     city_instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
                       'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
+                      #['oxford.txt']
                       
     batches = ceil(len(city_instances)/paralellism)
 
