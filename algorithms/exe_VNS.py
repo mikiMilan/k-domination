@@ -13,19 +13,19 @@ def task(fun, instance_name, g, k, d_min, d_max, time_limit, iteration_max, r, i
 
 
 if __name__ == '__main__':
-
     paralellism = 10
     iteration_max = 1000000
     time_limit = 3600
-    d_min = 20
-    d_max = 100
+    d_min = 1
+    d_max = 20
     
-    city_instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+    city_instances = ['manchester.txt']
+    ''' ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
                       'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
-                      #['oxford.txt']
+                      #['oxford.txt']'''
                       
     batches = ceil(len(city_instances)/paralellism)
 

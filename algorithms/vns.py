@@ -1,5 +1,5 @@
 from time import time
-from random import shuffle, random
+from random import shuffle, random, randrange, seed
 from math import sqrt
 from networkx import DiGraph, Graph, gnp_random_graph as rand_graph
 from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
@@ -22,19 +22,38 @@ def shaking(s: set, div: int, nodes: list) -> set:
     shak.union(set(nodes[:add_cnt]))
 
     return shak
+    
+def shaking_new_not_so_good(s: set, div: int, nodes: list, g: Graph or DiGraph) -> set:
+    sl = list(s)
+    shuffle(sl)
+    
+    remove_cnt = div
+    if remove_cnt> len(sl)//2:
+        remove_cnt = len(sl)//2
+        
+    shak = set(sl[:len(sl)-remove_cnt])
+
+    for i in range(len(sl)-remove_cnt, len(sl)):
+        v = sl[i]
+        neighb = list(g[v])
+        if len(neighb)==0:
+            continue
+        shak.add(neighb[randrange(0,len(neighb))])
+
+    return shak
 
 
 def random_nodes(g: Graph or DiGraph) -> set:
     s = set()
 
     for v in g.nodes:
-        if random() < 0.5:
+        if random() < 0.1:
             s.add(v)
 
     return s
 
 
-def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
+def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: dict, k: int):
     improved = True
     curr_fit = fitness(s, g, k)
 
@@ -44,7 +63,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
         shuffle(nodes)
         for v in nodes:
             if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, k)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k)
                 # s.remove(v)
                 # new_fit = fitness(s, g, k)
                 # s.add(v)
@@ -58,7 +77,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
                         exit(1)
                     break
             else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, k)
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k)
                 # s.add(v)
                 # new_fit = fitness(s, g, k)
                 # s.remove(v)
@@ -75,7 +94,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
     return curr_fit
     
     
-def local_search(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
+def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
     improved = True
     curr_fit = fitness(s, g, k)
 
@@ -120,6 +139,8 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: i
 
 
 def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, time_execution: int, iteration_max: int) -> list:
+    # TODO: set this to be parameter 
+    seed(12345)
     divmin = d_min
     divmax = min(d_max, len(graph)/5)
     div = divmin
@@ -132,21 +153,24 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
     for v in graph.nodes:
         neighbors[v] = set(graph[v])
 
-    s: set = random_nodes(graph)
+    s: set = ([]) # random_nodes(graph) # ACA: brze radi kad se instancira praznim resenjem
     fit = fitness(s, graph, k)
-
     s_accept = set(graph.nodes)
+    
     while iteration < iteration_max and time()-start_time < time_execution:
         s_new = shaking(s, div, nodes)
+        #s_new = shaking_new_not_so_good(s_accept, div, nodes, graph)
         # print("Fit: ", fitness(s_new, g, k), "velicine ", len(s_new))
         # if(is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
-        fit_new = local_search(s_new, graph, nodes, neighbors, k)
+        fit_new = local_search_best_impr(s_new, graph, nodes, neighbors, k)
         # print("Fit_New: ", fit_new, "velicine ", len(s_new))
         # if (is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
 
-        if fit_new < fit:
+        if fit_new < fit or (fit_new==fit and random()<0.5):
+            if fit_new==fit:
+                print("Prelazim u isto kvalitetno")
             s = s_new
             div = divmin
             fit = fit_new
@@ -155,6 +179,8 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
                 #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
                 #print("++Fit: ", fit, "velicina dominacije ", len(s))
+                #if len(s)==len(s_accept):
+                #    print("Pronadjen iste dimenzije")
                 s_accept = list(s)
                 best_time = time() - start_time
         else:
