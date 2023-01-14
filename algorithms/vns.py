@@ -169,8 +169,8 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
         #     print("s_new je dopustivo")
 
         if fit_new < fit or (fit_new==fit and random()<0.5):
-            if fit_new==fit:
-                print("Prelazim u isto kvalitetno")
+            #if fit_new==fit:
+            #    print("Prelazim u isto kvalitetno")
             s = s_new
             div = divmin
             fit = fit_new
@@ -189,8 +189,8 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
                 div = divmin
 
         iteration += 1
-        #if iteration%1 == 0:
-        print("it={}\tt={}\td={}\tinst={}\tk={}\tsize={}\tfit={:.5f}".format(iteration, int(time() - start_time),div, instance_name, k, len(s), fit))
+        if iteration%50 == 0:
+            print("it={}\tt={}\td={}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,  len(s), fit, k, instance_name))
     return s_accept, best_time
 
 

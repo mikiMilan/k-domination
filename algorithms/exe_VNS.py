@@ -16,8 +16,8 @@ if __name__ == '__main__':
     paralellism = 10
     iteration_max = 1000000
     time_limit = 3600
-    d_min = 1
-    d_max = 20
+    d_min = 5
+    d_max = 30
     
     city_instances =  ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
