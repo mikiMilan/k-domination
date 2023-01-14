@@ -9,10 +9,17 @@ from read_graph import read_graph
 def shaking(s: set, div: int, nodes: list) -> set:
     sl = list(s)
     shuffle(sl)
-    shak = set(sl[:len(sl)-div])
+    
+    remove_cnt = div
+    if remove_cnt> len(sl)//2:
+        remove_cnt = len(sl)//2
+        
+    shak = set(sl[:len(sl)-remove_cnt])
 
+    # TODO: maybe add_cnt should be bounded as well, which is not a practical problem when graphs are large enough
+    add_cnt = div
     shuffle(nodes)
-    shak.union(set(nodes[:div]))
+    shak.union(set(nodes[:add_cnt]))
 
     return shak
 

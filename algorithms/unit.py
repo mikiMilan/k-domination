@@ -8,6 +8,7 @@ def is_acceptable_solution(graph: DiGraph or Graph, D: list, k: int) -> bool:
     return True
 
 
+# TODO: use either library intersection method or check which set is smaller and set it to outer loop
 def number_same_elements(nv: set, d: set) -> int:
     counter = 0
     for element in d:
