@@ -27,7 +27,7 @@ def random_nodes(g: Graph or DiGraph) -> set:
     return s
 
 
-def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
+def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list, k: int):
     improved = True
     curr_fit = fitness(s, g, k)
 
@@ -45,6 +45,10 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
                     curr_fit = new_fit
                     s.remove(v)
                     improved = True
+                    check_fit =  fitness(s, g, k)
+                    if abs(check_fit-curr_fit)>0.000001:
+                        print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                        exit(1)
                     break
             else:
                 new_fit = fitness_rec_add(s, v, curr_fit, g, k)
@@ -55,7 +59,55 @@ def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
                     curr_fit = new_fit
                     s.add(v)
                     improved = True
+                    check_fit =  fitness(s, g, k)
+                    if abs(check_fit-curr_fit)>0.000001:
+                        print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                        exit(1)
                     break
+
+    return curr_fit
+    
+    
+def local_search(s: set, g: Graph or DiGraph, nodes: list, k: int):
+    improved = True
+    curr_fit = fitness(s, g, k)
+
+    while improved:
+        improved = False
+        best_fit = curr_fit
+        best_v = None
+        best_rem = None
+
+        for v in nodes:
+            if v in s:
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, k)
+                if new_fit < best_fit:
+                    best_fit = new_fit
+                    best_v = v
+                    best_rem = True
+                    improved = True
+            else:
+                new_fit = fitness_rec_add(s, v, curr_fit, g, k)
+                if new_fit < best_fit:
+                    best_fit = new_fit
+                    best_v = v
+                    best_rem = False
+                    improved = True
+        
+        if improved:
+            if best_rem:
+                s.remove(best_v)
+            elif not best_rem:
+                s.add(best_v)
+            else:
+                raise Exception("Unexpected value for best_rem +"+str(best_rem))
+            curr_fit = best_fit
+            #if curr_fit<1:
+            #    print("Improved to feasible "+str(curr_fit) + " with size "+str(len(s)))
+            check_fit =  fitness(s, g, k)
+            if abs(check_fit-curr_fit)>0.000001:
+                print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                exit(1)
 
     return curr_fit
 
@@ -88,10 +140,10 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             div = divmin
             fit = fit_new
 
-            print("Fit: ", fit, "velicine ", len(s))
+            #print("Fit: ", fit, "velicine ", len(s))
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
                 #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
-                print("++Fit: ", fit, "velicina dominacije ", len(s))
+                #print("++Fit: ", fit, "velicina dominacije ", len(s))
                 s_accept = list(s)
                 best_time = time() - start_time
         else:
@@ -99,9 +151,9 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             if div >= divmax:
                 div = divmin
 
-        iteration += 10
-        # if iteration%20 == 0:
-        #     print("it={}\tt={}\td={}\tinst={}\tk={}\tsize={}\tfit={:.5f}".format(iteration, int(time() - start_time),div, instance_name, k, len(s), fit))
+        iteration += 1
+        #if iteration%1 == 0:
+        print("it={}\tt={}\td={}\tinst={}\tk={}\tsize={}\tfit={:.5f}".format(iteration, int(time() - start_time),div, instance_name, k, len(s), fit))
     return s_accept, best_time
 
 
