@@ -1,3 +1,4 @@
 algorithms/.idea
 algorithms/__pycache__
 algorithms/test.py
+algorithms/results/VNS_test
