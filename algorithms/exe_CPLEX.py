@@ -36,14 +36,14 @@ if __name__ == '__main__':
                     graph_location = "random_instances/" + instance
                     file_name_res = 'results/CPLEX/random_instances/' + 'k' + str(k) + "-" + instance
 
-                print("Reading graph!")
-                g: Graph or DiGraph = read_graph(graph_location)
-                print("End: ", graph_location)
+                    print("Reading graph!")
+                    g: Graph or DiGraph = read_graph(graph_location)
+                    print("End: ", graph_location)
 
-                curr = time()
-                best_sol, best_bound, opt = ILP(g, k, time_limit)
-                time_execute = time() - curr
+                    curr = time()
+                    best_sol, best_bound, opt = ILP(g, k, time_limit)
+                    time_execute = time() - curr
 
-                with open(file_name_res, 'a') as f:
-                    f.write('{}, {}, {}, {}, {:.2f}\n'.format(instance,best_sol, best_bound, opt, time_execute))
-                print('{}, {}, {}, {}, {:.2f}\n'.format(instance, best_sol, best_bound, opt, time_execute))
+                    with open(file_name_res, 'a') as f:
+                        f.write('{}, {}, {}, {}, {:.2f}\n'.format(instance,best_sol, best_bound, opt, time_execute))
+                    print('{}, {}, {}, {}, {:.2f}\n'.format(instance, best_sol, best_bound, opt, time_execute))
