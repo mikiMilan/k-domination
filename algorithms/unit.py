@@ -8,12 +8,24 @@ def is_acceptable_solution(graph: DiGraph or Graph, D: list, k: int) -> bool:
     return True
 
 
+# TODO: use either library intersection method or check which set is smaller and set it to outer loop
 def number_same_elements(nv: set, d: set) -> int:
     counter = 0
     for element in d:
         if element in nv:
             counter += 1
     return counter
+
+def number_same_elements_at_least_k(nv: set, d: set, k: int) -> bool:
+    if k==1:
+        return number_same_elements_at_least_1(nv, d)
+    else:
+        return number_same_elements(nv, d)>=k
+
+def number_same_elements_at_least_1(nv: set, d: set) -> bool:
+    for element in d:
+        if element in nv:
+            return True
 
 
 def objective_function(s: list, g: Graph or DiGraph, k: int) -> int:
@@ -55,32 +67,44 @@ def obj_voi(s: set, g: Graph or DiGraph, k: int) -> (int, int):
     return objective_sum, len(g) - counter #- len(s)/4.0
 
 
+cache = {}
+
 def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
     viol = 0
+    cache.clear()
     for v in g.nodes:
         if v not in s:
             neighbors = set(g[v])
             nse = number_same_elements(neighbors, s)
             if nse < k:
                 viol += 1
+            cache[v] = nse
 
     return viol + float(len(s))/len(g)
 
 
-def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
     srem = set(s)
     srem.remove(v)
 
     for u in g[v]:
         if u not in s: # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
-            neighbors = set(g[u])
-            nse_s = number_same_elements(neighbors, s) # TODO: optimisation
+            neighbors = all_neighbors[u] # set(g[u])
+            #nse_s = number_same_elements(neighbors, s) # TODO: optimisation
+            nse_s = cache[u]
             if nse_s < k:
                 fit -= 1
+            #if not number_same_elements_at_least_k(neighbors, s, k):
+            #    fit-=1
 
-            nse_srem = number_same_elements(neighbors, srem) # TODO: optimisation
+            #nse_srem = number_same_elements(neighbors, srem) # TODO: optimisation
+            nse_srem = nse_s
+            if v in neighbors:
+                nse_srem-=1 # we removed the neighbor of u, se nse_srem is decreased
             if nse_srem < k:
                 fit += 1
+            #if not number_same_elements_at_least_k(neighbors, srem, k):
+            #    fit+=1
 
     nse_srem = number_same_elements(set(g[v]), srem)
     if nse_srem < k:
@@ -89,20 +113,28 @@ def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> 
     return fit - 1.0/len(g)
 
 
-def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, k: int) -> float:
+def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
     sadd = set(s)
     sadd.add(v)
 
     for u in g[v]:
         if u not in s:  # then s not in 'srem' <== s intersect srem = s, srem / s = {v}, v not in g[v]
-            neighbors = set(g[u])
-            nse_s = number_same_elements(neighbors, s)  # TODO: optimisation
+            neighbors = all_neighbors[u] # set(g[u])
+            #nse_s = number_same_elements(neighbors, s)  # TODO: optimisation
+            nse_s = cache[u]
             if nse_s < k:
                 fit -= 1
+            #if not number_same_elements_at_least_k(neighbors, s, k):
+            #    fit-=1
 
-            nse_sadd = number_same_elements(neighbors, sadd)  # TODO: optimisation
+            #nse_sadd = number_same_elements(neighbors, sadd)  # TODO: optimisation
+            nse_sadd = nse_s
+            if v in neighbors:
+                nse_sadd+=1
             if nse_sadd < k:
                 fit += 1
+            #if not number_same_elements_at_least_k(neighbors, sadd, k):
+            #    fit+=1
 
     nse_s = number_same_elements(set(g[v]), s)
     if nse_s < k:
