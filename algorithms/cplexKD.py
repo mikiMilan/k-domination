@@ -45,11 +45,11 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
 
 if __name__ == '__main__':
-    timelimit: float = 60 #sec
-    g = read_graph("cities_small_instances/manchester.txt")
+    timelimit: float = 180 #sec
+    g = read_graph("cities_small_instances/oxford.txt")
     # g = read_graph("random_instances/NEW-V1000-P0.2-G0.txt")
     curr = time()
-    primal, dual, status = ILP(g, 2, timelimit)
+    primal, dual, status = ILP(g, 8, timelimit)
     time_execute = time() - curr
     print(time_execute, primal, dual, status)
     
