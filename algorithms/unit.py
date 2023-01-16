@@ -67,23 +67,20 @@ def obj_voi(s: set, g: Graph or DiGraph, k: int) -> (int, int):
     return objective_sum, len(g) - counter #- len(s)/4.0
 
 
-cache = {}
-
-def fitness(s: set, g: Graph or DiGraph, k: int) -> float:
+def fitness(s: set, g: Graph or DiGraph, k: int, cache={}) -> float:
     viol = 0
-    cache.clear()
     for v in g.nodes:
         if v not in s:
             neighbors = set(g[v])
             nse = number_same_elements(neighbors, s)
             if nse < k:
-                viol += 1
+                viol += k-nse
             cache[v] = nse
 
     return viol + float(len(s))/len(g)
 
 
-def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
+def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int, cache: dict) -> float:
     srem = set(s)
     srem.remove(v)
 
@@ -93,27 +90,27 @@ def fitness_rec_rem(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbo
             #nse_s = number_same_elements(neighbors, s) # TODO: optimisation
             nse_s = cache[u]
             if nse_s < k:
-                fit -= 1
+                fit -= k-nse_s
             #if not number_same_elements_at_least_k(neighbors, s, k):
             #    fit-=1
 
             #nse_srem = number_same_elements(neighbors, srem) # TODO: optimisation
             nse_srem = nse_s
             if v in neighbors:
-                nse_srem-=1 # we removed the neighbor of u, se nse_srem is decreased
+                nse_srem -= 1 # we removed the neighbor of u, se nse_srem is decreased
             if nse_srem < k:
-                fit += 1
+                fit += k-nse_srem
             #if not number_same_elements_at_least_k(neighbors, srem, k):
             #    fit+=1
 
-    nse_srem = number_same_elements(set(g[v]), srem)
+    nse_srem = number_same_elements(all_neighbors[v], srem)
     if nse_srem < k:
-        fit += 1
+        fit += k-nse_srem
 
     return fit - 1.0/len(g)
 
 
-def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int) -> float:
+def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbors: dict, k: int, cache) -> float:
     sadd = set(s)
     sadd.add(v)
 
@@ -123,7 +120,7 @@ def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbo
             #nse_s = number_same_elements(neighbors, s)  # TODO: optimisation
             nse_s = cache[u]
             if nse_s < k:
-                fit -= 1
+                fit -= k-nse_s
             #if not number_same_elements_at_least_k(neighbors, s, k):
             #    fit-=1
 
@@ -132,12 +129,12 @@ def fitness_rec_add(s: set, v: int, fit: float, g: Graph or DiGraph, all_neighbo
             if v in neighbors:
                 nse_sadd+=1
             if nse_sadd < k:
-                fit += 1
+                fit += k-nse_sadd
             #if not number_same_elements_at_least_k(neighbors, sadd, k):
             #    fit+=1
 
-    nse_s = number_same_elements(set(g[v]), s)
+    nse_s = number_same_elements(all_neighbors[v], s)
     if nse_s < k:
-        fit -= 1
+        fit -= k-nse_s
 
     return fit + 1.0/len(g)

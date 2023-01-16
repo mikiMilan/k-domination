@@ -55,7 +55,8 @@ def random_nodes(g: Graph or DiGraph) -> set:
 
 def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: dict, k: int):
     improved = True
-    curr_fit = fitness(s, g, k)
+    cache = {}
+    curr_fit = fitness(s, g, k, cache)
 
     while improved:
         improved = False
@@ -63,7 +64,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: 
         shuffle(nodes)
         for v in nodes:
             if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k, cache)
                 # s.remove(v)
                 # new_fit = fitness(s, g, k)
                 # s.add(v)
@@ -71,13 +72,14 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: 
                     curr_fit = new_fit
                     s.remove(v)
                     improved = True
-                    check_fit =  fitness(s, g, k)
-                    if abs(check_fit-curr_fit)>0.000001:
+                    cache = {}
+                    check_fit = fitness(s, g, k, cache)
+                    if abs(check_fit-curr_fit) > 0.000001:
                         print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                         exit(1)
                     break
             else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k)
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k, cache)
                 # s.add(v)
                 # new_fit = fitness(s, g, k)
                 # s.remove(v)
@@ -85,7 +87,8 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: 
                     curr_fit = new_fit
                     s.add(v)
                     improved = True
-                    check_fit =  fitness(s, g, k)
+                    cache = {}
+                    check_fit =  fitness(s, g, k, cache)
                     if abs(check_fit-curr_fit)>0.000001:
                         print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                         exit(1)
@@ -96,7 +99,8 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: 
     
 def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
     improved = True
-    curr_fit = fitness(s, g, k)
+    cache = {}
+    curr_fit = fitness(s, g, k, cache)
 
     while improved:
         improved = False
@@ -106,14 +110,14 @@ def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: 
 
         for v in nodes:
             if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k, cache)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
                     best_rem = True
                     improved = True
             else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k)
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k, cache)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
@@ -130,7 +134,8 @@ def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: 
             curr_fit = best_fit
             #if curr_fit<1:
             #print("Improved to "+str(curr_fit) + " with size "+str(len(s)) +" out of "+str(len(g)))
-            check_fit =  fitness(s, g, k)
+            cache = {}
+            check_fit =  fitness(s, g, k, cache)
             if abs(check_fit-curr_fit)>0.000001:
                 print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                 exit(1)
@@ -168,7 +173,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
         # if (is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
 
-        if fit_new < fit or (fit_new==fit and random()<0.5):
+        if fit_new < fit or (fit_new == fit and random() < 0.5):
             #if fit_new==fit:
             #    print("Prelazim u isto kvalitetno")
             s = s_new
@@ -178,7 +183,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             #print("Fit: ", fit, "velicine ", len(s))
             if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
                 #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
-                #print("++Fit: ", fit, "velicina dominacije ", len(s))
+                # print("++Fit: ", fit, "velicina dominacije ", len(s))
                 #if len(s)==len(s_accept):
                 #    print("Pronadjen iste dimenzije")
                 s_accept = list(s)
@@ -190,17 +195,17 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
 
         iteration += 1
         if iteration%50 == 0:
-            print("it={}\tt={}\td={}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,  len(s), fit, k, instance_name))
+            print("it={:4d}\tt={:2d}\td={:2d}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,  len(s), fit, k, instance_name))
     return s_accept, best_time
 
 
 if __name__ == '__main__':
-    g = read_graph("cities_small_instances/oxford.txt")
+    g = read_graph("cities_small_instances/glasgow.txt")
 
     print("The graph has been loaded!!!")
 
     curr = time()
-    d1, bt = vns("oxford", g, k=8, d_min=1, d_max=20, time_execution=160, iteration_max=90000)
+    d1, bt = vns("oxford", g, k=1, d_min=1, d_max=20, time_execution=160, iteration_max=90000)
     time_execute = time() - curr
 
     print(len(d1), bt, time_execute)
