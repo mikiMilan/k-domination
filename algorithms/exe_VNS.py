@@ -16,17 +16,19 @@ if __name__ == '__main__':
     paralellism = 10
     iteration_max = 1000000
     time_limit = 3600
-    d_min = 5
+    d_min = 1
     d_max = 30
     
-    city_instances =  ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+    #instance_dir = 'cities_small_instances'
+    instance_dir = 'random_instances/low_density'
+    instances = ['NEW-V1000-P0.025-G0.txt']
+    ''' ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
-                      'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
-                      #['oxford.txt']
+                      'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']'''
                       
-    batches = ceil(len(city_instances)/paralellism)
+    batches = ceil(len(instances)/paralellism)
 
     for k in [1, 2, 4]:
         file_name_res = 'results/VNS/k' + str(k) + '_dmin'+str(d_min)+'_dmax'+str(d_max)+ '_tl'+str(time_limit)+ '.txt'
@@ -37,8 +39,8 @@ if __name__ == '__main__':
         procs = []
         i = 0
 
-        for instance in city_instances:
-            graph_open = 'cities_small_instances/'+instance
+        for instance in instances:
+            graph_open = instance_dir+'/'+instance
             print("Reading graph!")
             g = read_graph(graph_open)
             print("Creating process: ", graph_open)
@@ -50,7 +52,7 @@ if __name__ == '__main__':
             print("Doing batch "+str(b))
             for i in range(len(procs)):
                 if i%batches==b:
-                    print("Starting process "+str(i) +". "+city_instances[i])
+                    print("Starting process "+str(i) +". "+instances[i])
                     procs[i].start()
                     
             for i in range(len(procs)):
@@ -60,8 +62,8 @@ if __name__ == '__main__':
 
             print("Printing batch "+str(b)+" results")
             with open(file_name_res, 'a') as f:
-                for i in range(len(city_instances)):
-                    instance = city_instances[i]
+                for i in range(len(instances)):
+                    instance = instances[i]
                     if i%batches!=b:
                         continue
                     f.write('{}, {}, {:.2f}\n'.format(instance, return_dict[instance][0], return_dict[instance][1]))
