@@ -164,7 +164,7 @@ def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: 
     return curr_fit
     
     
-def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
+def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, neighb_matrix: list, k: int):
     improved = True
     cache = {}
     curr_fit = fitness(s, g, k, cache)
@@ -177,14 +177,14 @@ def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: 
 
         for v in nodes:
             if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k, cache)
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, neighb_matrix, k, cache)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
                     best_rem = True
                     improved = True
             else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k, cache)
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, neighb_matrix, k, cache)
                 if new_fit < best_fit:
                     best_fit = new_fit
                     best_v = v
@@ -222,8 +222,12 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
     
     neighbors = {}
+    neighb_matrix = [[] for _ in range(len(graph.nodes))]
     for v in graph.nodes:
         neighbors[v] = set(graph[v])
+        neighb_matrix[v] = [False]*len(graph.nodes)
+        for u in graph[v]:
+            neighb_matrix[v][u] = True
 
     s: set = ([]) # random_nodes(graph) # ACA: brze radi kad se instancira praznim resenjem
     fit = fitness(s, graph, k)
@@ -238,7 +242,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
         # print("Fit: ", fitness(s_new, g, k), "velicine ", len(s_new))
         # if(is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
-        fit_new = local_search_best_impr(s_new, graph, nodes, neighbors, k)
+        fit_new = local_search_best_impr(s_new, graph, nodes, neighbors, neighb_matrix, k)
         # print("Fit_New: ", fit_new, "velicine ", len(s_new))
         # if (is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")

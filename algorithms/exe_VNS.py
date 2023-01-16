@@ -19,15 +19,15 @@ if __name__ == '__main__':
     d_min = 1
     d_max = 10000
     
-    #instance_dir = 'cities_small_instances'
-    instance_dir = 'random_instances'
-    instances = ['NEW-V1000-P0.025-G0.txt']
-    '''['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+    instance_dir = 'cities_small_instances'
+    #instance_dir = 'random_instances'
+    #instances = ['NEW-V1000-P0.025-G0.txt']
+    instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
                       'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
-                      '''
+                      
     batches = ceil(len(instances)/paralellism)
 
     for k in [1, 2, 4]:
