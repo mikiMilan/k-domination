@@ -17,17 +17,17 @@ if __name__ == '__main__':
     iteration_max = 1000000
     time_limit = 3600
     d_min = 1
-    d_max = 30
+    d_max = 10000
     
     #instance_dir = 'cities_small_instances'
-    instance_dir = 'random_instances/low_density'
+    instance_dir = 'random_instances'
     instances = ['NEW-V1000-P0.025-G0.txt']
-    ''' ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+    '''['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
-                      'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']'''
-                      
+                      'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
+                      '''
     batches = ceil(len(instances)/paralellism)
 
     for k in [1, 2, 4]:

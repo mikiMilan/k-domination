@@ -42,6 +42,73 @@ def shaking_new_not_so_good(s: set, div: int, nodes: list, g: Graph or DiGraph) 
 
     return shak
 
+def shaking_balanced(s: set, div: int, nodes: list, g: Graph or DiGraph) -> set:
+    sl = list(s)
+    shuffle(sl)
+    
+    remove_cnt = div
+    if remove_cnt> len(sl)//2:
+        remove_cnt = len(sl)//2
+        
+    shak = set(sl[:len(sl)-remove_cnt])
+
+    # balanced add
+    complement_size = len(g)-len(sl)
+    dom_size = len(sl)
+    if dom_size == 0:
+        dom_size = 1
+    add_cnt = int(complement_size * remove_cnt // dom_size)
+
+    shuffle(nodes)
+    shak.union(set(nodes[:add_cnt]))
+
+    return shak
+
+def shaking_smart(s: set, div: int, nodes: list, g: Graph or DiGraph) -> set:
+    sl = list(s)
+    shuffle(sl)
+    
+    remove_cnt = div
+    if remove_cnt> len(sl)//2:
+        remove_cnt = len(sl)//2
+        
+    shak = set(sl[:len(sl)-remove_cnt])
+
+    # for each removed node v bring back one of the best candidates w.r.t. similar coverage 
+    # the newly added node u should cover similar set of nodes as the removed node v did
+    max_candidates_share = 1
+    for i in range(len(sl)-remove_cnt, len(sl)):
+        v = sl[i]
+        v_neigh = set(g[v])
+        intersect_size = {}
+        for u in nodes:
+            if u in s:
+                continue
+            intersect_size[u] = len(v_neigh.intersection(set(g[u])))
+        max_candidates_cnt = int(max_candidates_share*len(intersect_size))
+        sorted_candidates = sorted(intersect_size.items(), key=lambda item: item[1], reverse=True)[:max_candidates_cnt]
+        shak.add(sorted_candidates[randrange(0, len(sorted_candidates))][0])
+
+
+    return shak
+
+def shaking_with_random_fix(s: set, div: int, nodes: list, g: Graph or DiGraph, k: int) -> set:
+    sl = list(s)
+    shuffle(sl)
+    
+    remove_cnt = div
+    if remove_cnt> len(sl)//2:
+        remove_cnt = len(sl)//2
+        
+    shak = set(sl[:len(sl)-remove_cnt])
+
+    # randomly add new nodes until the solution becomes feasible
+    while not is_acceptable_solution(g, shak, k):
+        shak.add(nodes[randrange(0, len(nodes))])
+
+    return shak
+
+
 
 def random_nodes(g: Graph or DiGraph) -> set:
     s = set()
@@ -164,7 +231,10 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
     
     while iteration < iteration_max and time()-start_time < time_execution:
         s_new = shaking(s, div, nodes)
-        #s_new = shaking_new_not_so_good(s_accept, div, nodes, graph)
+        #s_new = shaking_balanced(s, div, nodes, graph)
+        #s_new = shaking_smart(s, div, nodes, graph)
+        #s_new = shaking_with_random_fix(s, div, nodes, graph, k)
+        #s_new = shaking_new_not_so_good(s, div, nodes, graph)
         # print("Fit: ", fitness(s_new, g, k), "velicine ", len(s_new))
         # if(is_acceptable_solution(graph, s_new, k)):
         #     print("s_new je dopustivo")
@@ -188,14 +258,15 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
                 #    print("Pronadjen iste dimenzije")
                 s_accept = list(s)
                 best_time = time() - start_time
+                divmax = int(len(s_accept)/2)
         else:
             div += 1
             if div >= divmax:
                 div = divmin
 
         iteration += 1
-        if iteration%50 == 0:
-            print("it={:4d}\tt={:2d}\td={:2d}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,  len(s), fit, k, instance_name))
+        if iteration%200 == 0:
+            print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,divmin, divmax,  len(s), fit, k, instance_name))
     return s_accept, best_time
 
 
