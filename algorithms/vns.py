@@ -66,8 +66,8 @@ def local_search_best_impr_phases(s: set, g: Graph or DiGraph, nodes: list, neig
         if improved:
             s.add(best_v)
             adding_cnt+=1
-            if adding_cnt%1000==0:
-                print("Removals "+str(removing_cnt)+" Additions "+str(adding_cnt))
+            #if adding_cnt%1000==0:
+            #    print("Removals "+str(removing_cnt)+" Additions "+str(adding_cnt))
             curr_fit = best_fit
             cache = {}
             check_fit =  fitness(s, g, k, cache)
@@ -222,7 +222,7 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
         s_new = shaking(s, div, nodes)
         fit_new = local_search_best_impr_phases(s_new, graph, nodes, neighbors, neighb_matrix, k, len(s), iteration)
 
-        if first_fitness_better(fit_new, fit) or (fitness_equal(fit, fit_new) and len(s_new.intersection(s))!=len(s_new) and random() < prob):
+        if first_fitness_better(fit_new, fit) or (fitness_equal(fit, fit_new) and random() < prob): #and len(s_new.intersection(s))!=len(s_new) and
             #if fitness_equal(fit_new, fit):
             #    print("Prelazim u isto kvalitetno sa drugacijom internom strukturom")
             s = s_new
