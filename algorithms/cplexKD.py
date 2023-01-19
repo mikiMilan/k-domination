@@ -30,7 +30,12 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
     solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info.log", msg=True)
     model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
-    
+    solution = []
+    for i in range(len(model.variables())):
+    	if y[i].varValue == 1: 
+    		solution.append(i)
+    		#print(y[i].name)
+    print(solution)
     #print("Problem status: ", LpStatus[model.status])
     #print("Solution status: ", LpSolution[model.sol_status])
     
@@ -38,7 +43,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
     logs_dict = orloge.get_info_solver("log_info.log", "CPLEX" ) # Orloge returns a dict with all logs info
     best_bound, best_solution, status = logs_dict["best_bound"], logs_dict["best_solution"], logs_dict["status"]
     #print("Best bound: ", best_bound) 
-    #print(logs_dict["status"])
+    #print(logs_dict)
     remove("log_info.log")
     
     return best_solution, ceil(best_bound), int(status == "MIP - Integer optimal")#"MIP - Time limit exceeded" --if not optimal
@@ -49,7 +54,7 @@ if __name__ == '__main__':
     g = read_graph("cities_small_instances/oxford.txt")
     # g = read_graph("random_instances/NEW-V1000-P0.2-G0.txt")
     curr = time()
-    primal, dual, status = ILP(g, 8, timelimit)
+    primal, dual, status = ILP(g, 2, timelimit)
     time_execute = time() - curr
     print(time_execute, primal, dual, status)
     
