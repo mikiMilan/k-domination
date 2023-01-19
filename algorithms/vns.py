@@ -6,7 +6,7 @@ from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_a
 from read_graph import read_graph
 
 
-def shaking(s: set, div: int, nodes: list) -> set:
+def shaking(s: set, div: int, nodes: list, fixed_nodes: set) -> set:
     sl = list(s)
     shuffle(sl)
         
@@ -14,6 +14,7 @@ def shaking(s: set, div: int, nodes: list) -> set:
 
     shuffle(nodes)
     shak.union(set(nodes[:div]))
+    shak.union(fixed_nodes)
 
     return shak
 
@@ -215,11 +216,17 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             neighb_matrix[v][u] = True
 
     s_accept = set([])
+    for v in graph.nodes:
+        if len(graph[v]) < k:
+            s_accept.add(v)
+
+    fixed_nodes = set(s_accept)
+
     fit = local_search_best(s_accept, graph, nodes, neighbors, neighb_matrix, k, len(nodes), 0)
     best_time = time()-start_time
     
     while iteration < iteration_max and time()-start_time < time_execution:
-        s_new = shaking(s_accept, div, nodes)
+        s_new = shaking(s_accept, div, nodes, fixed_nodes)
         fit_new = local_search_best(s_new, graph, nodes, neighbors, neighb_matrix, k, fit[1], iteration)
 
         if first_fitness_better(fit_new, fit) or (fitness_equal(fit, fit_new) and random() < prob): #and len(s_new.intersection(s))!=len(s_new) and
@@ -227,6 +234,8 @@ def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, 
             #    print("Prelazim u isto kvalitetno sa drugacijom internom strukturom")
             if first_fitness_better(fit_new, fit):
                 best_time = time() - start_time
+            if len(s_new)==24 and s_new!=s_accept:
+                print(s_new)
             s_accept = s_new
             div = divmin
             fit = fit_new
