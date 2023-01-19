@@ -9,39 +9,13 @@ from read_graph import read_graph
 def shaking(s: set, div: int, nodes: list) -> set:
     sl = list(s)
     shuffle(sl)
-    
-    remove_cnt = div
-    if remove_cnt> len(sl)//2:
-        remove_cnt = len(sl)//2
         
-    shak = set(sl[:len(sl)-remove_cnt])
+    shak = set(sl[:len(sl)-div])
 
-    # TODO: maybe add_cnt should be bounded as well, which is not a practical problem when graphs are large enough
-    add_cnt = div
     shuffle(nodes)
-    shak.union(set(nodes[:add_cnt]))
+    shak.union(set(nodes[:div]))
 
     return shak
-    
-def shaking_new_not_so_good(s: set, div: int, nodes: list, g: Graph or DiGraph) -> set:
-    sl = list(s)
-    shuffle(sl)
-    
-    remove_cnt = div
-    if remove_cnt> len(sl)//2:
-        remove_cnt = len(sl)//2
-        
-    shak = set(sl[:len(sl)-remove_cnt])
-
-    for i in range(len(sl)-remove_cnt, len(sl)):
-        v = sl[i]
-        neighb = list(g[v])
-        if len(neighb)==0:
-            continue
-        shak.add(neighb[randrange(0,len(neighb))])
-
-    return shak
-
 
 def random_nodes(g: Graph or DiGraph) -> set:
     s = set()
@@ -52,93 +26,170 @@ def random_nodes(g: Graph or DiGraph) -> set:
 
     return s
 
+def first_fitness_better(fit1, fit2):
+    fit1Tot = (1+fit1[0])*(1+fit1[1]*0.01)
+    fit2Tot = (1+fit2[0])*(1+fit2[1]*0.01)
+    return fit1Tot<fit2Tot
+    #return fit1[0] < fit2[0] or (fit1[0]==fit2[0] and fit1[1]<fit2[1]) or (fit1[0]==fit2[0] and fit1[1]==fit2[1] and fit1[2]<fit2[2])
 
-def local_search_first_impr(s: set, g: Graph or DiGraph, nodes: list,neighbors: dict, k: int):
+def fitness_equal(fit1, fit2):
+    return not first_fitness_better(fit1, fit2) and not first_fitness_better(fit2, fit1)
+
+
+adding_cnt = 0
+removing_cnt = 0
+ls3_tried = set()
+
+def local_search_best(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, neighb_matrix: list, k: int, best_size_so_far: int, iteration: int):
+    global adding_cnt, removing_cnt, ls3_tried
+    
     improved = True
     cache = {}
     curr_fit = fitness(s, g, k, cache)
 
-    while improved:
-        improved = False
-
-        shuffle(nodes)
-        for v in nodes:
-            if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k, cache)
-                # s.remove(v)
-                # new_fit = fitness(s, g, k)
-                # s.add(v)
-                if new_fit < curr_fit:
-                    curr_fit = new_fit
-                    s.remove(v)
-                    improved = True
-                    cache = {}
-                    check_fit = fitness(s, g, k, cache)
-                    if abs(check_fit-curr_fit) > 0.000001:
-                        print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
-                        exit(1)
-                    break
-            else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k, cache)
-                # s.add(v)
-                # new_fit = fitness(s, g, k)
-                # s.remove(v)
-                if new_fit < curr_fit:
-                    curr_fit = new_fit
-                    s.add(v)
-                    improved = True
-                    cache = {}
-                    check_fit =  fitness(s, g, k, cache)
-                    if abs(check_fit-curr_fit)>0.000001:
-                        print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
-                        exit(1)
-                    break
-
-    return curr_fit
-    
-    
-def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, k: int):
-    improved = True
-    cache = {}
-    curr_fit = fitness(s, g, k, cache)
-
+    # adding nodes to achieve feasibility
     while improved:
         improved = False
         best_fit = curr_fit
         best_v = None
-        best_rem = None
 
         for v in nodes:
-            if v in s:
-                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, k, cache)
-                if new_fit < best_fit:
+            if v not in s:
+                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, neighb_matrix, k, cache)
+                if first_fitness_better(new_fit, best_fit):
                     best_fit = new_fit
                     best_v = v
-                    best_rem = True
-                    improved = True
-            else:
-                new_fit = fitness_rec_add(s, v, curr_fit, g, neighbors, k, cache)
-                if new_fit < best_fit:
-                    best_fit = new_fit
-                    best_v = v
-                    best_rem = False
                     improved = True
         
         if improved:
-            if best_rem:
-                s.remove(best_v)
-            elif not best_rem:
-                s.add(best_v)
-            else:
-                raise Exception("Unexpected value for best_rem +"+str(best_rem))
+            s.add(best_v)
+            adding_cnt+=1
+            #if adding_cnt%1000==0:
+            #    print("Removals "+str(removing_cnt)+" Additions "+str(adding_cnt))
             curr_fit = best_fit
-            #if curr_fit<1:
-            #print("Improved to "+str(curr_fit) + " with size "+str(len(s)) +" out of "+str(len(g)))
             cache = {}
             check_fit =  fitness(s, g, k, cache)
-            if abs(check_fit-curr_fit)>0.000001:
+            if not fitness_equal(curr_fit, check_fit):
                 print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                 exit(1)
+
+    # now simple removal
+    improved = True
+    while improved:
+        improved = False
+        best_fit = curr_fit
+        best_v = None
+
+        for v in nodes:
+            if v in s:
+                new_fit = fitness_rec_rem(s, v, curr_fit, g, neighbors, neighb_matrix, k, cache)
+                if first_fitness_better(new_fit, best_fit):
+                    best_fit = new_fit
+                    best_v = v
+                    improved = True
+        
+        if improved:
+            s.remove(best_v)
+            removing_cnt+=1
+            if adding_cnt%1000==0:
+                print("Removals "+str(removing_cnt)+" Additions "+str(adding_cnt))
+            curr_fit = best_fit
+            cache = {}
+            check_fit =  fitness(s, g, k, cache)
+            if not fitness_equal(curr_fit, check_fit):
+                print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                exit(1)
+
+    # if solution is not good we do not want to execute this expensive remove+swap-based LS 
+    #print("Best size so far is "+str(best_size_so_far))
+    #if len(s)>best_size_so_far+2:
+    #    return curr_fit
+    #if iteration%100!=0:
+    return curr_fit
+
+    improved = True
+    while improved:
+        improved = False
+
+        #s_list = list(s)
+        #shuffle(s_list)
+
+        s_neighb = {}
+        for n in s:
+            s_neighb[n] = len(neighbors[n])
+
+        s_neighb_sorted = sorted(s_neighb.items(), key=lambda item: item[1])
+
+        for n, _ in s_neighb_sorted:
+            s_new = set(s)
+            s_new.remove(n)
+            new_fit = local_search_best_swap(s_new, g, nodes, neighbors, neighb_matrix, k)
+            if first_fitness_better(new_fit, curr_fit):
+                improved = True
+                curr_fit = new_fit
+                s.clear()
+                for e in  s_new:
+                    s.add(e)
+                #print("Improved with swap LS to "+str(curr_fit) +" by removing node with "+str(len(neighbors[n]))+" neighbors")
+                cache = {}
+                check_fit =  fitness(s, g, k, cache)
+                if not fitness_equal(curr_fit, check_fit):
+                    print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                    exit(1)
+                break
+
+    return curr_fit
+
+def local_search_best_swap(s: set, g: Graph or DiGraph, nodes: list, neighbors: dict, neighb_matrix: list, k: int):
+    
+    improved = True
+    cache = {}
+    curr_fit = fitness(s, g, k, cache)
+
+    #t1 = 0
+    #t2 = 0
+
+    while improved:
+        improved = False
+        best_fit = curr_fit
+        best_v1_rem = None
+        best_v2_add = None
+
+        for v1 in s:
+            sp = s.copy()
+            sp.remove(v1)
+            cache = {}
+            #start = time()
+            sp_fit = fitness(sp, g, k, cache)
+            #t1+=(time()-start)
+
+            #start = time()
+            for v2 in nodes:
+                if v2 in s:
+                    continue
+                new_sp_fit = fitness_rec_add(sp, v2, sp_fit, g, neighbors, neighb_matrix, k, cache)
+                if first_fitness_better(new_sp_fit, best_fit):
+                    best_fit = new_sp_fit
+                    best_v1_rem = v1
+                    best_v2_add = v2
+                    improved = True
+            #t2+=(time()-start)
+        
+        if improved:
+            v1_neigh = set(g[best_v1_rem])
+            v2_neigh = set(g[best_v2_add])
+            #size = len(v1_neigh.intersection(v2_neigh))
+            #print("swap improvement! "+str(best_fit)+"\tswap improvement intersection size is "+str(size))
+            s.remove(best_v1_rem)
+            s.add(best_v2_add)
+            curr_fit = best_fit
+            cache = {}
+            check_fit =  fitness(s, g, k, cache)
+            if not fitness_equal(curr_fit, check_fit):
+                print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
+                exit(1)
+
+    #print("T1 = "+str(t1)+" T2 = "+str(t2))
 
     return curr_fit
 
@@ -146,56 +197,48 @@ def local_search_best_impr(s: set, g: Graph or DiGraph, nodes: list, neighbors: 
 def vns(instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, time_execution: int, iteration_max: int) -> list:
     # TODO: set this to be parameter 
     seed(12345)
+    prob = 0.5
     divmin = d_min
     divmax = min(d_max, len(graph)/5)
     div = divmin
-    iteration = 0
+    iteration = 1
     start_time = time()
     best_time = 0
     nodes = list(graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
     
     neighbors = {}
+    neighb_matrix = [[] for _ in range(len(graph.nodes))]
     for v in graph.nodes:
         neighbors[v] = set(graph[v])
+        neighb_matrix[v] = [False]*len(graph.nodes)
+        for u in graph[v]:
+            neighb_matrix[v][u] = True
 
-    s: set = ([]) # random_nodes(graph) # ACA: brze radi kad se instancira praznim resenjem
-    fit = fitness(s, graph, k)
-    s_accept = set(graph.nodes)
+    s_accept = set([])
+    fit = local_search_best(s_accept, graph, nodes, neighbors, neighb_matrix, k, len(nodes), 0)
+    best_time = time()-start_time
     
     while iteration < iteration_max and time()-start_time < time_execution:
-        s_new = shaking(s, div, nodes)
-        #s_new = shaking_new_not_so_good(s_accept, div, nodes, graph)
-        # print("Fit: ", fitness(s_new, g, k), "velicine ", len(s_new))
-        # if(is_acceptable_solution(graph, s_new, k)):
-        #     print("s_new je dopustivo")
-        fit_new = local_search_best_impr(s_new, graph, nodes, neighbors, k)
-        # print("Fit_New: ", fit_new, "velicine ", len(s_new))
-        # if (is_acceptable_solution(graph, s_new, k)):
-        #     print("s_new je dopustivo")
+        s_new = shaking(s_accept, div, nodes)
+        fit_new = local_search_best(s_new, graph, nodes, neighbors, neighb_matrix, k, fit[1], iteration)
 
-        if fit_new < fit or (fit_new == fit and random() < 0.5):
-            #if fit_new==fit:
-            #    print("Prelazim u isto kvalitetno")
-            s = s_new
+        if first_fitness_better(fit_new, fit) or (fitness_equal(fit, fit_new) and random() < prob): #and len(s_new.intersection(s))!=len(s_new) and
+            #if fitness_equal(fit_new, fit):
+            #    print("Prelazim u isto kvalitetno sa drugacijom internom strukturom")
+            if first_fitness_better(fit_new, fit):
+                best_time = time() - start_time
+            s_accept = s_new
             div = divmin
             fit = fit_new
-
-            #print("Fit: ", fit, "velicine ", len(s))
-            if len(s_accept) > len(s) and is_acceptable_solution(graph, s, k):
-                #print("Pronadjen!!!!!!!!! Vrijeme: ", time() - start_time)
-                # print("++Fit: ", fit, "velicina dominacije ", len(s))
-                #if len(s)==len(s_accept):
-                #    print("Pronadjen iste dimenzije")
-                s_accept = list(s)
-                best_time = time() - start_time
+            divmax = int(len(s_accept)/2)
         else:
             div += 1
             if div >= divmax:
                 div = divmin
 
         iteration += 1
-        if iteration%50 == 0:
-            print("it={:4d}\tt={:2d}\td={:2d}\tsize={}\tfit={:.5f}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,  len(s), fit, k, instance_name))
+        if iteration%1000== 0:
+            print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration, int(time() - start_time),div,divmin, divmax, fit, fit_new, k, instance_name))
     return s_accept, best_time
 
 
