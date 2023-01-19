@@ -18,3 +18,4 @@ nottingham.txt, 44, 110.78
 plymouth.txt, 31, 84.40
 southampton.txt, 25, 21.18
 york.txt, 32, 65.46
+bath.txt, 38, 36.80
