@@ -1,13 +1,14 @@
 from time import time
-from vns import vns
+from vns import VNS
 from statistics import mean
 from read_graph import read_graph
 from multiprocessing import Process, Manager
 from math import ceil
 
 
-def task(fun, instance_name, g, k, d_min, d_max, time_limit, iteration_max, r, i):
-    d, time_execute = fun(instance_name, g, k, d_min, d_max, time_limit, iteration_max)
+def task(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed, r, i):
+    vns  = VNS(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed)
+    d, time_execute = vns.run()
     # print(len(d), time_execute)
     r[i] = [len(d), time_execute]
 
@@ -18,6 +19,9 @@ if __name__ == '__main__':
     time_limit = 3600
     d_min = 1
     d_max = 100000000
+    prob = 0.5
+    penalty =  0.01
+    seed = 12345
     
     instance_dir = 'cities_small_instances'
     #instance_dir = 'random_instances'
@@ -46,7 +50,7 @@ if __name__ == '__main__':
             g = read_graph(graph_open)
             print("Creating process: ", graph_open)
 
-            p = Process(target=task, args=(vns, instance, g, k, d_min, d_max, time_limit, iteration_max, return_dict, instance))
+            p = Process(target=task, args=(instance, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed, return_dict, instance))
             procs.append(p)
 
         for b in range(batches):
