@@ -29,39 +29,16 @@ class VNS:
                 self.neighb_matrix[v][u] = True
 
 
-    def shaking(self, s: set, div: int, fixed_nodes: set) -> set:
-        sl = []
-        for e in s:
-            if e not in fixed_nodes:
-                sl.append(e)
+    def shaking(self, s: set, d: int) -> set:
+        sl = list(s)
         shuffle(sl)
+            
+        shak = set(sl[:len(sl)-d])
 
-        if len(sl)+len(fixed_nodes) != len(s): # TODO: fixed_nodes in s?
-            print("Error: Fixed element not in s!!!")
-            exit(1)
+        shuffle(self.nodes)
+        shak.union(set(self.nodes[:d]))
 
-        if div < len(sl):
-            shak = set(sl[:len(sl)-div])
-
-            shuffle(self.nodes)
-            shak.union(set(self.nodes[:div]))
-            shak.union(fixed_nodes)
-
-            return shak
-        else:
-            pass # TODO: if div>divmin then div-=1 else END_ALGORITHM
-
-        return s
-
-
-    def random_nodes(g: Graph or DiGraph) -> set:
-        s = set()
-
-        for v in g.nodes:
-            if random() < 0.1:
-                s.add(v)
-
-        return s
+        return shak
 
     def first_fitness_better(self, fit1, fit2):
         fit1Tot = (1+fit1[0])*(1+fit1[1]*self.penalty)
@@ -145,7 +122,7 @@ class VNS:
         d = self.d_min
 
         while iteration < self.iteration_max and time()-start_time < self.time_limit:
-            s_new = self.shaking(s_accept, d, fixed_nodes)
+            s_new = self.shaking(s_accept, d)
             fit_new = self.local_search_best(s_new)
 
             if self.first_fitness_better(fit_new, fit) or (self.fitness_equal(fit, fit_new) and random() < self.prob): #and len(s_new.intersection(s))!=len(s_new) and
