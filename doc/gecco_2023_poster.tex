@@ -37,6 +37,12 @@
 %% The first command in your LaTeX source must be the \documentclass command.
 \documentclass[sigconf]{acmart}
 \usepackage{fixme}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\newtheorem{definition}{Definition}
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
 \AtBeginDocument{%
@@ -208,19 +214,32 @@ In this work we propose another meta-heuristic approach to solve the MkDP, a var
 \end{itemize}
 Contributions of the paper are as follow.
 \begin{itemize}
-	\item The proposed VNS is able to achieve new state-of-the-art results concerning real-world instances; it is compared to the two greedy and the BS approach from the literature. 
-	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the two state-of-the-art incrementally oriented approaches from the literature.
-	\item Concerning the (five) large-sized instances, where BS could not finish within the proposed time limit, our VNS delivers in all cases a feasible solution quickly. (TODO: provjeriti ovo...)
+	\item The parameters of the proposed VNS are tuned by two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and an evolutionary-based tuning tool \texttt{sklearn-genetic-opt}~\cite{Arenas_Gomez2022}.  
+	\item The two settings of VNS, obtained by the above-mentioned tuning tools, are able to achieve new state-of-the-art results concerning the real-world instances; they are compared to the two greedy algorithms and the BS approach from the literature. 
+	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the two state-of-the-art incremental approaches from the literature.
+	\item Concerning the (five) large-sized instances, where BS could not finish within the proposed time limit, our VNS delivers in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...)
 \end{itemize}
 
-\section{Problem definition }
+\section{Notation and problem definition }
     
+
+    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of $G$ that of a minimum cardinalty. 
+    
+    
+    This problem can be described by using a level of coverage of neighborhoods of vertex $v$ w.r.t.\ $D$
+    \begin{equation}
+    	C(D, v) = \min(k, |N(v) \cap D|)
+    \end{equation}
+and  formulated as the following optimization problem 
+\begin{align}
+    \arg \max_{D \subset V } \sum_{v \in V\setminus D} C(D,v) \\
+    s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
+\end{align}
+    
+\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS by not only searching for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\refeq{sec:vns}.  In other words, any subset of the set of vertices $V$ is a candidate solution in our VNS procedure. Thus, the size of search space is exponential, i.e. $2^{|V|}$.Further, a solution will be encoded as a set structure (of indices of vectors). 
    
    
-   \subsection{The general search space}
-   
-   
-\section{The proposed algorithm}
+\section{The proposed algorithm}\label{sec:vns}
  
    \subsection{Variable neighborhood search}
    
