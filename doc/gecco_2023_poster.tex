@@ -199,8 +199,19 @@ In the course of this work, we study the \emph{minimum k-domination problem} (Mk
 This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent to at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum such k--dominating set is a solution of MkDP.  NP-completeness of the k-domination problem is established on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Gagarin and Corcoran   in~\cite{corcoran2021heuristics}. A few greedy approaches is firstly  proposed by Couture et al.~\cite{couture2006incremental}, and by Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized algorithm. 
 Applications of this specific problem can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in a distributed system is a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
 
-In this work we propose ... TODO...
-
+In this work we propose another meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
+\begin{itemize}
+	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set; ($ii$) a penalized measure that evaluated how far is the considered set from being a $k$--dominating. 
+	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima.
+	\item An efficient local search mechanism that try to fix unfeasible solutions into feasible ones. It is equipped witch a fast partial evaluation of the fitness function in a constant time.
+ 
+\end{itemize}
+Contributions of the paper are as follow.
+\begin{itemize}
+	\item The proposed VNS is able to achieve new state-of-the-art results concerning real-world instances; it is compared to the two greedy and the BS approach from the literature. 
+	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the two state-of-the-art incrementally oriented approaches from the literature.
+	\item Concerning the (five) large-sized instances, where BS could not finish within the proposed time limit, our VNS delivers in all cases a feasible solution quickly. (TODO: provjeriti ovo...)
+\end{itemize}
 
 \section{Problem definition }
     
