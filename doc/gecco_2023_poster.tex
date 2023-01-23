@@ -38,9 +38,11 @@
 \documentclass[sigconf]{acmart}
 \usepackage{fixme}
 \usepackage{amsmath}
-\usepackage{amssymb}
+%\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \newtheorem{definition}{Definition}
 %%
@@ -236,13 +238,43 @@ and  formulated as the following optimization problem
     s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
 \end{align}
     
-\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS by not only searching for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\refeq{sec:vns}.  In other words, any subset of the set of vertices $V$ is a candidate solution in our VNS procedure. Thus, the size of search space is exponential, i.e. $2^{|V|}$.Further, a solution will be encoded as a set structure (of indices of vectors). 
+\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS by not only searching for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a candidate solution in our VNS procedure. Thus, the size of search space is exponential, i.e. $2^{|V|}$.Further, a solution will be encoded as a set structure (of indices of vectors). 
    
    
 \section{The proposed algorithm}\label{sec:vns}
+
+In this section we first give an overview of the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness evaluation, shaking procedure and local search.
  
-   \subsection{Variable neighborhood search}
-   
+  \subsection{Variable neighborhood search}
+ Variable neighborhood search is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from local optima. It is a single-point search metaheuristic, thus trying to improve always one solution per iteration. VNS had been proved as one of the most powerful meta-heuristic, delivering state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+  
+  The pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
+  
+     \begin{algorithm}[!t] 
+  	\caption{VNS  (max)}\label{alg:vns}
+  	\begin{algorithmic}[1]
+  		\STATE \textbf{Input:} initial solution $s$, neighborhoods  $\mathcal{N}_{k_{\min}},\ldots, \mathcal{N}_{k_{\max}}$ 
+  		\STATE \textbf{Output:} (improved) solution $s$
+  		\STATE $k \gets  k_{\min}$
+  		\WHILE{!(\emph{TerminationCriterionSatisfied()})}
+  		\STATE  $s' \gets$ choose random solution from $\mathcal{N}_k(s)$ \hspace{0.3cm}//\,shaking phase
+  		\STATE $s' \gets  LocalSearch(s^{'})$
+  		\IF{$fitness(s') > fitness(s)$}
+  		\STATE $s \gets s'$
+  		\STATE $k \gets k_{min}$
+  		\ELSE 
+  		\STATE $k \gets k+1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
+  		\IF{$k > k_{max}$}
+  		\STATE $k\gets k_{min}$
+  		\ENDIF
+  		\ENDIF
+  		\ENDWHILE
+  		\STATE \textbf{return} $s$
+  	\end{algorithmic}
+  \end{algorithm}
+
+TODO: explain VNS ... 
+
    \subsection{Fitness function}
   
    \subsection{Shaking}
