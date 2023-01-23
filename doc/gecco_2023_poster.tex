@@ -301,12 +301,20 @@ In this section we first give an overview of the variable neighborhood search (V
        	\item Between two unfeasible solutions of the same cardinalty, the search prefers that whose violation score is smaller, thus occasionally easier to be reshaped into   feasible one.  
        	\item Between two feasible solutions, the better is the one with a smaller cardinalty. 
        \end{itemize}
-   
+     Note that a solution is structured as a set of vertices belonging to it. 
    
    \subsection{Shaking}
     As we already mentioned, the purpose of shaking is to escape the search from stacking into   local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
    \subsection{Local search}
- 
+  The purpose of local search (LS) is improving a solution by utilizing small changes in its structure. Therefore, we shall to define by what these `small changes'' mean, that is, a local search neighbor have to be carefully designed.  For MkDP, the LS utilized is given in Algorithm~\ref{alg:ls}.
+  
+  
+  \begin{algorithm}[!t] 
+  	\caption{LocalSearch}\label{alg:ls}
+  	\begin{algorithmic}[1]
+  		\STATE Input: TODO
+  	\end{algorithmic}
+\end{algorithm}
 
 \section{Experimental evaluation}
 
