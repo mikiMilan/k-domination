@@ -251,7 +251,7 @@ In this section we first give an overview of the variable neighborhood search (V
   The pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
   
      \begin{algorithm}[!t] 
-  	\caption{VNS  (max)}\label{alg:vns}
+  	\caption{VNS scheme}\label{alg:vns}
   	\begin{algorithmic}[1]
   		\STATE \textbf{Input:} initial solution $s_{best}$ , neighborhoods  $\mathcal{N}_{k_{\min}},\ldots, \mathcal{N}_{k_{\max}}$ 
   		\STATE \textbf{Output:} (improved) solution $s_{best}$
@@ -304,7 +304,7 @@ In this section we first give an overview of the variable neighborhood search (V
    
    
    \subsection{Shaking}
-    As we already mentioned, the purpose of shaking is to escape the search from local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
+    As we already mentioned, the purpose of shaking is to escape the search from stacking into   local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
    \subsection{Local search}
  
 
