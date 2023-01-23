@@ -246,7 +246,7 @@ and  formulated as the following optimization problem
 In this section we first give an overview of the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness evaluation, shaking procedure and local search.
  
   \subsection{Variable neighborhood search}
- Variable neighborhood search is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from local optima. It is a single-point search metaheuristic, thus trying to improve always one solution per iteration. VNS had been proved as one of the most powerful meta-heuristic, delivering state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+ Variable neighborhood search is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stack the search in a  local optimum. It is a single-point search metaheuristic, thus trying to improve always one solution per each iteration. VNS had been proved as one of the most powerful meta-heuristic, delivering state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
   The pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
   
@@ -306,7 +306,7 @@ In this section we first give an overview of the variable neighborhood search (V
    \subsection{Shaking}
     As we already mentioned, the purpose of shaking is to escape the search from stacking into   local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
    \subsection{Local search}
-  The purpose of local search (LS) is improving a solution by utilizing small changes in its structure. Therefore, we shall to define by what these `small changes'' mean, that is, a local search neighbor have to be carefully designed.  For MkDP, the LS utilized is given by Algorithm~\ref{alg:ls}.
+  The purpose of local search (LS) is improving a solution by applying small changes on solution structure. Therefore, defining  ``small changes'', that is, the structure of local search neighboring plays a crucial role in establishing an effective LS.  For MkDP, the LS utilized is given by Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
@@ -353,6 +353,9 @@ In this section we first give an overview of the variable neighborhood search (V
   	\end{algorithmic}
 \end{algorithm}
 
+Our LS is iteratively trying to improve solution $s$ by applying the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score is being detected.  
+
+\emph{Partial fitness evaluation}. TODO: Marko 
 \section{Experimental evaluation}
 
 
