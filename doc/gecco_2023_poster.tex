@@ -306,13 +306,50 @@ In this section we first give an overview of the variable neighborhood search (V
    \subsection{Shaking}
     As we already mentioned, the purpose of shaking is to escape the search from stacking into   local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
    \subsection{Local search}
-  The purpose of local search (LS) is improving a solution by utilizing small changes in its structure. Therefore, we shall to define by what these `small changes'' mean, that is, a local search neighbor have to be carefully designed.  For MkDP, the LS utilized is given in Algorithm~\ref{alg:ls}.
+  The purpose of local search (LS) is improving a solution by utilizing small changes in its structure. Therefore, we shall to define by what these `small changes'' mean, that is, a local search neighbor have to be carefully designed.  For MkDP, the LS utilized is given by Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
   	\caption{LocalSearch}\label{alg:ls}
   	\begin{algorithmic}[1]
-  		\STATE Input: TODO
+  		\STATE \textbf{Input}: a feasible solution $s$
+  		\STATE \textbf{Output}: a (possibly) improved solution
+  		\STATE improved $\gets$ True
+  		\STATE $best\_fit \gets fitness(s)$
+  		\STATE $best\_v \gets \emptyset$
+ 
+  		\WHILE{\emph{improved}}
+  		     \STATE $improved \gets  False$
+  		     \FOR{$v \in V \setminus s$}
+  		          \STATE $s' \gets s \cup \{v\}$
+  		          \IF{$fitness(s') < fitness(s)$}
+  		              \STATE $best\_v \gets v$
+  		              \STATE $best\_fit \gets fitness(s')$
+  		          \ENDIF
+  		     \ENDFOR
+  		     \IF{\emph{improved}}
+  		         \STATE $s \gets s \cup \{best\_v\}$
+  		         \STATE $curr\_fit \gets best\_fit$
+  		     \ENDIF
+
+  		\ENDWHILE   		    
+  		 \STATE  $improved \gets True$
+  		 \WHILE{\emph{improved}}
+  		   \STATE $improved \gets  False$
+  		    \FOR{$v \in s$}
+  		       \STATE $s' \gets \setminus \{v\}$
+  		        \IF{$fitness(s') < fitness(s)$}
+  		             \STATE $best\_v \gets v$
+  		             \STATE $best\_fit \gets fitness(s')$
+  		       \ENDIF
+  		        \IF{\emph{improved}}
+  		       \STATE $s \gets s \setminus \{best\_v\}$
+  		       \STATE $curr\_fit \gets best\_fit$
+  		       \ENDIF
+  		       
+  		    \ENDFOR
+  		\ENDWHILE
+  		\STATE return $s$
   	\end{algorithmic}
 \end{algorithm}
 
