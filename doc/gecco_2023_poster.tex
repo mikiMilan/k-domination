@@ -287,12 +287,12 @@ In this section we first give an overview of the variable neighborhood search (V
 
    \subsection{Fitness function}
        In order to evaluate solution $s$, the following nonlinear \emph{fitness} function is used 
-       \begin{align}
+       \begin{align}\label{eq:fitness}
           \emph{fitness}(s) = ( 1+ penalty \cdot |s|) \times ( 1 + violate(s))
        \end{align}
        where 
        \begin{align}
-       	   violate(s) = \sum_{v \in V \setminus s} ( k - C(s, v) ) 
+       	   violate(s) = \sum_{v \in V \setminus s} \min(k, k - C(s, v) )
        \end{align}
    Note that this function operates on both, feasible and unfeasible solutions. 
        Motivation for integrating this function  in the search is threefold:
@@ -353,9 +353,14 @@ In this section we first give an overview of the variable neighborhood search (V
   	\end{algorithmic}
 \end{algorithm}
 
-Our LS is iteratively trying to improve solution $s$ by applying the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score is being detected.  
+Our LS is iteratively trying to improve solution $s$ by applying the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score is being detected.  We mention that the order of vertices we iterate through at Line 8 and Line 23 are randomly shuffled. 
 
-\emph{Partial fitness evaluation}. TODO: Marko 
+\emph{Partial fitness evaluation}. Calculating fitness function (\ref{eq:fitness}) takes $O(|E|)$ time; its the most time consuming part is the calculation of $\emph{violate}(\cdot)$  score.   If graphs are dense, this complexity may increase to  $O(n^2)$. Note that at each iteration in Algorithm~\ref{alg:ls},  fitness function evaluation is performed $|V|$ times. Thus, performing the \emph{fitness} evaluation here from scratch is too costly. 
+
+In order to perform \texttt{LocalSearch} more efficiently, partial calculations of the \emph{fitness} function are applied. More in details, before we enter the first \texttt{while} loop, $C(s, v), \forall v \in V$, values are pre-determined (cashed) for solution $s$, using a set structure. In case of a node addition, that is  $s' = s \cup \{v\} $, $violate(s') = violate(s) - C(s, v)  \texttt{I}_{(k> C(s,v))}  + \sum_{w\in N(v) \cap s'} \texttt{I}_{(k+1 > C(s, w))}  $ where \texttt{I} stands for the indicator function. 
+In case of a node removal, we apply a similar concept as for a node addition, that is, if $s' = s \setminus \{v\}$, then $violate(s') =  violate(s) + ( k - C(s, v)) \texttt{I}_{( k > C(s, v))} $+ $\sum_{ w \in   N(v)  \setminus s} \texttt{I}_{(k+1 \leq C(s, w)) }$. By encoutering a new incumbent in \texttt{LocalSearch}, cache structure $C(s, \cdot)$ has been updated accordingly.
+
+
 \section{Experimental evaluation}
 
 
