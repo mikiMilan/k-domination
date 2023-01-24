@@ -204,8 +204,8 @@ where $V$ represents a set of elements called vertices and   a set of pairs $e =
 
 
 In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}.  Note that the definition for this problem is ambiguous in the literature. The first variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
-This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent to at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum such k--dominating set is a solution of MkDP.  NP-completeness of the k-domination problem is established on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Gagarin and Corcoran   in~\cite{corcoran2021heuristics}. A few greedy approaches is firstly  proposed by Couture et al.~\cite{couture2006incremental}, and by Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized algorithm. 
-Applications of this specific problem can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in a distributed system is a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
+This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent to at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum such $k$--dominating set is a solution of MkDP.  NP-completeness of the k-domination problem is established on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics} so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches is proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized greedy algorithm. However, any of the proposed methods in the literature do not scale well with increase in the instance size.   
+Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in a distributed system is a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
 
 In this work we propose another meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
 \begin{itemize}
@@ -220,6 +220,7 @@ Contributions of the paper are as follow.
 	\item The two settings of VNS, obtained by the above-mentioned tuning tools, are able to achieve new state-of-the-art results concerning the real-world instances; they are compared to the two greedy algorithms and the BS approach from the literature. 
 	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the two state-of-the-art incremental approaches from the literature.
 	\item Concerning the (five) large-sized instances, where BS could not finish within the proposed time limit, our VNS delivers in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...)
+	\item The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
 \end{itemize}
 
 \section{Notation and problem definition }
@@ -361,11 +362,34 @@ In order to perform \texttt{LocalSearch} more efficiently, partial calculations 
 In case of a node removal, we apply a similar concept as for a node addition, that is, if $s' = s \setminus \{v\}$, then $violate(s') =  violate(s) + ( k - C(s, v)) \texttt{I}_{( k > C(s, v))} $+ $\sum_{ w \in   N(v)  \setminus s} \texttt{I}_{(k+1 \leq C(s, w)) }$. By encoutering a new incumbent in \texttt{LocalSearch}, cache structure $C(s, \cdot)$ has been updated accordingly.
 
 
-\section{Experimental evaluation}
+\section{Experimental evaluation}\label{sec:experiments}
 
 
+In this section we provide empirical evidence of the quality of the proposed \textsc{Vns} method. In order to do so, we include three competitor heuristic approaches from the literature. To me more precise, the following four methods for MkDP are compared:  
+
+\begin{itemize}
+	\item Greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, labelled by \textsc{Greedy-1};
+	\item Greedy method from~\cite{gagarin2018multiple}, labelled by \textsc{Greedy-2};
+	\item Beam search approach from~\cite{corcoran2021heuristics}, labelled by \textsc{Bs};
+	\item VNS approach, as described in Section~\ref{sec:vns}, labelled by \textsc{Vns}.  
+\end{itemize}
+
+
+\emph{Benchmark instances}. For the comparison purposes, we consider the set of real--world instances. This set consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All instances are  modeling street networks by means of network reachability graphs. Five large sized street networks correspond to international cities such as Belgrade, Berlin, Boston, Dublin, and Minsk.
+ Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}. \fxnote{TODO: Milan}
+ 
+ \begin{table}
+ 	\begin{tabular}{ccc}
+ 		City      & $|V|$ & $|E|$ \\ \hline
+ 		Belgrade  & XX    &   XX  \\ 
+ 		--        & XX    &   XX
+ 	\end{tabular}
+     \label{tab:big_instances_chars}  
+ \end{table}
+ 
+ Characteristics of large-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of small-to-middle-sized instances is given in Figure \fxnote{TODO: Milan} 
 \subsection{Parameters tuning}
-
+TODO: Marko 
 \subsection{Numerical results }
  
 \section{Conclusions and future work}
