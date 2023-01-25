@@ -293,7 +293,7 @@ In this section we first give an overview of the variable neighborhood search (V
        \end{align}
        where 
        \begin{align}
-       	   violate(s) = \sum_{v \in V \setminus s} \max(0, k - C(s, v) )
+       	   violate(s) = \sum_{v \in V \setminus s}   k - C(s, v)  
        \end{align}
    Note that this function operates on both, feasible and unfeasible solutions. 
        Motivation for integrating this function  in the search is threefold:
