@@ -1,27 +1,25 @@
+from numpy import int32, asarray
 from time import time
 from random import shuffle, random, seed
 from networkx import Graph
 from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
 from unit import fitness, fitness_rec_rem, fitness_rec_add
+from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 
 class VNS(BaseEstimator):
     def __init__(
             self,
-            instance_name='test',
-            graph=Graph(),
             k=1,
             d_min=1,
             d_max=100,
             time_limit=3600,
             iteration_max=999999,
             prob=0.5,
-            penalty=0.01,
-            rseed=12345
+            penalty=0.01
+            # graph, instance_name and rseed are sample
     ):
-        self.instance_name = instance_name
-        self.graph = graph
         self.k = k
         self.d_min = d_min
         self.d_max = d_max
@@ -29,17 +27,31 @@ class VNS(BaseEstimator):
         self.iteration_max = iteration_max
         self.prob = prob
         self.penalty = penalty
-        self.nodes = list(self.graph.nodes)  # kopiram cvorove zbog MJESANJA - necu da mjesam original
+
+    def init_sample(self, graph: Graph, rseed: int, instance_name: str):
+        self.instance_name = instance_name
+        self.graph = graph
+        self.nodes = list(graph.nodes)
+        self.neighbors = {}
+        self.neighb_matrix = [[] for _ in range(len(graph.nodes))]
+        for v in graph.nodes:
+            self.neighbors[v] = set(graph[v])
+            self.neighb_matrix[v] = [False] * len(graph.nodes)
+            for u in graph[v]:
+                self.neighb_matrix[v][u] = True
+
         self.rseed = rseed
         seed(self.rseed)
-        # prepare neighbor matrices and sets
-        self.neighbors = {}
-        self.neighb_matrix = [[] for _ in range(len(self.graph.nodes))]
-        for v in self.graph.nodes:
-            self.neighbors[v] = set(self.graph[v])
-            self.neighb_matrix[v] = [False] * len(self.graph.nodes)
-            for u in self.graph[v]:
-                self.neighb_matrix[v][u] = True
+
+    def destroy_sample(self):
+        self.instance_name = None
+        self.graph = None
+        self.nodes = None
+        self.neighbors = None
+        self.neighb_matrix = None
+
+        self.rseed = None
+        seed(self.rseed)
 
     def shaking(self, s: set, d: int) -> set:
         sl = list(s)
@@ -120,19 +132,15 @@ class VNS(BaseEstimator):
 
         return curr_fit
 
-    def run(self) -> list:
+    def run(self) -> int:
         start_time = time()
-        best_time = 0
 
         s_accept = set([])
         for v in self.graph.nodes:
             if len(self.graph[v]) < self.k:
                 s_accept.add(v)
 
-        fixed_nodes = set(s_accept)
-
         fit = self.local_search_best(s_accept)
-        best_time = time() - start_time
 
         iteration = 1
         d = self.d_min
@@ -141,54 +149,50 @@ class VNS(BaseEstimator):
             s_new = self.shaking(s_accept, d)
             fit_new = self.local_search_best(s_new)
 
-            if self.first_fitness_better(fit_new, fit) or (self.fitness_equal(fit,
-                                                                              fit_new) and random() < self.prob):  # and len(s_new.intersection(s))!=len(s_new) and
-                # if self.fitness_equal(fit_new, fit):
-                #    print("Prelazim u isto kvalitetno sa drugacijom internom strukturom")
-                if self.first_fitness_better(fit_new, fit):
-                    best_time = time() - start_time
+            if self.first_fitness_better(fit_new, fit) or \
+                    (self.fitness_equal(fit, fit_new) and random() < self.prob):
                 s_accept = s_new
                 d = self.d_min
                 fit = fit_new
-                self.d_max = int(len(s_accept) / 2)
+                # self.d_max = int(len(s_accept) / 2)
             else:
                 d += 1
                 if d >= self.d_max:
                     d = self.d_min
 
             iteration += 1
-            if iteration % 100 == 0:
-                print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration,
-                                                                                                            int(time() - start_time),
-                                                                                                            d,
-                                                                                                            self.d_min,
-                                                                                                            self.d_max,
-                                                                                                            fit,
-                                                                                                            fit_new,
-                                                                                                            self.k,
-                                                                                                            self.instance_name))
-        return s_accept, best_time
+            if iteration % 10 == 0:
+                print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tbest={}\tnew={}\tk={}\tinst={}".
+                      format(iteration, int(time() - start_time), d, self.d_min, self.d_max, fit, fit_new, self.k,
+                             self.instance_name))
+
+        return len(s_accept)
 
     def fit(self, X, y):
+        # X, y = check_X_y(X, y, accept_sparse=True)
+        # self.is_fitted_ = True
+
         return self
 
-    def score(self, X, y):
-        return accuracy_score(y, self.predict(X))
+    # def score(self, X, y):
+    #     pass
 
     def predict(self, X):
-        res = []
-        for g in X:
-            self.graph = g
-            self.neighbors = {}
-            self.neighb_matrix = [[] for _ in range(len(self.graph.nodes))]
-            for v in self.graph.nodes:
-                self.neighbors[v] = set(self.graph[v])
-                self.neighb_matrix[v] = [False] * len(self.graph.nodes)
-                for u in self.graph[v]:
-                    self.neighb_matrix[v][u] = True
-            s, t = self.run()
-            res.append(len(s))
+        # X = check_array(X, accept_sparse=True)
+        # check_is_fitted(self, 'is_fitted_')
 
-        return res
+        VNSX = []
+        for x in X:
+            print("Predict: ", x[1], " d_max: ", self.d_max)
+            self.init_sample(x[0], x[1], x[2])
+            s = self.run()
+            self.destroy_sample()
+            VNSX.append(s)
+
+        return asarray(VNSX, dtype=int32)
 
 
+if __name__ == '__main__':
+    from sklearn.utils.estimator_checks import check_estimator
+
+    check_estimator(VNS())
