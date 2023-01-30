@@ -36,9 +36,10 @@ def on_generation(ga_instance):
 
 class GASearch():
     def __init__(self, vns, len_kset, param_space, param_type, num_generations=100, num_parents_mating=10, sol_per_pop=20, rseed=2):
-        global function_inputs, desired_output
+        global function_inputs, desired_output, last_fitness
         function_inputs = vns
         desired_output = len_kset
+        last_fitness = 0
         self.num_genes = len(param_space)
         self.gene_space = param_space
         self.gene_type = param_type
