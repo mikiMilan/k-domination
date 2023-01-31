@@ -10,9 +10,9 @@ last_fitness = 0
 
 def fitness_func(solution, solution_idx):
     global function_inputs, desired_output
-    print("--", solution)
+    print("dmin={} dmax={} prob={:.3f} penalty={:.5f}".format(solution[0], solution[1], solution[2], solution[3]))
 
-    if solution[0] >= solution[1]:
+    if solution[0] >= solution[1]+2:
         return 0
 
     function_inputs.d_min = solution[0]
@@ -22,6 +22,7 @@ def fitness_func(solution, solution_idx):
     function_inputs.penalty = solution[3]
 
     output, _ = function_inputs.run()
+    print("-solution={}".format(len(output)))
     fitness = 1.0 / (numpy.abs(len(output) - desired_output) + 0.000001)
     return fitness
 
@@ -35,7 +36,7 @@ def on_generation(ga_instance):
 
 
 class GASearch():
-    def __init__(self, vns, len_kset, param_space, param_type, num_generations=100, num_parents_mating=10, sol_per_pop=20, rseed=2):
+    def __init__(self, vns, len_kset, param_space, param_type, num_generations=20, num_parents_mating=5, sol_per_pop=10, rseed=2):
         global function_inputs, desired_output, last_fitness
         function_inputs = vns
         desired_output = len_kset
@@ -59,7 +60,8 @@ class GASearch():
                                     on_generation=on_generation,
                                     random_seed=self.rseed,
                                     gene_space=self.gene_space,
-                                    gene_type=self.gene_type)
+                                    gene_type=self.gene_type,
+                                    mutation_probability=0.1)
         self.ga_instance.run()
         self.ga_instance.plot_fitness()
 
@@ -75,9 +77,9 @@ class GASearch():
         if self.ga_instance.best_solution_generation != -1:
             print("Best fitness value reached after {best_solution_generation} generations.".format(best_solution_generation=self.ga_instance.best_solution_generation))
 
-        # # Saving the GA instance.
-        # filename = 'genetic' # The filename to which the instance is saved. The name is without extension.
-        # ga_instance.save(filename=filename)
+        # Saving the GA instance.
+        filename = "results/GASearch/"+vns.instance_name # The filename to which the instance is saved. The name is without extension.
+        self.ga_instance.save(filename=filename)
         #
         # # Loading the saved GA instance.
         # loaded_ga_instance = pygad.load(filename=filename)
@@ -92,10 +94,9 @@ if __name__ == '__main__':
     g = read_graph(graph_open)
     print("Creating process: ", graph_open)
 
-    vns = VNS(instance, g, k=4, d_min=1, d_max_init=100, time_limit=60, iteration_max=3900, prob=0.5, penalty=0.01, rseed=2)
+    vns = VNS(instance, g, k=4, d_min=1, d_max_init=100, time_limit=40, iteration_max=3900, prob=0.5, penalty=0.01, rseed=2)
     sol, _ = vns.run()
-    print(len(sol))
-
+    print("Solution before GA:", len(sol))
 
     d_min_space =       {'low': 1, 'high': len(g)/100, 'step': 1}
     d_max_init_space =  {'low': 2, 'high': len(g)/10, 'step': 1}
