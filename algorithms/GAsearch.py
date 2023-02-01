@@ -1,29 +1,52 @@
-import numpy
 import pygad
 from vns import VNS
 from read_graph import read_graph
+from math import inf
+import sys
+from random import randrange
 
-function_inputs = None # vns
-last_fitness = 0
+if len(sys.argv)!=7:
+    print("Incorrect usage, please specify <k> <instance_dir> <instance> <time_limit> <iteration_max> <rseed>")
+    sys.exit()
 
+k = int(sys.argv[1])
+instance_dir = sys.argv[2]
+instance = sys.argv[3]
+time_limit = int(sys.argv[4])
+iteration_max = int(sys.argv[5])
+rseed = int(sys.argv[6])
+
+# GA params
+num_generations = 100
+num_parents_mating = 5
+sol_per_pop = 10
+mutation_probability = 0.1
+
+last_fitness = -inf
 
 def fitness_func(solution, solution_idx):
-    global function_inputs
+
     print("dmin={} dmax={} prob={:.3f} penalty={:.5f}".format(solution[0], solution[1], solution[2], solution[3]))
 
+    #return randrange(0, 100000)
+
     if solution[0] >= solution[1]:
-        return 0
+        return -inf
 
-    function_inputs.d_min = solution[0]
-    function_inputs.d_max_init = solution[1]
-    function_inputs.d_max = solution[1]
-    function_inputs.prob = solution[2]
-    function_inputs.penalty = solution[3]
+    graph_open = instance_dir + '/' + instance
+    print("Reading graph!")
+    g = read_graph(graph_open)
+    print("Graph created: ", graph_open)
+    vns = VNS(instance, g, k=k, d_min=solution[0], d_max_init=solution[1], time_limit=time_limit, iteration_max=iteration_max, prob=solution[2], penalty=solution[3], rseed=rseed)
+    
+    value, best_time, feasible = vns.run()
 
-    output, best_time = function_inputs.run()
-    print("-solution={}".format(len(output)))
-    fitness = len(function_inputs.graph) - len(output) + 1.0/best_time
-    return fitness
+    if not feasible:
+        print("-solution is not feasible")
+        return -inf
+
+    fitness = len(value) + best_time/100000
+    return -fitness
 
 
 def on_generation(ga_instance):
@@ -35,36 +58,32 @@ def on_generation(ga_instance):
 
 
 class GASearch():
-    def __init__(self, vns, param_space, param_type, num_generations=20, num_parents_mating=5, sol_per_pop=10, mutation_probability=0.1, rseed=12345):
-        global function_inputs, last_fitness
-        function_inputs = vns
-        last_fitness = 0
+    def __init__(self, param_space, param_type, num_generations=num_generations, num_parents_mating=num_parents_mating, sol_per_pop=sol_per_pop, mutation_probability=mutation_probability):
+        global last_fitness
         self.num_genes = len(param_space)
         self.gene_space = param_space
         self.gene_type = param_type
-
+        last_fitness = -inf
         self.num_generations = num_generations  # Number of generations.
         self.num_parents_mating = num_parents_mating  # Number of solutions to be selected as parents in the mating pool.
         self.sol_per_pop = sol_per_pop  # Number of solutions in the population.
         self.mutation_probability = mutation_probability
-        self.rseed = rseed
 
     def run(self):
-        global function_inputs, desired_output
         self.ga_instance = pygad.GA(num_generations=self.num_generations,
                                     num_parents_mating=self.num_parents_mating,
                                     sol_per_pop=self.sol_per_pop,
                                     num_genes=self.num_genes,
                                     fitness_func=fitness_func,
                                     on_generation=on_generation,
-                                    random_seed=self.rseed,
+                                    random_seed=11111,
                                     gene_space=self.gene_space,
                                     gene_type=self.gene_type,
-                                    mutation_probability=self.mutation_probability
-                                    # parallel_processing=['process', 1]
+                                    mutation_probability=self.mutation_probability,
+                                    parallel_processing=['process', 10]
                                     )
         self.ga_instance.run()
-        # self.ga_instance.plot_fitness()
+        #self.ga_instance.plot_fitness()
 
         # Returning the details of the best solution.
         solution, solution_fitness, solution_idx = self.ga_instance.best_solution(self.ga_instance.last_generation_fitness)
@@ -75,31 +94,10 @@ class GASearch():
         if self.ga_instance.best_solution_generation != -1:
             print("Best fitness value reached after {best_solution_generation} generations.".format(best_solution_generation=self.ga_instance.best_solution_generation))
 
-        # Saving the GA instance.
-        filename = "results/GASearch/"+vns.instance_name # The filename to which the instance is saved. The name is without extension.
-        self.ga_instance.save(filename=filename)
-        with open(filename, 'a') as f:
-            f.write('{}\n'.format(str(solution)))
-        #
-        # # Loading the saved GA instance.
-        # loaded_ga_instance = pygad.load(filename=filename)
-        # loaded_ga_instance.plot_fitness()
-
-        return solution
+        return solution, solution_fitness
 
 
 if __name__ == '__main__':
-    instance_dir = 'cities_small_instances'
-    instance = 'bath.txt'
-    time_limit = 3000
-    iteration_max = 1000
-
-    graph_open = instance_dir + '/' + instance
-    print("Reading graph!")
-    g = read_graph(graph_open)
-    print("Creating process: ", graph_open)
-
-    vns = VNS(instance, g, k=4, d_min=1, d_max_init=100, time_limit=time_limit, iteration_max=iteration_max, prob=0.5, penalty=0.01, rseed=12345)
 
     d_min_space =       {'low': 1, 'high': 10, 'step': 1}
     d_max_init_space =  {'low': 2, 'high': 100, 'step': 1}
@@ -109,7 +107,12 @@ if __name__ == '__main__':
     param_space = [d_min_space, d_max_init_space, prob_space, penalty_space]
     param_type = [int, int, float, float]
 
-    ga = GASearch(vns=vns, param_space=param_space, param_type=param_type)
-    res = ga.run()
+    ga = GASearch(param_space=param_space, param_type=param_type)
+    sol, sol_fit = ga.run()
 
-    print(res)
+    print(sol)
+    print(sol_fit)
+
+    fname = 'all_{}_{}_{}_{}.txt'.format(num_generations, num_parents_mating, sol_per_pop, mutation_probability)
+    with open('results/GASearch/'+fname, 'a') as f:
+        f.write('inst={}\tk={}\tit_max={}\tvns_seed={}\tparams={}\tfit={}\n'.format(instance, k, iteration_max, rseed, sol, sol_fit))
