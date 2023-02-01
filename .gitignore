@@ -4,5 +4,5 @@ algorithms/test.py
 algorithms/results/VNS_test
 algorithms/cities_big_instances
 algorithms/stepen.py
-algorithms/grid_search.py
 algorithms/distance.py
+algorithms/model_estimator.py

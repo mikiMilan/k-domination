@@ -1,17 +1,18 @@
 from time import time
 from random import shuffle, random, seed
-from math import sqrt
+from read_graph import read_graph
 from networkx import DiGraph, Graph
-from unit import fitness, is_acceptable_solution, fitness_rec_rem, fitness_rec_add
+from unit import fitness, fitness_rec_rem, fitness_rec_add
 
 
 class VNS:
-    def __init__(self, instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max: int, time_limit: int, iteration_max: int, prob: float, penalty: float, rseed : int):
+    def __init__(self, instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max_init: int, time_limit: int, iteration_max: int, prob: float, penalty: float, rseed : int):
         self.instance_name = instance_name
         self.graph = graph
         self.k = k
         self.d_min = d_min
-        self.d_max = d_max
+        self.d_max_init = d_max_init
+        self.d_max = self.d_max_init
         self.time_limit = time_limit
         self.iteration_max = iteration_max
         self.prob = prob
@@ -27,7 +28,6 @@ class VNS:
             self.neighb_matrix[v] = [False]*len(self.graph.nodes)
             for u in self.graph[v]:
                 self.neighb_matrix[v][u] = True
-
 
     def shaking(self, s: set, d: int) -> set:
         sl = list(s)
@@ -47,7 +47,6 @@ class VNS:
     
     def fitness_equal(self, fit1, fit2):
         return not self.first_fitness_better(fit1, fit2) and not self.first_fitness_better(fit2, fit1)
-
 
     def local_search_best(self, s: set):
         improved = True
@@ -103,21 +102,11 @@ class VNS:
 
         return curr_fit
 
-
     def run(self) -> list:
         start_time = time()
         best_time = 0
-        
         s_accept = set([])
-        for v in self.graph.nodes:
-            if len(self.graph[v]) < self.k:
-                s_accept.add(v)
-
-        fixed_nodes = set(s_accept)
-
         fit = self.local_search_best(s_accept)
-        best_time = time()-start_time
-        
         iteration = 1
         d = self.d_min
 
@@ -133,7 +122,8 @@ class VNS:
                 s_accept = s_new
                 d = self.d_min
                 fit = fit_new
-                self.d_max = int(len(s_accept)/2)
+                len_s_accept = int(len(s_accept)/2) if len(s_accept)>2 else self.d_max_init
+                self.d_max = min(len_s_accept, self.d_max_init)
             else:
                 d += 1
                 if d >= self.d_max:
@@ -144,4 +134,15 @@ class VNS:
                 print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration, int(time() - start_time),d,self.d_min, self.d_max, fit, fit_new, self.k, self.instance_name))
         return s_accept, best_time, fit[0]
 
+
+if __name__ == '__main__':
+    instance_dir = 'cities_small_instances'
+    instance = 'bath.txt'
+    graph_open = instance_dir + '/' + instance
+    print("Reading graph!")
+    g = read_graph(graph_open)
+    print("Creating process: ", graph_open)
+
+    vns = VNS(instance, g, k=4, d_min=5, d_max_init=39, time_limit=60, iteration_max=3900, prob=0.45, penalty=0.02, rseed=2)
+    print(vns.run())
 
