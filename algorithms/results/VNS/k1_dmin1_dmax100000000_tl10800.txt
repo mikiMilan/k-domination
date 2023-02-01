@@ -1,0 +1,5 @@
+belgrade.txt, 82, 10357.99, 0
+berlin.txt, 94, 10691.67, 0
+boston.txt, 89, 10051.69, 0
+dublin.txt, 93, 6639.67, 0
+minsk.txt, 100, 5514.46, 0

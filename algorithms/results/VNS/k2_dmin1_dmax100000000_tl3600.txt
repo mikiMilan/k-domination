@@ -58,3 +58,48 @@ nottingham.txt, 85, 1411.12
 plymouth.txt, 62, 313.46
 southampton.txt, 49, 378.95
 york.txt, 68, 81.99
+bath.txt, 71, 418.81
+brighton.txt, 40, 416.21
+cardiff.txt, 78, 1603.06
+exeter.txt, 76, 3232.63
+leeds.txt, 79, 1955.51
+liverpool.txt, 57, 209.99
+newcastle.txt, 83, 1655.81
+oxford.txt, 47, 5.83
+sheffield.txt, 84, 347.94
+sunderland.txt, 73, 216.40
+belfast.txt, 76, 1267.53
+bristol.txt, 74, 545.67
+coventry.txt, 73, 925.55
+glasgow.txt, 94, 106.15
+leicester.txt, 75, 930.87
+manchester.txt, 78, 431.33
+nottingham.txt, 85, 3266.36
+plymouth.txt, 61, 2929.00
+southampton.txt, 49, 722.09
+york.txt, 68, 49.12
+belgrade.txt, 168, 2729.56
+berlin.txt, 205, 3447.87
+boston.txt, 179, 3608.64
+dublin.txt, 194, 3125.00
+minsk.txt, 199, 2094.67
+bath.txt, 71, 419.27, 0
+brighton.txt, 40, 417.10, 0
+cardiff.txt, 78, 1609.52, 0
+exeter.txt, 76, 3254.93, 0
+leeds.txt, 79, 1975.17, 0
+liverpool.txt, 57, 205.96, 0
+newcastle.txt, 83, 1668.51, 0
+oxford.txt, 47, 6.21, 0
+sheffield.txt, 84, 348.11, 0
+sunderland.txt, 73, 218.75, 0
+belfast.txt, 76, 1275.69, 0
+bristol.txt, 74, 552.34, 0
+coventry.txt, 73, 932.69, 0
+glasgow.txt, 94, 111.12, 0
+leicester.txt, 75, 951.29, 0
+manchester.txt, 78, 436.37, 0
+nottingham.txt, 85, 3153.57, 0
+plymouth.txt, 61, 2834.28, 0
+southampton.txt, 49, 735.42, 0
+york.txt, 68, 49.45, 0

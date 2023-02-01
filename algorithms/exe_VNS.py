@@ -8,9 +8,8 @@ from math import ceil
 
 def task(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed, r, i):
     vns  = VNS(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed)
-    d, time_execute = vns.run()
-    # print(len(d), time_execute)
-    r[i] = [len(d), time_execute]
+    d, time_execute, invalid_cnt = vns.run()
+    r[i] = [len(d), time_execute, invalid_cnt]
 
 
 if __name__ == '__main__':
@@ -23,15 +22,17 @@ if __name__ == '__main__':
     penalty =  0.01
     seed = 12345
     
+    
     instance_dir = 'cities_small_instances'
-    #instance_dir = 'random_instances'
-    #instances = ['NEW-V1000-P0.025-G0.txt']
-    #instances = ['bath.txt']
     instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
                       'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
                       'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
                       'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
                       'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
+                  
+    '''
+    instance_dir = 'cities_big_instances'
+    instances = ['belgrade.txt', 'berlin.txt', 'boston.txt', 'dublin.txt', 'minsk.txt']'''
 
     batches = ceil(len(instances)/paralellism)
 
@@ -71,5 +72,5 @@ if __name__ == '__main__':
                     instance = instances[i]
                     if i%batches!=b:
                         continue
-                    f.write('{}, {}, {:.2f}\n'.format(instance, return_dict[instance][0], return_dict[instance][1]))
+                    f.write('{}, {}, {:.2f}, {}\n'.format(instance, return_dict[instance][0], return_dict[instance][1], return_dict[instance][2]))
 
