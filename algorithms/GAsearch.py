@@ -17,7 +17,7 @@ iteration_max = int(sys.argv[5])
 rseed = int(sys.argv[6])
 
 # GA params
-num_generations = 100
+num_generations = 50
 num_parents_mating = 5
 sol_per_pop = 10
 mutation_probability = 0.1
