@@ -94,7 +94,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title{Solving the $k$-domination problem: Variable neighborhood search algorithm and its evolutionary-based determination of control parameters}
+\title{VNS with GA-based parameter tuning for solving the $k$-domination problem}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -161,14 +161,14 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem asks for finding a minimum cardinality subset $D$ of vertices of a graph  $G=(V, E) $ so that each $v \in V$ belongs to $D$ or has at least $k$ neighbours from $D$. The $k$-domination problem has an application in distributed systems where a set of processors has to be chosen satisfying that each processor outside the set has at least $k$ neighbours in the set; another application includes analysis of biological networks. For solving the $k$--domination problem, a variable neighbourhood search (VNS) meta-heuristic is proposed. VNS is equipped with a non-linear, efficiently evaluated fitness function that allows the VNS to search through feasible regions but also unfeasible regions, penalizing those solutions. The parameters of our VNS are tuned by two tuning tools; one is based on the evolutionary strategy and the second one on the grid--search strategy. The two obtained settings of VNS are compared to the best-known heuristic approaches from the literature: a beam search and the two greedy approaches. Experimental evaluations are conducted on the real-world benchmark set whose instances represent the street networks of respective cities. Our VNS  produce new state-of-the-art results on the most of the considered small and large--sized problem instances,
+In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of nodes of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbours from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighbourhood search (VNS) meta-heuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalising infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared with the best known heuristic approaches from the literature: a beam search and the two greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for most of the considered instances with $k \in {1, 2, 4}$.
   
 \end{abstract}
   
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{variable neighborhood search, graph domination, evolutionary algorithms,  hyperparameters tuning}
+\keywords{variable neighborhood search, graph domination, genetic algorithm,  parameter tuning}
 
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
