@@ -3,6 +3,7 @@ from random import shuffle, random, seed
 from read_graph import read_graph
 from networkx import DiGraph, Graph
 from unit import fitness, fitness_rec_rem, fitness_rec_add
+import sys
 
 
 class VNS:
@@ -136,13 +137,31 @@ class VNS:
 
 
 if __name__ == '__main__':
-    instance_dir = 'cities_small_instances'
-    instance = 'bath.txt'
+
+    if len(sys.argv)!=11:
+        print("Incorrect usage, please specify <k> <instance_dir> <instance> <time_limit> <iteration_max> <rseed> <d_min> <d_max_init> <prob> <penalty>")
+        sys.exit()
+
+    k = int(sys.argv[1])
+    instance_dir = sys.argv[2]
+    instance = sys.argv[3]
+    time_limit = int(sys.argv[4])
+    iteration_max = int(sys.argv[5])
+    rseed = int(sys.argv[6])
+    d_min = int(sys.argv[7])
+    d_max_init = int(sys.argv[8])
+    prob = float(sys.argv[9])
+    penalty = float(sys.argv[10])
+
     graph_open = instance_dir + '/' + instance
     print("Reading graph!")
     g = read_graph(graph_open)
-    print("Creating process: ", graph_open)
+    print("Graph loaded: ", graph_open)
 
-    vns = VNS(instance, g, k=4, d_min=5, d_max_init=39, time_limit=60, iteration_max=3900, prob=0.45, penalty=0.02, rseed=2)
-    print(vns.run())
+    vns = VNS(instance, g, k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
+    sol, time, feasible = vns.run()
+    
+    file_name_res = 'results/VNS/k' + str(k) + '_dmin'+str(d_min)+'_dmax'+str(d_max_init)+'_prob'+str(prob)+'_pen'+str(penalty)+'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
+    with open(file_name_res, 'a') as f:
+        f.write('{}, {}, {:.2f}, {}\n'.format(instance, len(sol),  time, feasible))
 

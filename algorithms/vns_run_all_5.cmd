@@ -1,0 +1,10 @@
+python vns.py 4 cities_small_instances bath.txt 3600 10000000 12345 8 95 0.9 0.014
+python vns.py 4 cities_small_instances belfast.txt 3600 10000000 12345 9 64 0.6 0.007
+python vns.py 4 cities_small_instances brighton.txt 3600 10000000 12345 9 36 0.2 0.01
+python vns.py 4 cities_small_instances bristol.txt 3600 10000000 12345 9 11 0.55 0.004
+python vns.py 4 cities_small_instances cardiff.txt 3600 10000000 12345 7 47 0 0.008
+python vns.py 4 cities_small_instances coventry.txt 3600 10000000 12345 7 85 0.4 0.01
+python vns.py 4 cities_small_instances exeter.txt 3600 10000000 12345 8 85 0.85 0.01
+python vns.py 4 cities_small_instances glasgow.txt 3600 10000000 12345 8 78 0.7 0.007
+python vns.py 4 cities_small_instances leeds.txt 3600 10000000 12345 9 31 0.45 0.008
+python vns.py 4 cities_small_instances leicester.txt 3600 10000000 12345 5 65 0.1 0.01
