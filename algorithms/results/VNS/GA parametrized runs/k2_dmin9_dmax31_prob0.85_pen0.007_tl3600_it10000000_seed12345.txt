@@ -1,0 +1,1 @@
+bristol.txt, 74, 839.38, True

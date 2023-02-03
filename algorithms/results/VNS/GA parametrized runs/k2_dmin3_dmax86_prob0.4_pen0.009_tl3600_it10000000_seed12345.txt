@@ -1,0 +1,1 @@
+oxford.txt, 47, 0.61, True

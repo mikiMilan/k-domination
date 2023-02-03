@@ -1,0 +1,1 @@
+newcastle.txt, 153, 1328.77, True

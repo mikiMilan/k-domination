@@ -1,0 +1,1 @@
+glasgow.txt, 50, 4.02, True
