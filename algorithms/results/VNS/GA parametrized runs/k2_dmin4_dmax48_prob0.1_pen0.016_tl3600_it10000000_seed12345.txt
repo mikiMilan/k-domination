@@ -1,0 +1,1 @@
+manchester.txt, 78, 3211.24, True

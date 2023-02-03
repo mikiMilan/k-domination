@@ -1,0 +1,1 @@
+brighton.txt, 40, 1607.09, True
