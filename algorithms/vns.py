@@ -133,7 +133,9 @@ class VNS:
             iteration += 1
             if iteration%50== 0:
                 print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tprob={:.2f}\tpen={:.4f}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration, int(time() - start_time),d,self.d_min, self.d_max, self.prob, self.penalty, fit, fit_new, self.k, self.instance_name))
-        return s_accept, best_time, fit[0]==0
+        tot_time = time()-start_time
+        
+        return s_accept, best_time, fit[0]==0, tot_time
 
 
 if __name__ == '__main__':
@@ -159,9 +161,10 @@ if __name__ == '__main__':
     print("Graph loaded: ", graph_open)
 
     vns = VNS(instance, g, k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
-    sol, time, feasible = vns.run()
+    sol, time, feasible, tot_time = vns.run()
     
-    file_name_res = 'results/VNS/k' + str(k) + '_dmin'+str(d_min)+'_dmax'+str(d_max_init)+'_prob'+str(prob)+'_pen'+str(penalty)+'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
+    # + '_dmin'+str(d_min)+'_dmax'+str(d_max_init)+'_prob'+str(prob)+'_pen'+str(penalty)
+    file_name_res = 'results/VNS/k' + str(k) +'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
     with open(file_name_res, 'a') as f:
-        f.write('{}, {}, {:.2f}, {}\n'.format(instance, len(sol),  time, feasible))
+        f.write('{}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, len(sol),  time, feasible, tot_time))
 
