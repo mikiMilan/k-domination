@@ -27,7 +27,7 @@ def task(vns, grid_space, r, i):
 
 
 if __name__ == '__main__':
-    paralellism = 3
+    paralellism = 10
     iteration_max = 100
     time_limit = 3600
     seed = 12345
