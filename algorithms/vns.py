@@ -73,6 +73,7 @@ class VNS:
                 curr_fit = best_fit
                 cache = {}
                 check_fit =  fitness(s, self.graph, self.k, cache)
+                print("Improved to "+str(curr_fit))
                 if not self.fitness_equal(curr_fit, check_fit):
                     print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                     exit(1)
@@ -97,11 +98,13 @@ class VNS:
                 curr_fit = best_fit
                 cache = {}
                 check_fit =  fitness(s, self.graph, self.k, cache)
+                print("Improved to "+str(curr_fit))
                 if not self.fitness_equal(curr_fit, check_fit):
                     print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
                     exit(1)
 
         return curr_fit
+
 
     def run(self) -> list:
         start_time = time()
@@ -131,7 +134,7 @@ class VNS:
                     d = self.d_min
 
             iteration += 1
-            if iteration%50== 0:
+            if iteration%1== 0:
                 print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tprob={:.2f}\tpen={:.4f}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration, int(time() - start_time),d,self.d_min, self.d_max, self.prob, self.penalty, fit, fit_new, self.k, self.instance_name))
         tot_time = time()-start_time
         
