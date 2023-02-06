@@ -35,8 +35,9 @@
 %%
 %%
 %% The first command in your LaTeX source must be the \documentclass command.
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf]{article}   %cmrt}
 \usepackage{fixme}
+
 \usepackage{amsmath}
 %\usepackage{amssymb}
 \usepackage{amsthm}
@@ -188,35 +189,37 @@ In this paper we are concerned with solving a generalized version of the well-kn
 
 \section{Introduction}
 A graph $G=(V,E)$ is an abstract mathematical structure 
-where $V$ represents a set of elements called vertices and   a set of pairs $e = uv  \in E \subseteq V \times V$ called edges of $G$. In the context of this work, we deal with  simple undirected graphs which have no loops and where edges have no directions, that is $e = \{u,v\}  = uv = vu \in E$.   Graphs serve as models of many real--world problems and relations between objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. One of the most prominent classes of problems that have been studied for decades from theoretical, computational and practical aspects are dominating problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{domination problem}. The subset $D \subset V$ is called a domination set iff each vertex $v\in V$ belongs to $D$ or there is an vertex $w\in D$ such that $uw\in E$. Finding the smallest possible dominating set $D$ of graph $G$ w.r.t.\ its cardinalty defines \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example analysing biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order},  etc. From algorithmic point of view, this problem is NP--hard. It is solved by many exact approaches such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of graph~\cite{karci2020new}, etc. On the other hand, heuristic approaches are also dominant, for example a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant-colony optimization~\cite{ho2006enhanced}, among others. There are many generalizations of MDSP proposed in the literature:  the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+where $V$ represents a set of elements called vertices and   a set of pairs $e = uv  \in E \subseteq V \times V$ called edges of $G$. In the context of this work, we deal with  simple undirected graphs which have no loops and where edges have no directions, that is $e = \{u,v\}  = uv = vu \in E$.   Graphs serve as models of many real--world problems describing relations between objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. One of the most prominent classes of problems that have been studied for decades from theoretical, computational and practical aspects are dominating problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{domination problem}. The subset $D \subset V$ is called a domination set iff each vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. Finding the smallest possible dominating set $D$ of graph $G$ w.r.t.\ its cardinalty defines \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example analysing biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order},  etc. From algorithmic point of view, this problem is NP--hard. It is solved by many exact approaches such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of graph~\cite{karci2020new}, etc. On the other hand, heuristic approaches are dominant in the literature, for example a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant-colony optimization~\cite{ho2006enhanced} are just some among others. There are many generalizations of MDSP proposed in the literature that arise from practice: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
 
 
 
 
-In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}.  Note that the definition for this problem is ambiguous in the literature. The first variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
-This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent to at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum such $k$--dominating set is a solution of MkDP.  NP-completeness of the k-domination problem is established on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics} so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches is proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized greedy algorithm. However, any of the proposed methods in the literature do not scale well with increase in the instance size.   
-Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in a distributed system is a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
+In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics} for a fixed $k \in \mathbb{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
+This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent with at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum $k$--dominating set represents the optimal solution of MkDP.  NP-completeness of the k-domination problem is proven on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches is proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
+Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in these systems represents a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
 
-In this work we propose another meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
+In this work we propose a meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
 \begin{itemize}
-	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set; ($ii$) a penalized measure that evaluated how far is the considered set from being a $k$--dominating. 
+	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
 	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima.
-	\item An efficient local search mechanism that try to fix unfeasible solutions into feasible ones. It is equipped witch a fast partial evaluation of the fitness function in a constant time.
+	\item An efficient local search mechanism that try to fix unfeasible solutions into feasible ones. It is equipped witch a fast partial evaluation of the fitness function executed in linear time.
  
 \end{itemize}
 Contributions of the paper are as follow.
 \begin{itemize}
-	\item The parameters of the proposed VNS are tuned by two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and an evolutionary-based tuning tool, an open-source Python library~\texttt{PyGAD}~\cite{gad2021pygad}.  
-	\item The two settings of VNS, obtained by the above-mentioned tuning tools, are able to achieve new state-of-the-art results concerning the real-world instances; they are compared to the two greedy algorithms and the BS approach from the literature. 
-	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the two state-of-the-art incremental approaches from the literature.
-	\item Concerning the (five) large-sized instances, where BS could not finish within the proposed time limit, our VNS delivers in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...)
-	\item The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
+	\item The newly proposed VNS algorithm, which the performing differs from  the currently dominant constructive approaches in the literature.
+	
+	
+	\item The control parameters of the VNS are tuned by two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and an evolutionary-based tuning tool, an open-source Python library~\texttt{PyGAD}~\cite{gad2021pygad}.  
+	\item The two settings of VNS, obtained by the above-mentioned tuning tools, are able to achieve new state-of-the-art results concerning most of the real-world instances. %they are compared to the two greedy algorithms and the BS approach from the literature. 
+	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the state-of-the-art incremental approaches from the literature.
+	\item Concerning the (five) large-sized real instances, where BS could not finish within the proposed time limit, our VNS returns  in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...). The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
 \end{itemize}
 
 \section{Notation and problem definition }
     
 
-    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbf{N}$. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of $G$ that of a minimum cardinalty. 
+    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbf{N}$is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of graph $G$ one with a minimum cardinalty. 
     
     
     This problem can be described by using a level of coverage of neighborhoods of vertex $v$ w.r.t.\ $D$
@@ -229,7 +232,7 @@ and  formulated as the following optimization problem
     s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
 \end{align}
     
-\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS by not only searching for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a candidate solution in our VNS procedure. Thus, the size of search space is exponential, i.e. $2^{|V|}$.Further, a solution will be encoded as a set structure (of indices of vectors). 
+\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only operate for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure (of indices of vectors). 
    
    
 \section{The proposed algorithm}\label{sec:vns}
