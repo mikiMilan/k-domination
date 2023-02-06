@@ -46,7 +46,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
+%\usepackage{lmodern}
 
 \fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
@@ -196,7 +196,7 @@ where $V$ represents a set of elements called vertices and   a set of pairs $e =
 
 
 
-In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics} for a fixed $k \in \mathbb{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
+In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics} for a fixed $k \in \mathbf{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
 This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent with at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum $k$--dominating set represents the optimal solution of MkDP.  NP-completeness of the k-domination problem is proven on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches is proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
 Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in these systems represents a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
 In this work we propose a meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
@@ -251,7 +251,7 @@ In this section we first give an overview over the variable neighborhood search 
   		\STATE \textbf{Input:} initial solution $s_{best}$ , neighborhoods  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$ 
   		\STATE \textbf{Output:} (improved) solution $s_{best}$
   		\STATE $d \gets  d_{\min}$
-  		\WHILE{!(\emph{TerminationCriteriaMet()})}
+  		\WHILE{!(\texttt{TerminationCriteriaMet()})}
   		\STATE  $s' \gets$  $\texttt{Shaking}(\mathcal{N}_d(s_{best}))$ \hspace{0.3cm}//\,shaking phase
   		\STATE $s' \gets  \texttt{LocalSearch}(s {'})$
   		\IF{\texttt{AcceptingCriterion}($s_{best}, s', fitness(\cdot)$)}
@@ -293,7 +293,7 @@ In this section we first give an overview over the variable neighborhood search 
        Motivation for integrating this function  in the search is threefold:
        \begin{itemize}
        	\item First, any feasible solution of size $|s|$ is preferable over any unfeasible solution of the same (or a larger) cardinalty. 
-       	\item Between two unfeasible solutions of the same cardinalty, one whose \emph{violate}($\cdot$) score is smaller is preferred, thus the solution is intuitively easier to be reshaped into a feasible one.  
+       	\item Between two unfeasible solutions of the same cardinalty, one whose \emph{violate}($\cdot$) score is smaller is preferred -- the solution is intuitively easier to be recreated into a feasible one.  
        	\item Between two feasible solutions, a smaller cardinalty solution is preferred (\emph{violate}($\cdot$) score in that case vanishes). 
        \end{itemize}
     % Note that a solution is structured as a set of all vertices that belong to it. 
@@ -313,13 +313,13 @@ In this section we first give an overview over the variable neighborhood search 
     
      \fxnote{TODO: Milan} 
    \subsection{Local search}
-  The purpose of local search (LS) is improving a solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
+  The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
   	\caption{LocalSearch}\label{alg:ls}
   	\begin{algorithmic}[1]
-  		\STATE \textbf{Input}: a feasible solution $s$
+  		\STATE \textbf{Input}: a solution $s$
   		\STATE \textbf{Output}: a (possibly) improved solution
   		\STATE improved $\gets$ True
   		\STATE $best\_fit \gets fitness(s)$
@@ -399,7 +399,9 @@ In this section we provide empirical evidence of the quality of the proposed \te
  
  Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of these instances is given in Figure \fxnote{TODO: Milan} 
  \fxnote{Marko: stigao dovde!}
- \emph{Testing environments and applied methodology}. The experiments were conducted in a single-core on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. Note that \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{Greedy-1}, \textsc{Greedy-2} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors of~\cite{corcoran2021heuristics}. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances introduced in the original publication. } are obtained by executing our re-implementation of \textsc{Greedy-1}, \textsc{Greedy-2}, and \textsc{Bs} algorithms. In all cases, \textsc{Greedy-1} and \textsc{Greedy-2} are run once per each problem instance, as they are deterministic. \textsc{Bs} and \textsc{Vns} are run 10 times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. 
+ 
+ 
+ \emph{Testing environments and applied methodology}. The experiments were conducted in a single-core on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. Note that \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{Greedy-1}, \textsc{Greedy-2} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing our re-implementation of \textsc{Greedy-1}, \textsc{Greedy-2}, and \textsc{Bs} algorithms. In all cases, \textsc{Greedy-1} and \textsc{Greedy-2} are run once per each problem instance, as they are deterministic. \textsc{Bs} and \textsc{Vns} are run 10 times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. 
 \subsection{Parameters tuning}
    Among the four competitor algorithms, the parameters of \textsc{Vns} are matter of tuning. The following parameters are tuned: $d_{min}, d_{max},$ and  $penalty$. Domain of these parameters used for the tuning purposes are given in Table~\ref{tab:domain_tuning}.
    
@@ -415,7 +417,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
    	   	\label{tab:domain_tuning}
    \end{table}
    
-   Concerning tuning tools, two different tools are chosen: ($i$) a greedy--based tool xx and ($ii$) evolutionary--based tool \texttt{PyGAD}. The both tools may be directly included in Python by importing the respective packages.
+   Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD}. This tool is an open-source Python library an can be imported directly by installing  respective package.
    \fxnote{Milan: dio oko podesavanja tuninga -- koje instance, koliki je budet broja pustanja, isl.}
    
     \texttt{GridSearch} tool has returned the following configuration setting: TODO
@@ -450,7 +452,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 	Sheffield&\bf{42}&42&878.2&BS4&180&182.2\\
 	Southampton&\bf{25}&25&277.5&BS4&112&113.2\\
 	Sunderland&\bf{36}&36&688.6&BS4&162&163.6\\
-	York&\bf{32}&32&324.6&BS4&144&145.8\\
+	York&\bf{32}&32&324.6&BS4&144&145.8\\ \hline \hline
 	Belgrade&\bf{85}&88.7&3610.8&PG&99&100.3\\
 	Berlin&\bf{102}&104.7&3609.5&SG&146&147\\
 	Boston&99&101.1&3685.6&SG&\bf{71}&72.6\\
@@ -489,7 +491,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 		Sheffield&\bf{84}&84.7&1021.5&BS4&97&98.9\\
 		Southampton&\bf{50}&50.1&315.9&BS4&60&61.1\\
 		Sunderland&\bf{73}&73.7&754.2&BS4&87&89.1\\
-		York&\bf{68}&68&755.1&BS4&77&77.6\\
+		York&\bf{68}&68&755.1&BS4&77&77.6\\ \hline \hline
 		Belgrade&\bf{169}&172.3&3614.1&PG&197&197.5\\
 		Berlin&\bf{206}&207.1&3611.6&PG&268&270.4\\
 		Boston&181&194.6&5707.7&PG&\bf{133}&135\\
@@ -527,7 +529,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 		Sheffield&\bf{160}&161.6&1351.2&BS4&180&182.2\\
 		Southampton&\bf{97}&97.8&653.1&BS4&112&113.2\\
 		Sunderland&\bf{142}&142.5&3539.1&BS4&162&163.6\\
-		York&\bf{129}&130.1&630.5&BS4&144&145.8\\
+		York&\bf{129}&130.1&630.5&BS4&144&145.8\\ \hline \hline
 		Belgrade&\bf{344}&346.3&3610.9&SG&397&400.1\\
 		Berlin&\bf{408}&409.2&3612&PG&501&503.4\\
 		Boston&341&341&9340&PG&\bf{255}&255.4\\
