@@ -35,7 +35,8 @@
 %%
 %%
 %% The first command in your LaTeX source must be the \documentclass command.
-\documentclass[sigconf]{article}   %cmrt}
+\documentclass[dvipsnames,format=sigconf,anonymous=true,review=true]{acmart}
+
 \usepackage{fixme}
 
 \usepackage{amsmath}
@@ -44,6 +45,9 @@
 \usepackage{mathtools}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
 \fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
 %%
@@ -108,7 +112,6 @@
 \email{milan.predojevic@pmf.unibl.org}
 \orcid{xxxx-xxxx-xxxx}
 \author{M.P.}
-\authornote{Both authors contributed equally to this research.}
 %\authornotemark[1]
 %\email{webmaster@marysville-ohio.com}
 \affiliation{%
@@ -127,7 +130,6 @@
   \streetaddress{--}
   \city{Belgrade}
   \country{Serbia}}
-\authornote{Both authors contributed equally to this research.}
 \email{ kartelj@math.rs}
 
 \author{Marko Djukanović}
@@ -197,7 +199,6 @@ where $V$ represents a set of elements called vertices and   a set of pairs $e =
 In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics} for a fixed $k \in \mathbb{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
 This paper considers the following definition.  A $k$-dominating set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent with at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum $k$--dominating set represents the optimal solution of MkDP.  NP-completeness of the k-domination problem is proven on split graphs, where the problem is studied from an algorithmic point of view, see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches is proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
 Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in these systems represents a set of processors such that each processor outside the set has at least $k$ neighbors in the set.
-
 In this work we propose a meta-heuristic approach to solve the MkDP, a variable neighborhood search (VNS). The main algorithm components of the approach are:
 \begin{itemize}
 	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
@@ -409,6 +410,124 @@ In this section we provide empirical evidence of the quality of the proposed \te
      \texttt{PyGAD} tool has returned the following configuration setting: TODO
 \subsection{Numerical results }
  TODO: Marko
+ 
+  \begin{table}
+ 	\begin{tabular}{l|rrr|lrr}
+ 	\hline
+ 	\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+ 	\hline
+	City & Best & Avg. & T
+	 & Alg. & Best & Avg. \\ \hline
+	Bath&\bf{38}&38&445.5&BS4&43&44.6\\
+	Belfast&\bf{39}&39&838.3&BS4&48&50.2\\
+	Brighton&\bf{21}&21&463.4&BS4&28&28.2\\
+	Bristol&\bf{37}&37&791.3&BS2&46&47.4\\
+	Cardiff&\bf{39}&39&419.5&BS4&48&50.6\\
+	Coventry&\bf{38}&38.2&438.4&BS4&170&172.6\\
+	Exeter&\bf{38}&38&514.2&BS4&181&182.3\\
+	Glasgow&\bf{50}&50.2&416&BS4&197&199.8\\
+	Leeds&\bf{40}&40&685.6&BS4&186&187.1\\
+	Leicester&\bf{38}&38&1010.4&BS4&175&177.7\\
+	Liverpool&\bf{28}&28&700.5&BS4&132&133\\
+	Manchester&\bf{38}&38.8&2071.7&BS4&177&178.5\\
+	Newcastle&\bf{44}&44&611.7&BS2&169&171.5\\
+	Nottingham&\bf{44}&44&1211&BS4&193&195.2\\
+	Oxford&\bf{24}&24&63.1&BS2&99&100.8\\
+	Plymouth&\bf{31}&31&707.2&BS4&135&137\\
+	Sheffield&\bf{42}&42&878.2&BS4&180&182.2\\
+	Southampton&\bf{25}&25&277.5&BS4&112&113.2\\
+	Sunderland&\bf{36}&36&688.6&BS4&162&163.6\\
+	York&\bf{32}&32&324.6&BS4&144&145.8\\
+	Belgrade&\bf{85}&88.7&3610.8&PG&99&100.3\\
+	Berlin&\bf{102}&104.7&3609.5&SG&146&147\\
+	Boston&99&101.1&3685.6&SG&\bf{71}&72.6\\
+	Dublin&96&99.7&3790.3&PG&\bf{88}&90.2\\
+	Minsk&\bf{100}&102.2&3602.3&SG&138&139.3\\
+	
+	\hline
+	
+ 	\end{tabular}
+ 	\caption{Results for k=1.}
+ 	\label{tab:k1}  
+ \end{table}
+
+\begin{table}
+	\begin{tabular}{l|rrr|lrr}
+		\hline
+		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\hline
+		City & Best & Avg. & T & Alg. & Best & Avg. \\ \hline
+		Bath&\bf{71}&71.8&634.1&BS1&86&89\\
+		Belfast&\bf{76}&76.2&1675.3&BS4&96&97.6\\
+		Brighton&\bf{40}&41.1&574.7&BS4&49&49.4\\
+		Bristol&\bf{73}&73.7&1588.6&BS4&91&94\\
+		Cardiff&\bf{79}&79.4&897&BS4&92&95.9\\
+		Coventry&\bf{73}&73.2&937.9&BS4&84&85.1\\
+		Exeter&\bf{77}&77.3&582.5&BS4&94&95.7\\
+		Glasgow&\bf{93}&94.2&671&BS4&108&110.6\\
+		Leeds&\bf{79}&80.5&815&BS4&98&99.6\\
+		Leicester&\bf{75}&75.2&1056.6&BS4&93&94.1\\
+		Liverpool&\bf{57}&57&1157.7&BS4&71&72\\
+		Manchester&\bf{77}&78.4&3053.1&BS4&90&91.5\\
+		Newcastle&\bf{83}&84.3&823.1&BS4&94&95.4\\
+		Nottingham&\bf{84}&85.3&2167.1&BS4&102&103.3\\
+		Oxford&\bf{47}&47&83&BS4&54&54.9\\
+		Plymouth&\bf{62}&62.1&735.1&BS4&73&75\\
+		Sheffield&\bf{84}&84.7&1021.5&BS4&97&98.9\\
+		Southampton&\bf{50}&50.1&315.9&BS4&60&61.1\\
+		Sunderland&\bf{73}&73.7&754.2&BS4&87&89.1\\
+		York&\bf{68}&68&755.1&BS4&77&77.6\\
+		Belgrade&\bf{169}&172.3&3614.1&PG&197&197.5\\
+		Berlin&\bf{206}&207.1&3611.6&PG&268&270.4\\
+		Boston&181&194.6&5707.7&PG&\bf{133}&135\\
+		Dublin&181&184.4&5190.1&PG&\bf{166}&166.8\\
+		Minsk&\bf{197}&201.1&3602.4&PG&265&266.4\\
+		
+		\hline
+		
+	\end{tabular}
+	\caption{Results for k=4.}
+	\label{tab:k4}  
+\end{table}
+
+\begin{table}
+	\begin{tabular}{l|rrr|lrr}
+		\hline
+		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\hline
+		Bath&\bf{139}&140.4&434.8&BS4&159&160\\
+		Belfast&\bf{147}&148.5&2843.1&BS4&177&179.6\\
+		Brighton&\bf{78}&79.3&1393.7&BS4&92&94.8\\
+		Bristol&\bf{145}&146.7&979&BS4&175&176.4\\
+		Cardiff&\bf{160}&161.9&1285&BS4&181&183.2\\
+		Coventry&\bf{150}&150.6&1394.3&BS4&170&172.6\\
+		Exeter&\bf{157}&158.3&634&BS4&181&182.3\\
+		Glasgow&\bf{174}&175.4&550.8&BS4&197&199.8\\
+		Leeds&\bf{152}&152.4&1737.2&BS4&186&187.1\\
+		Leicester&\bf{151}&152.6&2846&BS4&175&177.7\\
+		Liverpool&\bf{112}&114&1673.1&BS4&132&133\\
+		Manchester&\bf{154}&156.4&3302&BS4&177&178.5\\
+		Newcastle&\bf{153}&154.8&2103.6&BS2&169&171.5\\
+		Nottingham&\bf{165}&166.6&2718.3&BS4&193&195.2\\
+		Oxford&\bf{89}&89.2&114.9&BS2&99&100.8\\
+		Plymouth&\bf{115}&116&1725.7&BS4&135&137\\
+		Sheffield&\bf{160}&161.6&1351.2&BS4&180&182.2\\
+		Southampton&\bf{97}&97.8&653.1&BS4&112&113.2\\
+		Sunderland&\bf{142}&142.5&3539.1&BS4&162&163.6\\
+		York&\bf{129}&130.1&630.5&BS4&144&145.8\\
+		Belgrade&\bf{344}&346.3&3610.9&SG&397&400.1\\
+		Berlin&\bf{408}&409.2&3612&PG&501&503.4\\
+		Boston&341&341&9340&PG&\bf{255}&255.4\\
+		Dublin&363&363&10035.5&PG&\bf{317}&318.5\\
+		Minsk&\bf{387}&391.5&3601.6&PG&506&509.4\\
+		
+		\hline
+		
+	\end{tabular}
+	\caption{Results for k=4.}
+	\label{tab:k4}  
+\end{table}
+ 
 \section{Conclusions and future work}
  TODO
  
