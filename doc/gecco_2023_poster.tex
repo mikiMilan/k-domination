@@ -40,7 +40,7 @@
 \usepackage{fixme}
 
 \usepackage{amsmath}
-%\usepackage{amssymb}
+ % \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{mathtools}
 \usepackage{algorithm}
@@ -220,7 +220,7 @@ Contributions of the paper are as follow.
 \section{Notation and problem definition }
     
 
-    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbf{N}$is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of graph $G$ one with a minimum cardinalty. 
+    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbf{N}$ is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of graph $G$ one with a minimum cardinalty. 
     
     
     This problem can be described by using a level of coverage of neighborhoods of vertex $v$ w.r.t.\ $D$
@@ -233,17 +233,17 @@ and  formulated as the following optimization problem
     s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
 \end{align}
     
-\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only operate for feasible solutions but also considering unfeasible ones which will be penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure (of indices of vectors). 
+\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only deal with feasible solutions but also unfeasible solutions  which are  penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure of vertices that belong to solution. 
    
    
 \section{The proposed algorithm}\label{sec:vns}
 
-In this section we first give an overview of the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness evaluation, shaking procedure and local search.
+In this section we first give an overview over the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness evaluation, shaking procedure and an efficient local search.
  
   \subsection{Variable neighborhood search}
- Variable neighborhood search is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stack the search in a  local optimum. It is a single-point search metaheuristic, thus trying to improve always one solution per each iteration. VNS had been proved as one of the most powerful meta-heuristic, delivering state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+ Variable neighborhood search is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stack into a  local optimum. It is a single-point search metaheuristic, which means it tries to improve always one solution per each iteration. VNS had been shown as one of the most powerful meta-heuristic, obtaining state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
-  The pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
+  Pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
   
      \begin{algorithm}[!t] 
   	\caption{VNS scheme}\label{alg:vns}
@@ -254,11 +254,11 @@ In this section we first give an overview of the variable neighborhood search (V
   		\WHILE{!(\emph{TerminationCriteriaMet()})}
   		\STATE  $s' \gets$  $\texttt{Shaking}(\mathcal{N}_d(s_{best}))$ \hspace{0.3cm}//\,shaking phase
   		\STATE $s' \gets  \texttt{LocalSearch}(s {'})$
-  		\IF{$fitness(s') < fitness(s_{best})$}
+  		\IF{\texttt{AcceptingCriterion}($s_{best}, s', fitness(\cdot)$)}
   		\STATE $s _{best}\gets s'$
   		\STATE $d \gets d_{min}$
   		\ELSE 
-  		\STATE $d \gets d+1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
+  		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
   		\IF{$d > d_{max}$}
   		\STATE $d\gets d_{min}$
   		\ENDIF
@@ -268,14 +268,14 @@ In this section we first give an overview of the variable neighborhood search (V
   	\end{algorithmic}
   \end{algorithm}
 
- VNS takes for input a solution $s_{best}$ obtained by a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
+ VNS takes for input a solution $s_{best}$, which may be obtained as the outcome of a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
   and a set of neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$.  
-  Initially, the starting neighbor $k$ is set to the smallest one, i.e. $k_{min}$. Further, the algorithm steps in the main loop (lines 4--16) until one of the termination criteria has met. At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
+  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 4--16) until one of the termination criteria has met. At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
   
   \begin{itemize}
-  	\item \texttt{Shaking}: $d$-th neighbor of incumbent solution $s_{best}$ is considered, and a random solution $s'$ is picked from there;
+  	\item \texttt{Shaking}: the solutions in $d$-th neighbor of incumbent solution $s_{best}$ is considered, and a random solution $s'$ is picked from there;
   	\item  \texttt{LocalSearch}: solution $s'$ is possibly improved by a local search procedure;
-  	\item If a possibly improved solution $s'$ is better than $s_{best}$, it is declared for a new incumbent, this $s_{best} = s'$, and $d$ is set back to $d_{min}$; otherwise $d$ is incrementally increased;
+  	\item \texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$): this function provided a condition when to accept a solution $s'$ for as new incumbent, that is $s_{best} = s'$; in that case, $d$ is set back to $d_{min}$; otherwise $d$ is incrementally increased. 
   	\item  If $d> d_{max}$, $d$ is again set back to $d_{min}$.
    \end{itemize}
     
@@ -289,19 +289,31 @@ In this section we first give an overview of the variable neighborhood search (V
        \begin{align}
        	   violate(s) = \sum_{v \in V \setminus s}   k - C(s, v)  
        \end{align}
-   Note that this function operates on both, feasible and unfeasible solutions. 
+   Note that this function evaluates both, feasible and unfeasible solutions. 
        Motivation for integrating this function  in the search is threefold:
        \begin{itemize}
-       	\item First, any feasible solution of size $|s|$ is preferable over any unfeasible solution of the same cardinalty. 
-       	\item Between two unfeasible solutions of the same cardinalty, the search prefers that whose \emph{violate} score is smaller, thus the solution is occasionally easier to be reshaped into a feasible one.  
-       	\item Between two feasible solutions, better is the one with a smaller cardinalty. 
+       	\item First, any feasible solution of size $|s|$ is preferable over any unfeasible solution of the same (or a larger) cardinalty. 
+       	\item Between two unfeasible solutions of the same cardinalty, one whose \emph{violate}($\cdot$) score is smaller is preferred, thus the solution is intuitively easier to be reshaped into a feasible one.  
+       	\item Between two feasible solutions, a smaller cardinalty solution is preferred (\emph{violate}($\cdot$) score in that case vanishes). 
        \end{itemize}
-     Note that a solution is structured as a set of all vertices that belong to it. 
+    % Note that a solution is structured as a set of all vertices that belong to it. 
+   
+   \subsection{Acceptance criterion}
+   
+   Solution $s'$ becomes a new incumbent iff one of the following conditions is fulfilled
+   \begin{itemize}
+   	\item $fitness(s') < fitness(s_{best})$ 
+   	\item  $fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob  $, where \emph{prob}$\in$[$0,1$] is a parameter of the algorithm.
+   \end{itemize}
+   
    
    \subsection{Shaking}
-    As we already mentioned, the purpose of shaking is to escape the search from stacking into   local optima. In case of MkDP, the shaking is realized as follows: \fxnote{TODO: Milan} 
+    As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
+    
+    
+     \fxnote{TODO: Milan} 
    \subsection{Local search}
-  The purpose of local search (LS) is improving a solution by applying small changes on solution structure. Therefore, defining  ``small changes'', that is, the structure of local search neighboring plays a crucial role in establishing an effective LS.  For MkDP, the LS utilized is given by Algorithm~\ref{alg:ls}.
+  The purpose of local search (LS) is improving a solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
@@ -348,12 +360,12 @@ In this section we first give an overview of the variable neighborhood search (V
   	\end{algorithmic}
 \end{algorithm}
 
-Our LS is iteratively trying to improve solution $s$ by applying the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score is being detected.  We mention that the order of vertices we iterate through at Line 8 and Line 23 are randomly shuffled. 
+Our LS procedure applies the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score has been detected.  We mention that the order of vertices we iterate through (Lines 8 and 23) is randomly given. 
 
-\emph{Partial fitness evaluation}. Calculating fitness function (\ref{eq:fitness}) takes $O(|E|)$ time; its the most time consuming part is the calculation of $\emph{violate}(\cdot)$  score.   If graphs are dense, this complexity may increase to  $O(n^2)$. Note that at each iteration in Algorithm~\ref{alg:ls},  fitness function evaluation is performed $|V|$ times. Thus, performing the \emph{fitness} evaluation here from scratch is too costly. 
+\emph{Partial fitness evaluation}. Calculating fitness function (\ref{eq:fitness}) takes $O(|E|)$ time; its the most time consuming part is the calculation of $\emph{violate}(\cdot)$  function.   If graphs are dense, this complexity may get to  $O(n^2)$. Note that at each iteration in Algorithm~\ref{alg:ls},  fitness function evaluation is performed $|V|$ times. Thus, performing the \emph{fitness} evaluation every time from scratch is too costly. 
 
-In order to perform \texttt{LocalSearch} more efficiently, partial calculations of the \emph{fitness} function are applied. More in details, before we enter the first \texttt{while} loop, $C(s, v), \forall v \in V$, values are pre-determined (cashed) for solution $s$, using a set structure. In case of a node addition, that is  $s' = s \cup \{v\} $, $violate(s') = violate(s) - C(s, v)  \texttt{I}_{(k> C(s,v))}  + \sum_{w\in N(v) \cap s'} \texttt{I}_{(k+1 > C(s, w))}  $ where \texttt{I} stands for the indicator function. 
-In case of a node removal, we apply a similar concept as for a node addition, that is, if $s' = s \setminus \{v\}$, then $violate(s') =  violate(s) + ( k - C(s, v)) \texttt{I}_{( k > C(s, v))} $+ $\sum_{ w \in   N(v)  \setminus s} \texttt{I}_{(k+1 \leq C(s, w)) }$. By encoutering a new incumbent in \texttt{LocalSearch}, cache structure $C(s, \cdot)$ has been updated accordingly.
+In order to execute \texttt{LocalSearch} procedure  efficiently, partial calculations of the \emph{fitness} function are applied. More in details, before we enter the first \texttt{while} loop, $C(s, v), \forall v \in V$, values are pre-determined (cashed) for solution $s$, in the set structure. In case of a node addition, that is  $s' = s \cup \{v\} $, we do $violate(s') = violate(s) - C(s, v)  \texttt{I}_{(k> C(s,v))}  + \sum_{w\in N(v) \cap s'} \texttt{I}_{(k+1 > C(s, w))}  $ where \texttt{I} stands for the indicator function. 
+In case of a node removal, we apply a similar concept as for a node addition, that is, if $s' = s \setminus \{v\}$, then $violate(s') =  violate(s) + ( k - C(s, v)) \texttt{I}_{( k > C(s, v))} $+ $\sum_{ w \in   N(v)  \setminus s} \texttt{I}_{(k+1 \leq C(s, w)) }$. By encountering a new incumbent in \texttt{LocalSearch}, cache structure $C(s, \cdot)$ has been updated accordingly.
 
 
 \section{Experimental evaluation}\label{sec:experiments}
@@ -362,41 +374,42 @@ In case of a node removal, we apply a similar concept as for a node addition, th
 In this section we provide empirical evidence of the quality of the proposed \textsc{Vns} method. In order to do so, we include three competitor heuristic approaches from the literature. To me more precise, the following four methods for MkDP are compared:  
 
 \begin{itemize}
-	\item Greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, labelled by \textsc{Greedy-1};
-	\item Greedy method from~\cite{gagarin2018multiple}, labelled by \textsc{Greedy-2};
+	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, labelled by \textsc{SG};
+	\item Greedy method from~\cite{gagarin2018multiple}, labelled by \textsc{PG};
 	\item Beam search approach from~\cite{corcoran2021heuristics}, labelled by \textsc{Bs};
 	\item VNS approach, as described in Section~\ref{sec:vns}, labelled by \textsc{Vns}.  
 \end{itemize}
 
 
-\emph{Benchmark instances}. For the comparison purposes, we consider the set of real--world instances. This set consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All instances are  modeling street networks by means of network reachability graphs. Five large sized street networks correspond to international cities such as Belgrade, Berlin, Boston, Dublin, and Minsk.
+\emph{Benchmark instances}. For the comparison purposes, we consider the set of real--world instances. It consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All instances are  modeling road networks of different cities by means of network reachability graphs. Five large sized street networks correspond to international cities as follow: Belgrade, Berlin, Boston, Dublin, and Minsk.
  Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}. \fxnote{TODO: Milan}
  
  \begin{table}
  	\begin{tabular}{lcc}
  		\textbf{City}      & $|V|$ & $|E|$ \\ \hline
- 		Belgrade  & XX    &   XX  \\ 
+ 		Belgrade      & XX    &   XX  \\ 
  		Berlin        & XX    &   XX \\
  	    Boston        & XX    &   XX \\
  	    Dublin        & XX    &   XX \\
- 	    Minsk        & XX    &   XX \\ \hline
+ 	    Minsk         & XX    &   XX \\ \hline
  	\end{tabular}
      \caption{Large-sized instance characteristics.}
           \label{tab:big_instances_chars}  
  \end{table}
  
- Characteristics of large-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of small-to-middle-sized instances is given in Figure \fxnote{TODO: Milan} 
- 
+ Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of these instances is given in Figure \fxnote{TODO: Milan} 
+ \fxnote{Marko: stigao dovde!}
  \emph{Testing environments and applied methodology}. The experiments were conducted in a single-core on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. Note that \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{Greedy-1}, \textsc{Greedy-2} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors of~\cite{corcoran2021heuristics}. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances introduced in the original publication. } are obtained by executing our re-implementation of \textsc{Greedy-1}, \textsc{Greedy-2}, and \textsc{Bs} algorithms. In all cases, \textsc{Greedy-1} and \textsc{Greedy-2} are run once per each problem instance, as they are deterministic. \textsc{Bs} and \textsc{Vns} are run 10 times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. 
 \subsection{Parameters tuning}
    Among the four competitor algorithms, the parameters of \textsc{Vns} are matter of tuning. The following parameters are tuned: $d_{min}, d_{max},$ and  $penalty$. Domain of these parameters used for the tuning purposes are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
-   	\begin{tabular}{ll}
-   		parameters      & domain \\ \hline
-   	$d_{min}$ &  -- \\
-   	$d_{max}$ &  -- \\
-   	 $penalty$ & --  \\   \hline
+   	\begin{tabular}{lll}
+    parameter       & domain & step \\ \hline
+   	$d_{min}$  &  [1, 10] & 1 \\
+   	$d_{max}$  & [2, 100] & 1\\
+   	 $penalty$ & [0.001, 0.02]  & 0.001 \\
+   	 $prob$    & [0, 1] & 0.05 \\ \hline
    	\end{tabular}
    	\caption{Parameter domains of \textsc{Vns}.}  
    	   	\label{tab:domain_tuning}
