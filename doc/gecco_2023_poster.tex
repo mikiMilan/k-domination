@@ -45,8 +45,8 @@
 \usepackage{mathtools}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage[T1]{fontenc}
-%\usepackage{lmodern}
+\usepackage{tikz,pgfplots,pgfplotstable}
+\pgfplotsset{scaled x ticks = false}
 
 \fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
@@ -386,16 +386,16 @@ In this section we provide empirical evidence of the quality of the proposed \te
  Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}. \fxnote{TODO: Milan}
  
  \begin{table}
- 	\begin{tabular}{lcc}
- 		\textbf{City}      & $|V|$ & $|E|$ \\ \hline
- 		Belgrade      & XX    &   XX  \\ 
- 		Berlin        & XX    &   XX \\
- 	    Boston        & XX    &   XX \\
- 	    Dublin        & XX    &   XX \\
- 	    Minsk         & XX    &   XX \\ \hline
+ 	\caption{Large-sized instance characteristics.}
+ 	\label{tab:big_instances_chars}  
+ 	\begin{tabular}{lrr}
+ 		City      & $|V|$ & $|E|$ \\ \hline
+ 		Belgrade      & 19,586 & 7,561,185  \\ 
+ 		Berlin        & 29,461 & 9,944,851 \\
+ 	    Boston        & 44,797 & 28,164,740 \\
+ 	    Dublin        & 37,982 & 21,630,466 \\
+ 	    Minsk         & 10,487 & 1,375,618 \\ \hline
  	\end{tabular}
-     \caption{Large-sized instance characteristics.}
-          \label{tab:big_instances_chars}  
  \end{table}
  
  Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of these instances is given in Figure \fxnote{TODO: Milan}.  
@@ -406,15 +406,15 @@ In this section we provide empirical evidence of the quality of the proposed \te
    Among the four competitor algorithms, the parameters of \textsc{Vns} are matter of tuning. The following parameters are tuned: $d_{min}, d_{max},$ and  $penalty$. Domain of these parameters used for the tuning purposes are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
-   	\begin{tabular}{lll}
-    parameter       & domain & step \\ \hline
+    	\caption{Parameter domains of \textsc{Vns}.}  
+    	\label{tab:domain_tuning}
+   	\begin{tabular}{lrr}
+    Parameter       & Domain & Step \\ \hline
    	$d_{min}$  &  [1, 10] & 1 \\
    	$d_{max}$  & [2, 100] & 1\\
    	 $penalty$ & [0.001, 0.02]  & 0.001 \\
    	 $prob$    & [0, 1] & 0.05 \\ \hline
    	\end{tabular}
-   	\caption{Parameter domains of \textsc{Vns}.}  
-   	   	\label{tab:domain_tuning}
    \end{table}
    
    Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD}. This tool is given as an open-source Python library and can be imported directly by installing the respective package. All (20) small-sized problem instances are separately tuned for each $k\in \{1, 2, 4\}$ and thus, for each of the 60 cases, a single parameter setting of VNS was obtained. 
@@ -436,121 +436,191 @@ In this section we provide empirical evidence of the quality of the proposed \te
  
  
   \begin{table}
+  	\caption{Results for k=1.}
+  	\label{tab:k1}  
  	\begin{tabular}{l|rrr|lrr}
  	\hline
  	\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
  	\hline
-	City & Best & Avg. & T
-	 & Alg. & Best & Avg. \\ \hline
-	Bath&\bf{38}&38&445.5&BS4&43&44.6\\
-	Belfast&\bf{39}&39&838.3&BS4&48&50.2\\
-	Brighton&\bf{21}&21&463.4&BS4&28&28.2\\
-	Bristol&\bf{37}&37&791.3&BS2&46&47.4\\
-	Cardiff&\bf{39}&39&419.5&BS4&48&50.6\\
-	Coventry&\bf{38}&38.2&438.4&BS4&170&172.6\\
-	Exeter&\bf{38}&38&514.2&BS4&181&182.3\\
-	Glasgow&\bf{50}&50.2&416&BS4&197&199.8\\
-	Leeds&\bf{40}&40&685.6&BS4&186&187.1\\
-	Leicester&\bf{38}&38&1010.4&BS4&175&177.7\\
-	Liverpool&\bf{28}&28&700.5&BS4&132&133\\
-	Manchester&\bf{38}&38.8&2071.7&BS4&177&178.5\\
-	Newcastle&\bf{44}&44&611.7&BS2&169&171.5\\
-	Nottingham&\bf{44}&44&1211&BS4&193&195.2\\
-	Oxford&\bf{24}&24&63.1&BS2&99&100.8\\
-	Plymouth&\bf{31}&31&707.2&BS4&135&137\\
-	Sheffield&\bf{42}&42&878.2&BS4&180&182.2\\
-	Southampton&\bf{25}&25&277.5&BS4&112&113.2\\
-	Sunderland&\bf{36}&36&688.6&BS4&162&163.6\\
-	York&\bf{32}&32&324.6&BS4&144&145.8\\ \hline \hline
-	Belgrade&\bf{85}&88.7&3610.8&PG&99&100.3\\
-	Berlin&\bf{102}&104.7&3609.5&SG&146&147\\
-	Boston&99&101.1&3685.6&SG&\bf{71}&72.6\\
-	Dublin&96&99.7&3790.3&PG&\bf{88}&90.2\\
-	Minsk&\bf{100}&102.2&3602.3&SG&138&139.3\\
-	
+	City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+	Bath&\bf{38}&38&BS4&43&44.6\\
+	Belfast&\bf{39}&39&BS4&48&50.2\\
+	Brighton&\bf{21}&21&BS4&28&28.2\\
+	Bristol&\bf{37}&37&BS2&46&47.4\\
+	Cardiff&\bf{39}&39&BS4&48&50.6\\
+	Coventry&\bf{38}&38.2&BS4&170&172.6\\
+	Exeter&\bf{38}&38&BS4&181&182.3\\
+	Glasgow&\bf{50}&50.2&BS4&197&199.8\\
+	Leeds&\bf{40}&40&BS4&186&187.1\\
+	Leicester&\bf{38}&38&BS4&175&177.7\\
+	Liverpool&\bf{28}&28&BS4&132&133\\
+	Manchester&\bf{38}&38.8&BS4&177&178.5\\
+	Newcastle&\bf{44}&44&BS2&169&171.5\\
+	Nottingham&\bf{44}&44&BS4&193&195.2\\
+	Oxford&\bf{24}&24&BS2&99&100.8\\
+	Plymouth&\bf{31}&31&BS4&135&137\\
+	Sheffield&\bf{42}&42&BS4&180&182.2\\
+	Southampton&\bf{25}&25&BS4&112&113.2\\
+	Sunderland&\bf{36}&36&BS4&162&163.6\\
+	York&\bf{32}&32&BS4&144&145.8\\ \hline \hline
+	Belgrade&\bf{85}&88.7&PG&99&100.3\\
+	Berlin&\bf{102}&104.7&SG&146&147\\
+	Boston&99&101.1&SG&\bf{71}&72.6\\
+	Dublin&96&99.7&PG&\bf{88}&90.2\\
+	Minsk&\bf{100}&102.2&SG&138&139.3\\
 	\hline
 	
  	\end{tabular}
- 	\caption{Results for k=1.}
- 	\label{tab:k1}  
  \end{table}
 
 \begin{table}
+	\caption{Results for k=2.}
+	\label{tab:k2}  
 	\begin{tabular}{l|rrr|lrr}
 		\hline
 		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
 		\hline
-		City & Best & Avg. & T & Alg. & Best & Avg. \\ \hline
-		Bath&\bf{71}&71.8&634.1&BS1&86&89\\
-		Belfast&\bf{76}&76.2&1675.3&BS4&96&97.6\\
-		Brighton&\bf{40}&41.1&574.7&BS4&49&49.4\\
-		Bristol&\bf{73}&73.7&1588.6&BS4&91&94\\
-		Cardiff&\bf{79}&79.4&897&BS4&92&95.9\\
-		Coventry&\bf{73}&73.2&937.9&BS4&84&85.1\\
-		Exeter&\bf{77}&77.3&582.5&BS4&94&95.7\\
-		Glasgow&\bf{93}&94.2&671&BS4&108&110.6\\
-		Leeds&\bf{79}&80.5&815&BS4&98&99.6\\
-		Leicester&\bf{75}&75.2&1056.6&BS4&93&94.1\\
-		Liverpool&\bf{57}&57&1157.7&BS4&71&72\\
-		Manchester&\bf{77}&78.4&3053.1&BS4&90&91.5\\
-		Newcastle&\bf{83}&84.3&823.1&BS4&94&95.4\\
-		Nottingham&\bf{84}&85.3&2167.1&BS4&102&103.3\\
-		Oxford&\bf{47}&47&83&BS4&54&54.9\\
-		Plymouth&\bf{62}&62.1&735.1&BS4&73&75\\
-		Sheffield&\bf{84}&84.7&1021.5&BS4&97&98.9\\
-		Southampton&\bf{50}&50.1&315.9&BS4&60&61.1\\
-		Sunderland&\bf{73}&73.7&754.2&BS4&87&89.1\\
-		York&\bf{68}&68&755.1&BS4&77&77.6\\ \hline \hline
-		Belgrade&\bf{169}&172.3&3614.1&PG&197&197.5\\
-		Berlin&\bf{206}&207.1&3611.6&PG&268&270.4\\
-		Boston&181&194.6&5707.7&PG&\bf{133}&135\\
-		Dublin&181&184.4&5190.1&PG&\bf{166}&166.8\\
-		Minsk&\bf{197}&201.1&3602.4&PG&265&266.4\\
-		
+		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+		Bath&\bf{71}&71.8&BS1&86&89\\
+		Belfast&\bf{76}&76.2&BS4&96&97.6\\
+		Brighton&\bf{40}&41.1&BS4&49&49.4\\
+		Bristol&\bf{73}&73.7&BS4&91&94\\
+		Cardiff&\bf{79}&79.4&BS4&92&95.9\\
+		Coventry&\bf{73}&73.2&BS4&84&85.1\\
+		Exeter&\bf{77}&77.3&BS4&94&95.7\\
+		Glasgow&\bf{93}&94.2&BS4&108&110.6\\
+		Leeds&\bf{79}&80.5&BS4&98&99.6\\
+		Leicester&\bf{75}&75.2&BS4&93&94.1\\
+		Liverpool&\bf{57}&57&BS4&71&72\\
+		Manchester&\bf{77}&78.4&BS4&90&91.5\\
+		Newcastle&\bf{83}&84.3&BS4&94&95.4\\
+		Nottingham&\bf{84}&85.3&BS4&102&103.3\\
+		Oxford&\bf{47}&47&BS4&54&54.9\\
+		Plymouth&\bf{62}&62.1&BS4&73&75\\
+		Sheffield&\bf{84}&84.7&BS4&97&98.9\\
+		Southampton&\bf{50}&50.1&BS4&60&61.1\\
+		Sunderland&\bf{73}&73.7&BS4&87&89.1\\
+		York&\bf{68}&68&BS4&77&77.6\\ \hline \hline
+		Belgrade&\bf{169}&172.3&PG&197&197.5\\
+		Berlin&\bf{206}&207.1&PG&268&270.4\\
+		Boston&181&194.6&PG&\bf{133}&135\\
+		Dublin&181&184.4&PG&\bf{166}&166.8\\
+		Minsk&\bf{197}&201.1&PG&265&266.4\\
 		\hline
-		
 	\end{tabular}
-	\caption{Results for k=2.}
-	\label{tab:k2}  
 \end{table}
 
 \begin{table}
+	\caption{Results for k=4.}
+	\label{tab:k4}  
 	\begin{tabular}{l|rrr|lrr}
 		\hline
 		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
 		\hline
-		Bath&\bf{139}&140.4&434.8&BS4&159&160\\
-		Belfast&\bf{147}&148.5&2843.1&BS4&177&179.6\\
-		Brighton&\bf{78}&79.3&1393.7&BS4&92&94.8\\
-		Bristol&\bf{145}&146.7&979&BS4&175&176.4\\
-		Cardiff&\bf{160}&161.9&1285&BS4&181&183.2\\
-		Coventry&\bf{150}&150.6&1394.3&BS4&170&172.6\\
-		Exeter&\bf{157}&158.3&634&BS4&181&182.3\\
-		Glasgow&\bf{174}&175.4&550.8&BS4&197&199.8\\
-		Leeds&\bf{152}&152.4&1737.2&BS4&186&187.1\\
-		Leicester&\bf{151}&152.6&2846&BS4&175&177.7\\
-		Liverpool&\bf{112}&114&1673.1&BS4&132&133\\
-		Manchester&\bf{154}&156.4&3302&BS4&177&178.5\\
-		Newcastle&\bf{153}&154.8&2103.6&BS2&169&171.5\\
-		Nottingham&\bf{165}&166.6&2718.3&BS4&193&195.2\\
-		Oxford&\bf{89}&89.2&114.9&BS2&99&100.8\\
-		Plymouth&\bf{115}&116&1725.7&BS4&135&137\\
-		Sheffield&\bf{160}&161.6&1351.2&BS4&180&182.2\\
-		Southampton&\bf{97}&97.8&653.1&BS4&112&113.2\\
-		Sunderland&\bf{142}&142.5&3539.1&BS4&162&163.6\\
-		York&\bf{129}&130.1&630.5&BS4&144&145.8\\ \hline \hline
-		Belgrade&\bf{344}&346.3&3610.9&SG&397&400.1\\
-		Berlin&\bf{408}&409.2&3612&PG&501&503.4\\
-		Boston&341&341&9340&PG&\bf{255}&255.4\\
-		Dublin&363&363&10035.5&PG&\bf{317}&318.5\\
-		Minsk&\bf{387}&391.5&3601.6&PG&506&509.4\\
-		
+		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+		Bath&\bf{139}&140.4&BS4&159&160\\
+		Belfast&\bf{147}&148.5&BS4&177&179.6\\
+		Brighton&\bf{78}&79.3&BS4&92&94.8\\
+		Bristol&\bf{145}&146.7&BS4&175&176.4\\
+		Cardiff&\bf{160}&161.9&BS4&181&183.2\\
+		Coventry&\bf{150}&150.6&BS4&170&172.6\\
+		Exeter&\bf{157}&158.3&BS4&181&182.3\\
+		Glasgow&\bf{174}&175.4&BS4&197&199.8\\
+		Leeds&\bf{152}&152.4&BS4&186&187.1\\
+		Leicester&\bf{151}&152.6&BS4&175&177.7\\
+		Liverpool&\bf{112}&114&BS4&132&133\\
+		Manchester&\bf{154}&156.4&BS4&177&178.5\\
+		Newcastle&\bf{153}&154.8&BS2&169&171.5\\
+		Nottingham&\bf{165}&166.6&BS4&193&195.2\\
+		Oxford&\bf{89}&89.2&BS2&99&100.8\\
+		Plymouth&\bf{115}&116&BS4&135&137\\
+		Sheffield&\bf{160}&161.6&BS4&180&182.2\\
+		Southampton&\bf{97}&97.8&BS4&112&113.2\\
+		Sunderland&\bf{142}&142.5&BS4&162&163.6\\
+		York&\bf{129}&130.1&BS4&144&145.8\\ \hline \hline
+		Belgrade&\bf{344}&346.3&SG&397&400.1\\
+		Berlin&\bf{408}&409.2&PG&501&503.4\\
+		Boston&341&341&PG&\bf{255}&255.4\\
+		Dublin&363&363&PG&\bf{317}&318.5\\
+		Minsk&\bf{387}&391.5&PG&506&509.4\\
 		\hline
 		
 	\end{tabular}
-	\caption{Results for k=4.}
-	\label{tab:k4}  
 \end{table}
+
+\pgfplotstableread{ % Read the data into a table macro
+City	k1	k2	k4
+Manchester	844.078	1608.695	2584.787
+Nottingham	85.132	1125.304	1827.64
+Belfast	66.681	865.443	1800.359
+Sunderland	44.395	187.461	2464.102
+Leicester	233.02	462.418	1729.272
+Newcastle	88.577	378.578	1147.646
+Leeds	132.67	291.423	1078.052
+Liverpool	192.537	239.716	981.006
+Bristol	129.058	571.793	638.25
+Coventry	144.585	300.407	826.953
+Brighton	89.172	292.017	858.973
+Sheffield	78.21	289.042	850.464
+Plymouth	55.003	205.265	919.927
+Cardiff	41.944	181.9	679.325
+Exeter	52.443	285.106	387.588
+Bath	60.934	256.686	285.744
+Glasgow	90.929	110.067	376.057
+York	28.401	111.923	359.89
+Southampton	7.778	147.781	203.324
+Oxford	18.758	6.93	23.79
+
+}\testdata
+
+\begin{figure}
+\begin{tikzpicture}
+	\begin{axis}[
+		 legend style={legend columns=1,at={(1,1)},anchor=north east},
+		xbar stacked,   % Stacked horizontal bars
+		bar width=5pt,
+		ytick=data,     % Use as many tick labels as y coordinates
+		yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+		]
+		\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+		\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+		\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+		\legend{k=1, k=2,k=4}
+	\end{axis}
+\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for small cities.}
+	\label{fig:timeSmall}  
+\end{figure}
+
+\pgfplotstableread{ % Read the data into a table macro
+	City	k1	k2	k4
+	Dublin	3301.775	5190.116	10035.541
+	Boston	3313.146	5707.734	9339.97
+	Berlin	2943.355	3363.764	3574.488
+	Belgrade	2604.035	3454.216	3441.493
+	Minsk	2086.718	2864.217	3364.123
+	
+}\testdata
+
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+			]
+			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+			\legend{k=1, k=2,k=4}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for big cities.}
+	\label{fig:timeBig}  
+\end{figure}
  
 \section{Conclusions and future work}
  TODO
