@@ -164,7 +164,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of nodes of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbours from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighbourhood search (VNS) meta-heuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalising infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared with the best known heuristic approaches from the literature: a beam search and the \colorbox{yellow}{two greedy approaches -> a greedy approach}. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for most of the considered instances with $k \in {1, 2, 4}$.
+In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of nodes of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbours from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighbourhood search (VNS) meta-heuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalising infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared with the best known heuristic approaches from the literature: a beam search and \colorbox{yellow}{the two greedy approaches -> a greedy approach}. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for most of the considered instances with $k \in {1, 2, 4}$.
   
 \end{abstract}
   
@@ -457,26 +457,26 @@ In this section we provide empirical evidence of the quality of the proposed \te
 	Brighton&\bf{21}&21&BS4&28&28.2\\
 	Bristol&\bf{37}&37&BS2&46&47.4\\
 	Cardiff&\bf{39}&39&BS4&48&50.6\\
-	Coventry&\bf{38}&38.2&BS4&170&172.6\\
-	Exeter&\bf{38}&38&BS4&181&182.3\\
-	Glasgow&\bf{50}&50.2&BS4&197&199.8\\
-	Leeds&\bf{40}&40&BS4&186&187.1\\
-	Leicester&\bf{38}&38&BS4&175&177.7\\
-	Liverpool&\bf{28}&28&BS4&132&133\\
-	Manchester&\bf{38}&38.8&BS4&177&178.5\\
-	Newcastle&\bf{44}&44&BS2&169&171.5\\
-	Nottingham&\bf{44}&44&BS4&193&195.2\\
-	Oxford&\bf{24}&24&BS2&99&100.8\\
-	Plymouth&\bf{31}&31&BS4&135&137\\
-	Sheffield&\bf{42}&42&BS4&180&182.2\\
-	Southampton&\bf{25}&25&BS4&112&113.2\\
-	Sunderland&\bf{36}&36&BS4&162&163.6\\
-	York&\bf{32}&32&BS4&144&145.8\\ \hline \hline
-	Belgrade&\bf{85}&88.7&PG&103&103.4\\
-	Berlin&\bf{102}&104.7&PG&125&125.9\\
-	Boston&\bf{99}&101.1&PG&101&102.7\\
-	Dublin&\bf{96}&99.7&PG&112&113.8\\
-	Minsk&\bf{100}&102.2&PG&X&X\\
+	Coventry&\bf{38}&38.2&BS4&44&44.8\\
+	Exeter&\bf{38}&38&BS4&50&50.6\\
+	Glasgow&\bf{50}&50.2&BS4&58&59.2\\
+	Leeds&\bf{40}&40&BS4&51&52.4\\
+	Leicester&\bf{38}&38&BS4&51&51.5\\
+	Liverpool&\bf{28}&28&BS4&38&38.4\\
+	Manchester&\bf{38}&38.8&BS4&45&45.9\\
+	Newcastle&\bf{44}&44&BS4&51&52.6\\
+	Nottingham&\bf{44}&44&BS4&55&56.6\\
+	Oxford&\bf{24}&24&BS4&27&27.9\\
+	Plymouth&\bf{31}&31&BS4&39&40.3\\
+	Sheffield&\bf{42}&42&BS4&51&52.5\\
+	Southampton&\bf{25}&25&BS4&28&29.6\\
+	Sunderland&\bf{36}&36&BS4&46&46.3\\
+	York&\bf{32}&32&BS4&39&39.1\\  \hline  \hline
+	Belgrade&\bf{85}&88.4&PG&103&103.4\\
+	Berlin&\bf{102}&104.5&PG&125&125.9\\
+	Boston&\bf{99}&101.2&PG&101&102.7\\
+	Dublin&\bf{93}&99&PG&112&113.8\\
+	Minsk&\bf{100}&102&PG&138&139.3\\
 	\hline
 	
  	\end{tabular}
@@ -494,7 +494,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 		Belfast&\bf{76}&76.2&BS4&96&97.6\\
 		Brighton&\bf{40}&41.1&BS4&49&49.4\\
 		Bristol&\bf{73}&73.7&BS4&91&94\\
-		Cardiff&\bf{79}&79.4&BS4&92&95.9\\
+		Cardiff&\bf{79}&79.4&BS4&92&95.6\\
 		Coventry&\bf{73}&73.2&BS4&84&85.1\\
 		Exeter&\bf{77}&77.3&BS4&94&95.7\\
 		Glasgow&\bf{93}&94.2&BS4&108&110.6\\
@@ -509,12 +509,12 @@ In this section we provide empirical evidence of the quality of the proposed \te
 		Sheffield&\bf{84}&84.7&BS4&97&98.9\\
 		Southampton&\bf{50}&50.1&BS4&60&61.1\\
 		Sunderland&\bf{73}&73.7&BS4&87&89.1\\
-		York&\bf{68}&68&BS4&77&77.6\\ \hline \hline
+		York&\bf{68}&68&BS4&77&77.6\\  \hline  \hline
 		Belgrade&\bf{169}&172.3&PG&196&197.3\\
 		Berlin&\bf{206}&207.1&PG&239&240.1\\
 		Boston&\bf{181}&194.6&PG&190&191.6\\
 		Dublin&\bf{181}&184.4&PG&209&211.3\\
-		Minsk&\bf{197}&201.1&PG&X&X\\
+		Minsk&\bf{197}&201.1&PG&265&266.4\\
 		\hline
 	\end{tabular}
 \end{table}
@@ -546,12 +546,12 @@ In this section we provide empirical evidence of the quality of the proposed \te
 		Sheffield&\bf{160}&161.6&BS4&180&182.2\\
 		Southampton&\bf{97}&97.8&BS4&112&113.2\\
 		Sunderland&\bf{142}&142.5&BS4&162&163.6\\
-		York&\bf{129}&130.1&BS4&144&145.8\\ \hline \hline
-		Belgrade&\bf{344}&346.3&PG&372&374.5\\
+		York&\bf{129}&130.1&BS4&144&145.8\\  \hline  \hline
+		Belgrade&\bf{344}&346.3&SG&372&374.5\\
 		Berlin&\bf{408}&409.2&PG&444&446.2\\
 		Boston&\bf{341}&341&PG&367&368.7\\
-		Dublin&\bf{363}&363&PG&~388&~390\\
-		Minsk&\bf{387}&391.5&PG&X&X\\
+		Dublin&363&363&PG&\bf{317}&318.5\\
+		Minsk&\bf{387}&391.5&PG&506&509.4\\
 		\hline
 		
 	\end{tabular}
