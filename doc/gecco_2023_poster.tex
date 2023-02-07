@@ -417,17 +417,23 @@ In this section we provide empirical evidence of the quality of the proposed \te
    	   	\label{tab:domain_tuning}
    \end{table}
    
-   Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD}. This tool is given as an open-source Python library and can be imported directly by installing the respective package. All (20) small-sized problem instances are separately tuned and thus, for each of them a single parameter setting of VNS was obtained. 
+   Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD}. This tool is given as an open-source Python library and can be imported directly by installing the respective package. All (20) small-sized problem instances are separately tuned for each $k\in \{1, 2, 4\}$ and thus, for each of the 60 cases, a single parameter setting of VNS was obtained. 
    \fxnote{Milan: dio oko podesavanja tuning alata -- koje instance, koliki je budet broja pustanja, isl.}
   
     
-     Details on the configuration settings per each small-sized instance produced by \texttt{PyGAD} tool can be found at \url{XXxxxx.com}
+     Details on the configuration settings per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool can be found at \url{XXxxxx.com}
      
-     We emphasize that tuning of all (five) large-sized instances    by means of \texttt{PyGAD} tool has not been efficient. Thus, we determined a reasonable  value of the parameters  greedily, by testing a few carefully chosen parameters configurations. Among them, the best performing configuration w.r.t. average solution quality has the following values: $d_{min}=1, d_{max} = + \infty, penalty = 0.01, prob=0.5$. 
+     We emphasize that tuning of all (five) large-sized instances and each $k \in \{1,2,4\}$  by means of \texttt{PyGAD} tool using the default configuration parameters has not been efficient. Thus, we determined a reasonable  value of the parameters  greedily, by testing a few carefully chosen parameters configurations. Among them, the best performing configuration w.r.t. average solution quality has the following values: $d_{min}=1, d_{max} = + \infty, penalty = 0.01, prob=0.5$. 
 
-\fxnote{Marko: stigao dovde!}
 \subsection{Numerical results }
- TODO: Marko
+ Numerical results are reported in the three Tables~\ref{tab:k1}--\ref{tab:k4}, one per each $k \in \{1, 2,4\}$. The first column gives the instance name for which the results are reported; there are 20 small-sized instances, and 5 large-sized instance (at the very bottom). The next two blocks provide the results of \textsc{Vns} (the best result within ten runs and the average solution quality) and the best approach from the literature on the respective instance (the  name of the algorithm achieving the best result, its best result within ten runs, and its average solution quality). 
+ 
+   The following conclusions may be drawn from these results.
+   
+ 
+ 
+ \fxnote{Marko: stigao dovde!}
+ 
  
   \begin{table}
  	\begin{tabular}{l|rrr|lrr}
