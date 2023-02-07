@@ -203,19 +203,19 @@ In this work we propose a meta-heuristic approach to solve the MkDP, a variable 
 \begin{itemize}
 	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
 	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima.
-	\item An efficient local search mechanism that try to fix unfeasible solutions into feasible ones. It is equipped witch a fast partial evaluation of the fitness function executed in linear time.
+	\item An efficient swap--based  best-improvement local search mechanism   has been applied. It is equipped witch a fast partial evaluation of the fitness function, executed in linear time.
  
 \end{itemize}
 Contributions of the paper are as follow.
 \begin{itemize}
-	\item The newly proposed VNS algorithm, which the performing differs from  the currently dominant constructive approaches in the literature.
+	\item An efficient VNS algorithm is constructed, which performs differently from  the currently dominant constructive and mainly incremental approaches from the literature.
 	
-	
-	\item The control parameters of the VNS is tuned by %two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and 
+	\item The control parameters of the VNS are tuned by %two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and 
 	an evolutionary-based tuning tool, an open-source Python library~\texttt{PyGAD}~\cite{gad2021pygad}.  
-	\item The two settings of VNS, obtained by the above-mentioned tuning tools, are able to achieve new state-of-the-art results concerning most of the real-world instances. %they are compared to the two greedy algorithms and the BS approach from the literature. 
-	\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the state-of-the-art incremental approaches from the literature.
-	\item Concerning the (five) large-sized real instances, where BS could not finish within the proposed time limit, our VNS returns  in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...). The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
+	\item The settings of VNS, obtained by the above-mentioned tuning tool, is able to achieve new state-of-the-art results concerning all small and large-sized real-world problem instances from the literature. %they are compared to the two greedy algorithms and the BS approach from the literature. 
+	\item  \textsc{Vns} approach scales better with increase in the instance size than so-far leading literature approaches. 
+	%\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the state-of-the-art incremental approaches from the literature.
+	%\item Concerning the (five) large-sized real instances, where BS could not finish within the proposed time limit, our VNS returns  in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...). The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
 \end{itemize}
 
 \section{Notation and problem definition }
@@ -438,8 +438,8 @@ In this section we provide empirical evidence of the quality of the proposed \te
    \begin{itemize}
    		\item  Concerning the results for $k=1$ presented in Table~\ref{tab:k1}, in case of all (20) small-sized instances, our \textsc{Vns} achieved new state-of-the-art results,   significantly better than that of BS4 or BS2, the best performing literature configurations. In case of the large--sized instances,   \textsc{Vns} delivered new best solutions, also significantly better than the results of \textsc{PG} approach.  
    		\item Concerning the results for $k=2$ presented in Table~\ref{tab:k2}, in case of all (20) small-sized instances the best performing approach is again our \textsc{Vns} achieving new state-of-the-art results by significantly outperforming \textsc{Bs} approach. Relative percentage differences between average solutions qualities delivered by the later two   approaches are about 15\% in favor of   \textsc{Vns}. For the large-sized instances, similar conclusions hold: Relative percentage differences between the  delivered average solutions qualities of \textsc{Vns} and \textsc{GP} range from about 5--15\% in favor of   \textsc{Vns} approach. 
-   		\item Concerning the for $k=4$ presented in Table~\ref{tab:k4}, in case of all (20) small-sized instances the conclusions remain similar. The best performing approach is \textsc{Vns}, in some cases outperforming the best \text{Bs} configuration from the  literature by more than 15\% concerning the relative difference  between the obtained average solution qualities (see, for example,  the instance Nottingham where \textsc{Vns} achieved the score 165 versus BS4 which achieved the score 193). For the large--sized instances, \textsc{Vns} again outperforms \textsc{PG} in all cases. 
-   		\item From the above, we conclude that our \textsc{Vns} approach scales better with increase in the instance size than so-far leading incrementally-based literature approaches, such as \text{Bs} or the greedy approaches. 
+   		\item Concerning the results for $k=4$ presented in Table~\ref{tab:k4}, in case of all (20) small-sized instances the conclusions remain similar. The best performing approach is \textsc{Vns}, in some cases outperforming the best \text{Bs} configuration from the  literature by more than 15\% concerning the relative difference  between the obtained average solution qualities (see, for example,  the instance Nottingham where \textsc{Vns} achieved the score 165 versus BS4 which achieved the score 193). For the large--sized instances, \textsc{Vns} again outperforms \textsc{PG} in all cases. 
+   		\item From the above, we conclude that our \textsc{Vns} approach scales better with increase in the instance size than so-far leading incrementally-based literature approaches, such as \text{Bs} or the two greedy methods. 
    		\item Concerning average times of obtaining the best solutions of \textsc{Vns}, these are shown in Figure~\ref{fig:timeSmall}--\ref{fig:timeBig}.  In case of the small-sized instances, it is obvious that the instance Oxford is the smallest among others, while the largest one is the instance Manchester.  In Figure~\ref{fig:timeSmall}, one can clearly see that with the increase of $k$, the average times of obtaining the best solutions are rapidly grow this the problem gets harder to solve. In case of the large-sized instances, in  Figure~\ref{fig:timeBig} one can seen that the most demanding instances in terms of solving are the instances Boston and Dublin; these are indeed the largest one in terms of number of nodes, see Table~\ref{tab:big_instances_chars}. Again, one can clearly see that with the increase of $k$, the average runtimes of reaching the best solution significantly increase. These   runtimes, as expected, increase with the instance size as well. 
    \end{itemize}
  
