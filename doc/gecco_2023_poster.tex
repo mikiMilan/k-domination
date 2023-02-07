@@ -249,15 +249,16 @@ In this section we first give an overview over the variable neighborhood search 
      \begin{algorithm}[!t] 
   	\caption{VNS scheme}\label{alg:vns}
   	\begin{algorithmic}[1]
-  		\STATE \textbf{Input:} initial solution $s_{best}$ , neighborhoods  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$ 
-  		\STATE \textbf{Output:} (improved) solution $s_{best}$
+  		\STATE \textbf{Input:} neighborhoods  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$ 
+  		\STATE \textbf{Output:}   solution $s_{best}$
+  		\STATE  $s_{best} \gets \texttt{Initialize()}$ 
   		\STATE $d \gets  d_{\min}$
   		\WHILE{!(\texttt{TerminationCriteriaMet()})}
   		\STATE  $s' \gets$  $\texttt{Shaking}(\mathcal{N}_d(s_{best}))$ \hspace{0.3cm}//\,shaking phase
   		\STATE $s' \gets  \texttt{LocalSearch}(s {'})$
-  		\IF{\texttt{AcceptingCriterion}($s_{best}, s', fitness(\cdot)$)}
-  		\STATE $s _{best}\gets s'$
-  		\STATE $d \gets d_{min}$
+  		\IF{\texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$)}
+  	    \STATE $s _{best}\gets s'$
+  	 	\STATE \texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
   		\ELSE 
   		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
   		\IF{$d > d_{max}$}
@@ -271,16 +272,20 @@ In this section we first give an overview over the variable neighborhood search 
 
  VNS takes for input a solution $s_{best}$, which may be obtained as the outcome of a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
   and a set of neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$.  
-  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 4--16) until one of the termination criteria has met. At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
+  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 4--16) until one of the termination criteria has met.
+ 
+   At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
   
   \begin{itemize}
-  	\item \texttt{Shaking}: the solutions in $d$-th neighbor of incumbent solution $s_{best}$ is considered, and a random solution $s'$ is picked from there;
-  	\item  \texttt{LocalSearch}: solution $s'$ is possibly improved by a local search procedure;
-  	\item \texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$): this function provided a condition when to accept a solution $s'$ for as new incumbent, that is $s_{best} = s'$; in that case, $d$ is set back to $\min(d_{min}, |s|/2)$ if $|s|>2$; otherwise $d$ is incrementally increased. 
+  	\item \texttt{Shaking}: the solutions of $d$-th neighbor of the (incumbent) solution $s_{best}$ are considered, picking a random solution $s'$ from there;
+  	\item  \texttt{LocalSearch}: the chosen solution $s'$ is possibly improved by a local search procedure;
+  	\item \texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$):  this function provides a condition when to accept a solution $s'$ for as new incumbent that is $s_{best} = s'$ which also triggers an update of $d$-value; otherwise $d$ is incrementally increased. 
   	\item  If $d> d_{max}$, $d$ is again set back to $d_{min}$.
    \end{itemize}
     
-
+    \subsection{Initialization}
+      Before we enter the main loop in the \textsc{Vns}, solution $s_{best}$ is initialized to the empty solution    which is further improved by the \texttt{LocalSearch}() procedure, see details in Section~\ref{sec:local_search}. 
+ 
    \subsection{Fitness function}
        In order to evaluate solution $s$, the following nonlinear \emph{fitness} function is used 
        \begin{align}\label{eq:fitness}
@@ -301,24 +306,24 @@ In this section we first give an overview over the variable neighborhood search 
    
    \subsection{Acceptance criterion}
    
-   Solution $s'$ becomes a new incumbent iff one of the following conditions is fulfilled
+   Solution $s'$ becomes a new incumbent iff it represents a feasible solution and  one of the following conditions is fulfilled
    \begin{itemize}
    	\item $fitness(s') < fitness(s_{best})$ 
    	\item  $fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob  $, where \emph{prob}$\in$[$0,1$] is a parameter of the algorithm.
    \end{itemize}
-   
+    In the case the acceptance criterion is fulfilled, $d$ is set back to $\min(d_{min}, |s|/2)$ if $|s|>2$ (\texttt{UpdateNeighbor()}). 
    
    \subsection{Shaking}
     As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
     
     
      \fxnote{TODO: Milan} 
-   \subsection{Local search}
+   \subsection{Local search}\label{sec:local_search}
   The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
-  	\caption{LocalSearch}\label{alg:ls}
+  	\caption{\texttt{LocalSearch}}\label{alg:ls}
   	\begin{algorithmic}[1]
   		\STATE \textbf{Input}: a solution $s$
   		\STATE \textbf{Output}: a (possibly) improved solution
@@ -401,9 +406,9 @@ In this section we provide empirical evidence of the quality of the proposed \te
  Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of these instances is given in Figure \fxnote{TODO: Milan}.  
  
  
- \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG}, and \textsc{Bs} obtained from the authors. In all cases,  \textsc{PG} is executed ten times per each problem instance. \textsc{Bs} and \textsc{Vns} are also run 10 times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. 
+ \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG}, and \textsc{Bs} obtained from the authors. On all large-sized instances,  \textsc{PG} is executed ten times per each problem instance. \textsc{Bs} and \textsc{Vns} are also run ten times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. 
 \subsection{Parameters tuning}
-   Among the four competitor algorithms, the parameters of \textsc{Vns} are matter of tuning. The following parameters are tuned: $d_{min}, d_{max},$ and  $penalty$. Domain of these parameters used for the tuning purposes are given in Table~\ref{tab:domain_tuning}.
+   Among the four competitor algorithms, the parameters of \textsc{Vns} are only a matter of tuning. The following parameters are tuned: $d_{min}, d_{max}, penalty$, and \emph{prob}.  The domains of the parameters used in the tuning are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
     	\caption{Parameter domains of \textsc{Vns}.}  
@@ -423,14 +428,18 @@ In this section we provide empirical evidence of the quality of the proposed \te
     
      Details on the configuration settings per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool can be found at \url{XXxxxx.com}
      
-     We emphasize that tuning of all (five) large-sized instances and each $k \in \{1,2,4\}$  by means of \texttt{PyGAD} tool using the default configuration parameters has not been efficient. Thus, we determined a reasonable  value of the parameters  greedily, by testing a few carefully chosen parameters configurations. Among them, the best performing configuration w.r.t. average solution quality has the following values: $d_{min}=1, d_{max} = + \infty, penalty = 0.01, prob=0.5$. 
+     We emphasize that tuning of all (five) large-sized instances and each $k \in \{1,2,4\}$  by means of \texttt{PyGAD} tool using the default configuration parameters of GA has not been efficient. Thus, we determined a reasonable  value of the parameters  greedily, by testing a few carefully chosen parameters configurations. Among them, the best performing configuration w.r.t. average solution quality has the following values: $d_{min}=1, d_{max} = + \infty, penalty = 0.01, prob=0.5$. 
 
 \subsection{Numerical results }
- Numerical results are reported in the three Tables~\ref{tab:k1}--\ref{tab:k4}, one per each $k \in \{1, 2,4\}$. The first column gives the instance name for which the results are reported; there are 20 small-sized instances, and 5 large-sized instance (at the very bottom). The next two blocks provide the results of \textsc{Vns} (the best result within ten runs and the average solution quality) and the best approach from the literature on the respective instance (the  name of the algorithm achieving the best result, its best result within ten runs, and its average solution quality). 
+ Numerical results are reported in the three tables, as given in Tables~\ref{tab:k1}--\ref{tab:k4}, one per each $k \in \{1, 2,4\}$. The first column gives the instance name for which the results are reported; there are 20 small-sized instances, and 5 large-sized instance (provided at the very bottom). The next two blocks provide the results of \textsc{Vns} -- the best result and the average solution quality over ten runs -- and the best approach from the literature on the respective instance -- the algorithm who achieved the best result, its best result  and its average solution quality over ten runs. Note that the label BS2 or BS4 means that the best results are achieved by \textsc{Bs} approach which uses a beam with of 2 or 4, respectively. 
  
-   The following conclusions may be drawn from these results.
+   The following conclusions may be drawn from these results. 
    
- 
+   \begin{itemize}
+   	\item  Concerning the results for $k=1$ in Table~\ref{tab:k1}, for all (20) small-sized instances, our \textsc{Vns} achieved new statte-of-the art   results, that are significantly better than that of BS4. In case of the large--sized instances, in 3 out of 5 cases, \textsc{Vns} delivered the best solution, while \textsc{SG} and \textsc{PG} on one each. This could be due to a specificity in the structure of the graphs of  these  instances.
+   	\item Concerning the results for $k=2$, for all (20) small-sized instances the clear winner is our \textsc{Vns} achieving new state-of-the-art results by significantly outperforming \textsc{PG} approach. The relative percentage differences in the context of average solution quality are at about 15\% in favor of our \textsc{Vns}. For the large-sized instances...
+   	\item 
+   \end{itemize}
  
  \fxnote{Marko: stigao dovde!}
  
@@ -438,9 +447,9 @@ In this section we provide empirical evidence of the quality of the proposed \te
   \begin{table}
   	\caption{Results for k=1.}
   	\label{tab:k1}  
- 	\begin{tabular}{l|rrr|lrr}
+ 	\begin{tabular}{l|rr|rlrr}
  	\hline
- 	\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+ 	\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
  	\hline
 	City & Best & Avg. & Alg. & Best & Avg. \\ \hline
 	Bath&\bf{38}&38&BS4&43&44.6\\
@@ -474,11 +483,11 @@ In this section we provide empirical evidence of the quality of the proposed \te
  \end{table}
 
 \begin{table}
-	\caption{Results for k=2.}
+	\caption{Results for $k=2$.}
 	\label{tab:k2}  
-	\begin{tabular}{l|rrr|lrr}
+	\begin{tabular}{l|rr|rlr}
 		\hline
-		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
 		\hline
 		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
 		Bath&\bf{71}&71.8&BS1&86&89\\
@@ -511,11 +520,11 @@ In this section we provide empirical evidence of the quality of the proposed \te
 \end{table}
 
 \begin{table}
-	\caption{Results for k=4.}
+	\caption{Results for $k=4$.}
 	\label{tab:k4}  
-	\begin{tabular}{l|rrr|lrr}
+	\begin{tabular}{l|rr|rlrr}
 		\hline
-		\multicolumn{1}{c}{ } & \multicolumn{3}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
 		\hline
 		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
 		Bath&\bf{139}&140.4&BS4&159&160\\
