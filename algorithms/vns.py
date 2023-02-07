@@ -118,7 +118,7 @@ class VNS:
             s_new = self.shaking(s_accept, d)
             fit_new = self.local_search_best(s_new)
 
-            if self.first_fitness_better(fit_new, fit) or (self.fitness_equal(fit, fit_new) and random() < self.prob): #and len(s_new.intersection(s))!=len(s_new) and
+            if (self.first_fitness_better(fit_new, fit) or (self.fitness_equal(fit, fit_new) and random() < self.prob)) and fit_new[0]==0: #and len(s_new.intersection(s))!=len(s_new) and
                 #if self.fitness_equal(fit_new, fit):
                 #    print("Prelazim u isto kvalitetno sa drugacijom internom strukturom")
                 if self.first_fitness_better(fit_new, fit):
