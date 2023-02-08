@@ -561,51 +561,6 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
 	\end{tabular}
 \end{table}
 
-\pgfplotstableread{ % Read the data into a table macro
-City	k1	k2	k4 
-Manchester	844.078	1608.695	2584.787
-Nottingham	85.132	1125.304	1827.64
-Belfast	66.681	865.443	1800.359
-Sunderland	44.395	187.461	2464.102
-Leicester	233.02	462.418	1729.272
-Newcastle	88.577	378.578	1147.646
-Leeds	132.67	291.423	1078.052
-Liverpool	192.537	239.716	981.006
-Bristol	129.058	571.793	638.25
-Coventry	144.585	300.407	826.953
-Brighton	89.172	292.017	858.973
-Sheffield	78.21	289.042	850.464
-Plymouth	55.003	205.265	919.927
-Cardiff	41.944	181.9	679.325
-Exeter	52.443	285.106	387.588
-Bath	60.934	256.686	285.744
-Glasgow	90.929	110.067	376.057
-York	28.401	111.923	359.89
-Southampton	7.778	147.781	203.324
-Oxford	18.758	6.93	23.79
-
-}\testdata
-
-\begin{figure}
-\begin{tikzpicture}
-	\begin{axis}[
-		 legend style={legend columns=1,at={(1,1)},anchor=north east},
-		xbar stacked,   % Stacked horizontal bars
-		bar width=5pt,
-		width=0.45\textwidth,
-		height=300pt,
-		ytick=data,     % Use as many tick labels as y coordinates
-		yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
-		]
-		\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
-		\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
-		\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
-		\legend{k=1, k=2,k=4}
-	\end{axis}
-\end{tikzpicture}
-	\caption{Average times (in seconds) of finding the best solution for small cities.}
-	\label{fig:timeSmall}  
-\end{figure}
 
 \pgfplotstableread{ % Read the data into a table macro
 	City	k1	k2	k4
@@ -614,7 +569,6 @@ Oxford	18.758	6.93	23.79
 	Berlin	2943.355	3363.764	3574.488
 	Belgrade	2604.035	3454.216	3441.493
 	Minsk	2086.718	2864.217	3364.123
-	
 }\testdata
 
 
@@ -638,6 +592,53 @@ Oxford	18.758	6.93	23.79
 	\caption{Average times (in seconds) of finding the best solution for big cities.}
 	\label{fig:timeBig}  
 \end{figure}
+
+\pgfplotstableread{ % Read the data into a table macro
+	City	k1	k2	k4
+	Manchester	844.078	1608.695	2584.787
+	Nottingham	85.132	1125.304	1827.64
+	Belfast	66.681	865.443	1800.359
+	Sunderland	44.395	187.461	2464.102
+	Leicester	233.02	462.418	1729.272
+	Newcastle	88.577	378.578	1147.646
+	Leeds	132.67	291.423	1078.052
+	Liverpool	192.537	239.716	981.006
+	Bristol	129.058	571.793	638.25
+	Coventry	144.585	300.407	826.953
+	Brighton	89.172	292.017	858.973
+	Sheffield	78.21	289.042	850.464
+	Plymouth	55.003	205.265	919.927
+	Cardiff	41.944	181.9	679.325
+	Exeter	52.443	285.106	387.588
+	Bath	60.934	256.686	285.744
+	Glasgow	90.929	110.067	376.057
+	York	28.401	111.923	359.89
+	Southampton	7.778	147.781	203.324
+	Oxford	18.758	6.93	23.79
+}\testdata
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			width=0.45\textwidth,
+			height=300pt,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+			]
+			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+			\legend{k=1, k=2,k=4}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for small cities.}
+	\label{fig:timeSmall}  
+\end{figure}
+
+
  
 \section{Conclusions and future work}
 
