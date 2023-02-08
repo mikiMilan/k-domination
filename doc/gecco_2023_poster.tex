@@ -221,7 +221,7 @@ Contributions of the paper are as follow.
 \section{Notation and problem definition }
     
 
-    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbf{N}$ is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that asks for finding among all $k$--dominating sets of graph $G$ one with a minimum cardinalty. 
+    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that  among all $k$--dominating sets  of graph $G$  asks for finding one with a minimum cardinalty. 
     
     
     This problem can be described by using a level of coverage of neighborhoods of vertex $v$ w.r.t.\ $D$
@@ -234,7 +234,7 @@ and  formulated as the following optimization problem
     s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
 \end{align}
     
-\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only deal with feasible solutions but also unfeasible ones  which are further  penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure of vertices that belong to solution. 
+\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only deal with feasible solutions but also unfeasible ones  which are further  penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure consisting of those vertices that belong to the solution. 
    
    
 \section{The proposed algorithm}\label{sec:vns}
@@ -242,48 +242,61 @@ and  formulated as the following optimization problem
 In this section we first give an overview over the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness function, the shaking procedure and the efficient local search.
  
   \subsection{Variable neighborhood search}
- \emph{Variable neighborhood search} is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stack into a  local optimum. It is a single-point search metaheuristic, which means it tries to improve always one solution per each iteration. VNS had been shown as one of the most powerful meta-heuristic, obtaining state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+ \emph{Variable neighborhood search} is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stuck into local optimum. It is a single-point search meta-heuristic, which means it tries to improve always one solution per each iteration. VNS had been shown as one of the most powerful meta-heuristic, obtaining state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
-  Pseudocode of the basic VNS scheme is given in Algorithm~\ref{alg:vns}.
+  The basic VNS scheme for solving the MkDP is given in Algorithm~\ref{alg:vns}.
   
      \begin{algorithm}[!t] 
-  	\caption{VNS scheme}\label{alg:vns}
+  	\caption{VNS scheme for solving MkDP}\label{alg:vns}
   	\begin{algorithmic}[1]
-  		\STATE \textbf{Input:} neighborhoods  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$ 
+  		\STATE \textbf{Input:} $d_{\min}$: minimum index of neighborhoods, $d_{\max}$: maximum index of neighborhoods, %neighborhood structures  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$, 
+  		\emph{penalty}: penalty parameter for the fitness score; \emph{prob}: probability of accepting equally good solution 
   		\STATE \textbf{Output:}   solution $s_{best}$
+  		\STATE $d \gets  d_{\min}$, $d_{\max\_init} \gets d_{\max}$
   		\STATE  $s_{best} \gets \texttt{Initialize()}$ 
-  		\STATE $d \gets  d_{\min}$
-  		\WHILE{!(\texttt{TerminationCriteriaMet()})}
+         
+  		\WHILE{!(\texttt{TerminationCriteriaMet()})}  \label{vns:main_loop_start}
   		\STATE  $s' \gets$  $\texttt{Shaking}(\mathcal{N}_d(s_{best}))$ \hspace{0.3cm}//\,shaking phase
   		\STATE $s' \gets  \texttt{LocalSearch}(s {'})$
-  		\IF{\texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$)}
+  		\IF{ $fitness(s') < fitness(s_{best}) \vee (fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob)$ } \label{line:acceptance_incumbent_cond} %AcceptanceCriterion($s_{best}, s', fitness(\cdot)$)
   	    \STATE $s _{best}\gets s'$
-  	 	\STATE \texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
+  	    \STATE $d \gets d_{\min}$
+  	    \IF{$|s|> 4$}
+  	 	    \STATE  $d_{max} \gets \min(d_{\max\_init}, |s|/2)$   %\texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
+  	 	 \ELSE \STATE $d_{max} \gets d_{\max\_init}$ 
+  	 	     
+  	 	\ENDIF
   		\ELSE 
   		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
   		\IF{$d > d_{max}$}
   		\STATE $d\gets d_{min}$
   		\ENDIF
   		\ENDIF
-  		\ENDWHILE
+  		\ENDWHILE \label{vns:main_loop_end}
   		\STATE \textbf{return} $s_{best}$
   	\end{algorithmic}
   \end{algorithm}
 
-VNS takes for input a solution $s_{best}$ \hl{ovdje hoces da kezes da VNS startuje sa SBest? Kod nas je na pocetku prazan skup}, which may be obtained as the outcome of a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
-  and a set of neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$.  
-  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 5--17) until one of the termination criteria has met.
+VNS takes as the input parameters $d_{min}, d_{max} \in \mathbb{N}$ which serve to define a sequence of the considered neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$,  \emph{penalty} as a penalty parameter involved in the fitness function, and \emph{prob} parameter which serves in accepting new incumbent solution; more about the meanings of the later two parameters will be given in the next sections. 
+
+
+A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=d_{\min}, \ldots,  d_{\max}$  around solution $s$ if it can be obtained from $s$ by first removing some $\min(d, |s|)$ vertices from $s$ and then adding $d$ vertices from $V$ into $s$. 
  
-   At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
+  Initially, the starting neighborhood $d$ is set to the smallest one, i.e. to $d_{min}$. 
+  Afterwards, initial solution $s_{best}$  have been generated as explained in Section~\ref{sec:init_solution}.  
+  Then, the algorithm steps into the main loop (lines \ref{vns:main_loop_start}--\ref{vns:main_loop_end}) until one of the termination criteria has met. At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
   
   \begin{itemize}
-  	\item \texttt{Shaking}: the solutions of $d$-th neighbor of the (incumbent) solution $s_{best}$ are considered, picking a random solution $s'$ from there;
-  	\item  \texttt{LocalSearch}: the chosen solution $s'$ is possibly improved by a local search procedure;
-  	\item \texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$):  this function provides a condition when to accept a solution $s'$ for as new incumbent that is $s_{best} = s'$ which also triggers an update of $d$-value; otherwise $d$ is incrementally increased. 
-  	\item  If $d> d_{max}$, $d$ is again set back to $d_{min}$.
+  	\item \texttt{Shaking}($\mathcal{N}_d(s_{best})$): the solutions of $d$-th neighborhood structure around solution $s_{best}$ are considered, where random solution $s'$ is picked and returned from there;
+  	\item  \texttt{LocalSearch}: the chosen solution $s'$ is possibly improved by a local search procedure, as explained in Section~\ref{sec:local_search};
+  	\item %\texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$):  this function provides a condition when to accept a solution $s'$ for as new incumbent that is $s_{best} = s'$ which also triggers an update of $d$-value; otherwise $d$ is incrementally increased. 
+  	
+  	Solution $s'$ becomes a new incumbent iff it represents a feasible solution and the condition  at Line~\ref{line:acceptance_incumbent_cond} of Algorithm~\ref{alg:vns} is fulfilled. If it is fulfilled, $d$ is set back to $d_{\min}$ and 
+  	$d_{max}$ is dynamically adjusted to $\min(d_{\max\_init}, |s|/2)$ if $|s|\geq4$; otherwise set to $d_{\max\_init}$. The purpose of variable $d_{max\_init}$ is storing the initial value of the variable $d_{max}$.
+  	\item  If the condition  at Line~\ref{line:acceptance_incumbent_cond}  is not fulfilled, d is incrementally increased. In case that $d> d_{max}$, $d$ is again set back to $d_{min}$.
    \end{itemize}
     
-    \subsection{Initialization}
+    \subsection{Initialization} \label{sec:init_solution}
       Before we enter the main loop in the \textsc{Vns}, solution $s_{best}$ is initialized to the empty solution    which is further improved by the \texttt{LocalSearch}() procedure, see details in Section~\ref{sec:local_search}. 
  
    \subsection{Fitness function}
@@ -304,6 +317,8 @@ VNS takes for input a solution $s_{best}$ \hl{ovdje hoces da kezes da VNS startu
        \end{itemize}
     % Note that a solution is structured as a set of all vertices that belong to it. 
    
+   \begin{comment}
+
    \subsection{Acceptance criterion}
    
    Solution $s'$ becomes a new incumbent iff it represents a feasible solution and  one of the following conditions is fulfilled
@@ -311,13 +326,13 @@ VNS takes for input a solution $s_{best}$ \hl{ovdje hoces da kezes da VNS startu
    	\item $fitness(s') < fitness(s_{best})$ 
    	\item  $fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob  $, where \emph{prob}$\in$[$0,1$] is a parameter of the algorithm.
    \end{itemize}
-    In the case the acceptance criterion is fulfilled, $d_{max}$ is set back to $\min(d_{max\_init}, |s|/2)$ if $|s|\geq4$ , otherwise it remains unchanged (\texttt{UpdateNeighbor()}). The variable $d_{max\_init}$ stores the initial value of the variable $d_{max}$.
-   
-   \subsection{Shaking}
-    As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
+    In the case the acceptance criterion is fulfilled, $d_{max}$ is set back to $\min(d_{max}, |s|/2)$ if $|s|\geq4$ , otherwise it remains unchanged (\texttt{UpdateNeighbor()}). The variable $d_{max\_init}$ stores the initial value of the variable $d_{max}$.
+ \end{comment}   
+   %\subsection{Shaking}
+   % As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
     
     
-     \fxnote{TODO: Milan} 
+ 
    \subsection{Local search}\label{sec:local_search}
   The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
   
@@ -407,7 +422,10 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
  
  \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of the paper~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the python script obtained from the authors. As these  scripts use  up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG} from the authors. According to the same authors,  \textsc{Bs} was inefficient  on the large-sized instances due to
  the high computational complexity. Therefore, we did also not consider this algorithm into comparison for the large-size instances.  
- \textsc{PG} and \textsc{Vns} algorithms are executed ten times per each problem instance.  The termination criteria of the \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. We decided to let us run the complete process of the solution initialization in \textsc{Vns} (Line 3 in Algorithm~\ref{alg:vns})  and only afterwards the time--limit has been checked.  
+ \textsc{PG} and \textsc{Vns} algorithms are executed ten times per each problem instance. 
+ 
+ 
+  The termination criteria of the \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. We decided to let us run the complete process of the solution initialization in \textsc{Vns} (Line 3 in Algorithm~\ref{alg:vns})  and only afterwards the time--limit has been checked.  
 \subsection{Parameters tuning}
    Among all competitor algorithms, the parameters of \textsc{Vns} are only a matter of tuning. The following parameters are tuned: $d_{min}, d_{max}, penalty$, and \emph{prob}.  Domains of the parameters used in the tuning are given in Table~\ref{tab:domain_tuning}.
    
