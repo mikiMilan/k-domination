@@ -443,7 +443,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
    		\item Concerning average times of reaching the best solution in \textsc{Vns}, these are shown in Figure~\ref{fig:timeSmall}--\ref{fig:timeBig} by means of stick plots.  In case of the small-sized instances, it is obvious that for the instance \texttt{Oxford},  the smallest instance among the others, \textsc{Vns} needs the least average runtime.  In Figure~\ref{fig:timeSmall}, one can clearly see that with the increase of $k$, the average times of reaching the best solutions are rapidly grow thus the problem gets harder to solve. In case of the large-sized instances, one can see  from  Figure~\ref{fig:timeBig} that the most time demanding instances in terms of reaching the best solution are the instances \texttt{Boston} and \texttt{Dublin}; these are indeed the largest one in terms of number of nodes/edges, see Table~\ref{tab:big_instances_chars}. Again, one can clearly see that with the increase of $k$ value, the average times of reaching the best solution significantly increase. These  average times, as expected, increase also with the instance size growth. This as the result affects the number of performed \textsc{Vns} iterations which significantly decreases as more time will be needed to perform a \textsc{Vns} iteration due to the   computationally intensive local search procedure that runs in quadratic runtime w.r.t. the instance size.
    \end{itemize}
  
- \fxnote{Marko: stigao dovde!}
+
  
  
   \begin{table}
@@ -638,8 +638,13 @@ Oxford	18.758	6.93	23.79
 \end{figure}
  
 \section{Conclusions and future work}
- TODO
+
  
+ In this paper we studied the $k-$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem has been solved by a few constructive, incremental approaches. We proposed the popular variable neighborhood search (VNS) meta-heuristic to solve this problem. It is equipped with an effective fitness function that evaluate feasible as well as unfeasible solutions considering the two scores: how far is the solution from being feasible and the cardinalty of   solution.  Moreover, an efficient swap-based local search procedure incorporating best-improvement strategy plys an important role in achieving good feasible solution.  Efficiency of our \textsc{Vns} is confirmed on the real-world benchmark set from literature by comparing to the existing state-of-the-art approaches -- the two greedy and the beam search approach. More in details, on all 20 small-sized and 5 large-sized instances, \textsc{Vns} delivers new state-of-the-art results in terms of the obtained solution quality; the relative average percentage differences mostly range from 5-15\% in favor of \textsc{Vns}. 
+ 
+ For future work, one could consider improving the \textsc{Vns} to perform more efficiently on large-scale graphs modeling social networks; here the local search must be significantly adapted as the best-improvement strategy will not be a viable option anymore due to  its time complexity.  We could study performances of the current approaches more deeply to detect their weaknesses and strengths more clear w.r.t.\  wide range of graph sizes with different densities. Comparing our \textsc{Vns} with state-of-the-art exact solvers like the purpose solver \textsc{Cplex}  is our next goal to achieve. 
+  
+  \fxnote{Marko: stigao dovde!}
 \section*{Acknowledgments} 
 TODO
 %%
