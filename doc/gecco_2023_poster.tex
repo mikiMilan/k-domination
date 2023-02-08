@@ -36,7 +36,8 @@
 %%
 %% The first command in your LaTeX source must be the \documentclass command.
 \documentclass[dvipsnames,format=sigconf,anonymous=true,review=true]{acmart}
-
+	
+\usepackage{soul}
 \usepackage{fixme}
 
 \usepackage{amsmath}
@@ -269,9 +270,9 @@ In this section we first give an overview over the variable neighborhood search 
   	\end{algorithmic}
   \end{algorithm}
 
- VNS takes for input a solution $s_{best}$, which may be obtained as the outcome of a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
+VNS takes for input a solution $s_{best}$ \hl{ovdje hoces da kezes da VNS startuje sa SBest? Kod nas je na pocetku prazan skup}, which may be obtained as the outcome of a greedy or some randomized procedure, $d_{min}, d_{max} \in \mathbf{N}$, 
   and a set of neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$.  
-  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 4--16) until one of the termination criteria has met.
+  Initially, the starting neighbor $d$ is set to the smallest one, i.e. $d_{min}$. Further, the algorithm steps in the main loop (lines 5--17) until one of the termination criteria has met.
  
    At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
   
@@ -310,7 +311,7 @@ In this section we first give an overview over the variable neighborhood search 
    	\item $fitness(s') < fitness(s_{best})$ 
    	\item  $fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob  $, where \emph{prob}$\in$[$0,1$] is a parameter of the algorithm.
    \end{itemize}
-    In the case the acceptance criterion is fulfilled, $d$ is set back to $\min(d_{min}, |s|/2)$ if $|s|>2$ (\texttt{UpdateNeighbor()}). 
+    In the case the acceptance criterion is fulfilled, $d_{max}$ is set back to $\min(d_{max\_init}, |s|/2)$ if $|s|\geq4$ , otherwise it remains unchanged (\texttt{UpdateNeighbor()}). The variable $d_{max\_init}$ stores the initial value of the variable $d_{max}$.
    
    \subsection{Shaking}
     As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
