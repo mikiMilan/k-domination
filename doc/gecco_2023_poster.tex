@@ -261,8 +261,8 @@ In this section we first give an overview over the variable neighborhood search 
   		\IF{ $fitness(s') < fitness(s_{best}) \vee (fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob)$ } \label{line:acceptance_incumbent_cond} %AcceptanceCriterion($s_{best}, s', fitness(\cdot)$)
   	    \STATE $s _{best}\gets s'$
   	    \STATE $d \gets d_{\min}$
-  	    \IF{$|s|> 4$}
-  	 	    \STATE  $d_{max} \gets \min(d_{\max\_init}, |s|/2)$   %\texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
+  	    \IF{$|s_{best}| \geq 4$}
+  	 	    \STATE  $d_{max} \gets \min(d_{\max\_init}, |s_{best}|/2)$   %\texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
   	 	 \ELSE \STATE $d_{max} \gets d_{\max\_init}$ 
   	 	     
   	 	\ENDIF
@@ -292,7 +292,7 @@ A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=
   	\item %\texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$):  this function provides a condition when to accept a solution $s'$ for as new incumbent that is $s_{best} = s'$ which also triggers an update of $d$-value; otherwise $d$ is incrementally increased. 
   	
   	Solution $s'$ becomes a new incumbent iff it represents a feasible solution and the condition  at Line~\ref{line:acceptance_incumbent_cond} of Algorithm~\ref{alg:vns} is fulfilled. If it is fulfilled, $d$ is set back to $d_{\min}$ and 
-  	$d_{max}$ is dynamically adjusted to $\min(d_{\max\_init}, |s|/2)$ if $|s|\geq4$; otherwise set to $d_{\max\_init}$. The purpose of variable $d_{max\_init}$ is storing the initial value of the variable $d_{max}$.
+  	$d_{max}$ is dynamically adjusted to $\min(d_{\max\_init}, |s_{best}|/2)$ if $|s_{best}|\geq4$; otherwise $d_{\max}$ is set to $d_{\max\_init}$. In this way, it is not allowed to do shaking on more than a half of the overall nodes in the solution. This adjustment lead to an improved performance than without having it.  The purpose of variable $d_{max\_init}$ is storing the initial value of the variable $d_{max}$.
   	\item  If the condition  at Line~\ref{line:acceptance_incumbent_cond}  is not fulfilled, d is incrementally increased. In case that $d> d_{max}$, $d$ is again set back to $d_{min}$.
    \end{itemize}
     
@@ -309,11 +309,11 @@ A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=
        	   violate(s) = \sum_{v \in V \setminus s}   k - C(s, v)  
        \end{align}
    Note that this function evaluates both, feasible and unfeasible solutions. 
-       Motivation for integrating this function  in the search is threefold:
+       Motivation behind the integration of this function  in the search is threefold:
        \begin{itemize}
-       	\item First, any feasible solution of size $|s|$ is preferable over any unfeasible solution of the same (or a larger) cardinalty. 
+       	\item First, any feasible solution of size $|s|$ is favored over any unfeasible solution of the same (or a larger) cardinalty. 
        	\item Between two unfeasible solutions of the same cardinalty, one whose \emph{violate}($\cdot$) score is smaller is preferred -- the solution is intuitively easier to be recreated into a feasible one.  
-       	\item Between two feasible solutions, a smaller cardinalty solution is preferred (\emph{violate}($\cdot$) score in that case vanishes). 
+       	\item Between two feasible solutions, a smaller cardinalty solution is preferred (the \emph{violate}  score in that case vanishes). 
        \end{itemize}
     % Note that a solution is structured as a set of all vertices that belong to it. 
    
@@ -334,7 +334,7 @@ A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=
     
  
    \subsection{Local search}\label{sec:local_search}
-  The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS.  For MkDP, a pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
+  The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS procedure.  For the MkDP,  pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
   
   
   \begin{algorithm}[!t] 
@@ -381,7 +381,7 @@ A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=
   	\end{algorithmic}
 \end{algorithm}
 
-Our LS procedure applies the best improvement strategy. At each step, it examines all vertex out of solution $s$, and chooses the best one (if any) which contributes most to the fitness decrease, further being added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best is chosen and   removed from $s$.   The algorithm stops at the first iteration  in which no improvement in the fitness score has been detected.  We mention that the order of vertices we iterate through (Lines 8 and 23) is randomly given. 
+Our LS procedure applies the best improvement strategy. At each step, it examines all vertices  out of solution $s$, and chooses the best one (if any) which contributes most to the improvement of the current fitness score; that vertex is then added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best one is chosen and   removed from it.   The algorithm stops at the first iteration  in which no improvement in the fitness score has been detected.  We emphasize that the order of vertices  through which we iterate (Lines 8 and 23) is randomly given. 
 
 \emph{Partial fitness evaluation}. Calculating fitness function (\ref{eq:fitness}) takes $O(|E|)$ time; its the most time consuming part is the calculation of $\emph{violate}(\cdot)$  function.   If graphs are dense, this complexity may get to  $O(n^2)$. Note that at each iteration in Algorithm~\ref{alg:ls},  fitness function evaluation is performed $|V|$ times. Thus, performing the \emph{fitness} evaluation every time from scratch is too costly. 
 
