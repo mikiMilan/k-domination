@@ -196,7 +196,7 @@ where $V$ represents a set of elements called vertices and   a set of pairs $e =
 
 In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
 In this paper we take the following definition from the literature.   A $k$-\emph{dominating}  set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent with at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum $k$--dominating set represents the optimal solution of MkDP.  NP-completeness of the $k$-domination problem is formally proven for the split graphs, %where the problem is studied from an algorithmic point of view,
- see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real--world instances. A few greedy approaches are proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
+ see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real-world instances. A few greedy approaches are proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
 Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in these systems represents a set of processors such that each processor outside the set has to have at least $k$ neighbors in the set.
 In this work we propose  a variable neighborhood search (VNS) meta-heuristic to solve the MkDP.    The main algorithm components of this algorithm are:
 \begin{itemize}
@@ -376,7 +376,7 @@ In case of a node removal, we apply a similar concept as for a node addition, th
 \section{Experimental evaluation}\label{sec:experiments}
 
 
-In this section we provide empirical evidence of the quality of the proposed \textsc{Vns} method. In order to do so, we include three competitor heuristic approaches from the literature. To me more precise, the following four methods for MkDP are compared:  
+In this section we provide the analysis of the quality of the proposed \textsc{Vns} method. In order to do so, we include the competitor heuristic approaches from the literature. To be more precise, the following four methods for MkDP are compared:  
 
 \begin{itemize}
 	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, labelled by \textsc{SG};
@@ -386,8 +386,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 \end{itemize}
 
 
-\emph{Benchmark instances}. For the comparison purposes, we consider the set of real--world instances. It consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All instances are  modeling road networks of different cities by means of network reachability graphs. Five large sized street networks correspond to international cities as follow: Belgrade, Berlin, Boston, Dublin, and Minsk.
- Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}. \fxnote{TODO: Milan}
+\emph{Benchmark instances}. For the comparison purposes, we consider the set of real-world benchmark set from literature. It consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All the instances represent road networks of different cities modeled by means of network reachability graphs. Five large sized road  networks correspond to international cities as follow: Belgrade, Berlin, Boston, Dublin, and Minsk.  Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}.  
  
  \begin{table}
  	\caption{Large-sized instance characteristics.}
@@ -402,12 +401,14 @@ In this section we provide empirical evidence of the quality of the proposed \te
  	\end{tabular}
  \end{table}
  
- Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of these instances is given in Figure \fxnote{TODO: Milan}.  
+ Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of the graphs of these instances is given in Figure \fxnote{TODO: Milan}.  
  
  
- \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the script obtained from the authors. As the script uses up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG}, and \textsc{Bs} obtained from the authors. On all large-sized instances,  \textsc{PG} is executed ten times per each problem instance. \textsc{Bs} and \textsc{Vns} are also run ten times per each problem instance.  The termination criteria of our \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. We decided to let us run the complete process of solution initialization in \textsc{Vns} (Line 3 in Algorithm~\ref{alg:vns})  and only afterwards the time--limit is checked. 
+ \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of the paper~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the python script obtained from the authors. As these  scripts use  up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG} from the authors. According to the same authors,  \textsc{Bs} was inefficient  on the large-sized instances due to
+ the high computational complexity. Therefore, we did also not consider this algorithm into comparison for the large-size instances.  
+ \textsc{PG} and \textsc{Vns} algorithms are executed ten times per each problem instance.  The termination criteria of the \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. We decided to let us run the complete process of the solution initialization in \textsc{Vns} (Line 3 in Algorithm~\ref{alg:vns})  and only afterwards the time--limit has checked.  
 \subsection{Parameters tuning}
-   Among the four competitor algorithms, the parameters of \textsc{Vns} are only a matter of tuning. The following parameters are tuned: $d_{min}, d_{max}, penalty$, and \emph{prob}.  The domains of the parameters used in the tuning are given in Table~\ref{tab:domain_tuning}.
+   Among all competitor algorithms, the parameters of \textsc{Vns} are only a matter of tuning. The following parameters are tuned: $d_{min}, d_{max}, penalty$, and \emph{prob}.  The domains of the parameters used in the tuning are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
     	\caption{Parameter domains of \textsc{Vns}.}  
@@ -559,7 +560,7 @@ In this section we provide empirical evidence of the quality of the proposed \te
 \end{table}
 
 \pgfplotstableread{ % Read the data into a table macro
-City	k1	k2	k4
+City	k1	k2	k4 
 Manchester	844.078	1608.695	2584.787
 Nottingham	85.132	1125.304	1827.64
 Belfast	66.681	865.443	1800.359
