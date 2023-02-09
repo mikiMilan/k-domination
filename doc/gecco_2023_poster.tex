@@ -530,7 +530,15 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
    \end{table}
    
    Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD} which run a genetic algorithm (GA).  This tool is given as an open-source Python library and can be imported directly by installing the respective package. All (20) small-sized problem instances are separately tuned for each $k\in \{1, 2, 4\}$. Thus, for each of the 60 cases, a single parameter configuration of VNS was obtained.
-   \fxnote{Milan: dio oko podesavanja tuning alata -- koje instance, koliki je budet broja pustanja, isl.}
+
+   For parameter tuning purposes, the vhile loop in line 5 of the VNS algorithm is limited to 100 iterations. \hl{Maybe some explanation here why it was done that way}.The following genetic algorithm parameters are set:
+\begin{itemize}
+	\item $num\_generations = 50$ (number of generations),
+	\item $num\_parents\_mating = 5$ (number of solutions to be selected as parents in the mating pool),
+	\item $sol\_per\_pop = 10$ (number of solutions in the population),
+	\item $mutation\_probability = 0.1$  (the probability of selecting a gene for applying the mutation operation),
+	\item $num\_genes = 4$ (number of genes in the solution/chromosome).
+\end{itemize}
   
    Details on the obtained configurations of the \textsc{Vns} %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
      can be found at \url{XXxxxx.com}
