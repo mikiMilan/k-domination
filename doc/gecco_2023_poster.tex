@@ -219,7 +219,7 @@ The contributions of our work can be summarized as follows:
 	
 	\item VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
 	
-	%\item  \textsc{Vns} approach scales better with increase in the instance size than so-far leading literature approaches. 
+	%\item  VNS approach scales better with increase in the instance size than so-far leading literature approaches. 
 \end{itemize}
 
 \section{Formal problem definition }
@@ -258,14 +258,14 @@ In this section, we first give an overview of the variable neighborhood search (
   		\STATE \textbf{Input:} $d_{\min}$, $d_{\max}$, $p_{move}$, \emph{penalty}
   		\STATE \textbf{Output:} best found solution $D_{best}$
   		\STATE $d \gets  d_{\min}$, $d_{\max\_init} \gets d_{\max}$
-  		\STATE  $D_{best} \gets \texttt{LocalSearch}(\emptyset)$ 
+  		\STATE  $D_{best} \gets \texttt{LocalSearch}(\emptyset)$ \label{vns:init}
   		\WHILE{\texttt{TerminationCriteriaNotMet()}}  \label{vns:main_loop_start}
   		\STATE  $D' \gets$  $\texttt{Shaking}(\mathcal{N}_d(D_{best}))$
   		\STATE $D'' \gets  \texttt{LocalSearch}(D')$
   		\IF{ $fitness(D'') < fitness(D_{best}) \vee (fitness(D'') = fitness(D_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  p_{move})$ } \label{line:acceptance_incumbent_cond}
   	    \STATE $D _{best}\gets D''$
   	    \STATE $d \gets d_{\min}$
-  	 	\STATE  $d_{max} \gets \min(d_{\max\_init}, |D_{best}|/2)$  
+  	 	\STATE  $d_{max} \gets \min(d_{\max\_init}, |D_{best}|/2)$  \label{vns:implicit_bound}
   		\ELSE 
   		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, try with next neighborhood
   		\IF{$d > d_{max}$}
@@ -388,18 +388,17 @@ In case of a vertex removal, the similar idea is used.
 
 \section{Experimental evaluation}\label{sec:experiments}
 
-
-In this section we provide the analysis of the quality of the proposed \textsc{Vns} method. In order to do so, we include the competitor heuristic approaches from the literature. To be more precise, the following four methods for MkDP are compared:  
+In this section we analyze the quality of the proposed VNS method. For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
 
 \begin{itemize}
-	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, labelled by \textsc{SG};
-	\item Greedy method from~\cite{gagarin2018multiple}, labelled by \textsc{PG};
-	\item Beam search approach from~\cite{corcoran2021heuristics}, labelled by \textsc{Bs};
-	\item VNS approach, as described in Section~\ref{sec:vns}, labelled by \textsc{Vns}.  
+	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG;
+	\item Greedy method from~\cite{gagarin2018multiple}, denoted by PG;
+	\item Beam search approach from~\cite{corcoran2021heuristics}, denoted by BS;
+	\item VNS approach, as described in Section~\ref{sec:vns}, denoted by VNS.  
 \end{itemize}
 
 
-\emph{Benchmark instances}. For the comparison purposes, we consider the set of real-world benchmark set from literature. It consists of 20 small-to-middle-sized instance problems and five large-sized instance problems, introduced in~\cite{corcoran2021heuristics}. All the instances represent road networks of different cities modeled by means of network reachability graphs. Five large sized road  networks correspond to international cities as follow: Belgrade, Berlin, Boston, Dublin, and Minsk.  Characteristics of large-sized instances in terms of number of vertices and edges are given in Table~\ref{tab:big_instances_chars}.  
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
  
  \begin{table}
  	\caption{Large-sized instance characteristics.}
@@ -414,7 +413,9 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
  	\end{tabular}
  \end{table}
  
- Characteristics of 20 small-sized instances can be found in~\cite{corcoran2021heuristics}. For the shake of completeness, the plots providing vertex numbers and edge numbers of the graphs of these instances is given in Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges}.  
+ The characteristics of 20 small to medium sized instances can be found in~\cite{corcoran2021heuristics}.
+ Unlike the five large networks, these 20 instances are exactly the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
+Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges} show the number of vertices and edges of these instances.  
 
 \pgfplotstableread{ % Read the data into a table macro
     CityName	|V|
@@ -456,7 +457,7 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
             \legend{No. vertices}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{The number of vertices in the graph for small-sized instances.}
+	\caption{The number of vertices in the small to medium sized instances.}
 	\label{fig:novertex}
 \end{figure}
 
@@ -500,66 +501,60 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
             \legend{No. edges}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{The number of edges in the graph for small-sized instances.}
+	\caption{The number of edges in the small to medium sized instances.}
 	\label{fig:noedges}
 \end{figure}
  
  
- \emph{Testing environments and applied methodology}. The experiments were conducted  on a computer with Intel Core i9-9900KF CPU @3.6GHz with a memory limit of 6GB RAM per execution, under Microsoft Windows 10 Pro OS. \textsc{Vns}  is implemented in Python 3.9. The results of \textsc{SG}, \textsc{PG} and \textsc{Bs} are taken from~\cite{corcoran2021heuristics} for the small-sized instances\footnote{These instances are obtained from the authors of the paper~\cite{corcoran2021heuristics} in the original shape as used in the paper} as reported in their experimental section. The results of the  five large-sized instances\footnote{These instances have been generated by using the python script obtained from the authors. As these  scripts use  up-to-date street networks of the five cities, the large-sized instances differ from the instances used in the original publication. } are obtained by executing the original version of \textsc{PG} from the authors. According to the same authors,  \textsc{Bs} was inefficient  on the large-sized instances due to
- the high computational complexity. Therefore, we did also not consider this algorithm into comparison for the large-size instances.  
- \textsc{PG} and \textsc{Vns} algorithms are executed ten times per each problem instance. 
+ \emph{Testing environment}. Experiments were performed on a computer running Intel Core i9-9900KF CPU @3.6GHz with 64GB RAM, under Microsoft Windows 10 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
+ PG and VNS algorithms are run ten times for each problem instance. 
  
  
-  The termination criteria of the \textsc{Vns} are: ($i$) the maximal time of 30~minutes, i.e., 1800 seconds is exceeded; and ($ii$) the maximal number of iteration of 1 million has reached. We decided to let us run the complete process of the solution initialization in \textsc{Vns} (Line 3 in Algorithm~\ref{alg:vns})  and only afterwards the time--limit has been checked.  
+  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 2000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
+   
 \subsection{Parameters tuning}
-   Among all competitor algorithms, the parameters of \textsc{Vns} are only a matter of tuning. The following parameters are tuned: $d_{min}, d_{max}, penalty$, and \emph{prob}.  Domains of the parameters used in the tuning are given in Table~\ref{tab:domain_tuning}.
+   As mentioned earlier, VNS for MkDPA has four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. The range of parameters used for tuning are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
-    	\caption{Parameter domains of \textsc{Vns}.}  
+    	\caption{VNS parameter ranges.}  
     	\label{tab:domain_tuning}
    	\begin{tabular}{lll}
     Parameter       & Domain & Step \\ \hline
    	$d_{min}$  &  [1, 10] & 1 \\
    	$d_{max}$  & [2, 100] & 1\\
-   	 $penalty$ & [0.001, 0.02]  & 0.001 \\
-   	 $prob$    & [0, 1] & 0.05 \\ \hline
+   	$p_{move}$    & [0, 1] & 0.05 \\
+   	$penalty$ & [0.001, 0.02]  & 0.001 \\ \hline
    	\end{tabular}
    \end{table}
    
-   Concerning tuning tool, we decided to use an evolutionary--based tool \texttt{PyGAD} which run a genetic algorithm (GA).  This tool is given as an open-source Python library and can be imported directly by installing the respective package. All (20) small-sized problem instances are separately tuned for each $k\in \{1, 2, 4\}$. Thus, for each of the 60 cases, a single parameter configuration of VNS was obtained.
-
-   For parameter tuning purposes, the vhile loop in line 5 of the VNS algorithm is limited to 100 iterations. \hl{Maybe some explanation here why it was done that way}.The following genetic algorithm parameters are set:
+   As for the tuning tool, we have decided to use genetic algorithm called \texttt{PyGAD}. This implementation, proposed in ~\cite{gad2021pygad}, is available as an open-source Python library. All (20) small to medium sized problem instances were tuned separately  for each $k\in \{1, 2, 4\}$, resulting in a total of 60 control parameter configurations. 
+    \texttt{PyGAD} was used as an outer optimizer calling the inner VNS method in a multiprocessing manner -- each \texttt{PyGAD} chromosome (solution) encodes a single VNS control parameter configuration and corresponds to a separate process. VNS was limited to 100 iterations. The \texttt{PyGAD} parameters were as follows:
 \begin{itemize}
-	\item $num\_generations = 50$ (number of generations),
-	\item $num\_parents\_mating = 5$ (number of solutions to be selected as parents in the mating pool),
-	\item $sol\_per\_pop = 10$ (number of solutions in the population),
-	\item $mutation\_probability = 0.1$  (the probability of selecting a gene for applying the mutation operation),
-	\item $num\_genes = 4$ (number of genes in the solution/chromosome).
+	\item $num\_generations = 50$ -- number of generations;
+	\item $num\_parents\_mating = 5$ -- number of chromosomes selected as parents for the mating pool;
+	\item $sol\_per\_pop = 10$ -- number of chromosomes in the population;
+	\item $mutation\_probability = 0.1$  -- the mutation probability;
+	\item $num\_genes = 4$ -- number of genes in the chromosome, the same as the number of control parameters. 
 \end{itemize}
   
-   Details on the obtained configurations of the \textsc{Vns} %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
-     can be found at \url{XXxxxx.com}
+   %Details on the obtained configurations of the VNS %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
+   %  can be found at \url{XXxxxx.com}
      
-     We emphasize that tuning process run for each (five) large-sized instances and for each $k \in \{1,2,4\}$, performed under the default configuration parameters of GA, has been inefficient. Thus, we determined a reasonable  value of the parameters  greedily, by testing a few carefully chosen meaningful parameters configurations. Among them, the best performing configuration w.r.t. delivered average solution quality has the following values: $d_{min}=1, d_{max} = + \infty, penalty = 0.01, prob=0.5$. 
+ Parameter tuning for large instances was too inefficient. Therefore, we used reasonable manually configured parameters for these instances: $d_{min}=1, d_{max} = + \infty, p_{move}=0.5, penalty = 0.01$. (Note that $d_{max}$ has implicit upper bound -- it is set in line~\ref{vns:implicit_bound} of Algorithm~\ref{alg:vns}.)
 
-\subsection{Numerical results }
- Tables~\ref{tab:k1}--\ref{tab:k4} provide the numerical results, one per each $k \in \{1, 2,4\}$ is given. The first column gives the instance name for which the results are reported; there are 20 small-sized instances, and 5 large-sized instance (provided at the   bottom rows of each table). The next block  provide the results of \textsc{Vns} -- the best result and the average solution quality over ten runs. The third block reports on the results of the best approach from the literature on the respective instance -- the algorithm (configuration) which achieved the best result, providing the best obtained result  and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 mean  that the best results are achieved by the \textsc{Bs} approach  utilizing a beam width of 1,2 or 4, respectively. 
+\subsection{Experimental results }
+ Tables~\ref{tab:k1}-\ref{tab:k4} contain the experimental results for $k \in \{1, 2,4\}$, respectively. The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
  
-   The following conclusions may be drawn from the numerical results. 
+The following conclusions can be drawn from these results. 
    
-   \begin{itemize}
-   		\item  Concerning the results for $k=1$ presented in Table~\ref{tab:k1}, in case of all (20) small-sized instances, our \textsc{Vns} achieved new state-of-the-art results, which are   significantly better than that of BS4 or BS2, the best performing literature configurations. In case of the large--sized instances,   \textsc{Vns} delivered new best solutions in all cases, also significantly better than the results of \textsc{PG} approach.  
-   		\item Concerning the results for $k=2$ presented in Table~\ref{tab:k2}, in case of all (20) small-sized instances the best performing approach is again our \textsc{Vns} achieving   state-of-the-art results by significantly outperforming the \textsc{Bs} approach. Relative percentage differences between average solutions qualities delivered by the later two   approaches are about 15\% in favor of   \textsc{Vns}. For the large-sized instances, similar conclusions hold: Relative percentage differences between the  delivered average solutions qualities of \textsc{Vns} and the second best \textsc{GP} approach range from  $\approx$ 5--15\% in favor of   \textsc{Vns}. 
-   		\item Concerning the results for $k=4$ presented in Table~\ref{tab:k4}, in case of all (20) small-sized instances the conclusions remain similar; the best performing approach is \textsc{Vns}, in some cases outperforming the best \textsc{Bs} configuration from the  literature by more than 15\% concerning the relative difference  between the obtained average solution qualities (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved the score 165 versus BS4 which achieved the score 193). For the large-sized instances, \textsc{Vns} again outperforms \textsc{PG} in all cases. 
-   		\item From the above, we conclude that our \textsc{Vns} approach scales better with increase in the instance size than so-far leading incrementally-based literature approaches, such as \text{Bs} or the greedy methods. 
-   		\item Concerning average times of reaching the best solution in \textsc{Vns}, these are shown in Figure~\ref{fig:timeSmall}--\ref{fig:timeBig} by means of stick plots. % In case of the small-sized instances, it is obvious that for the instance \texttt{Oxford},  the smallest instance among the others, 
-   		The smaller the size of an instance, the smaller is the average time of \textsc{Vns}  to reach the best solution.  In Figure~\ref{fig:timeSmall}, one can clearly see that with the increase of $k$, the average times of reaching the best solutions are rapidly grow thus the problem gets harder to solve. In case of the large-sized instances, one can see  from  Figure~\ref{fig:timeBig} that the most time demanding instances in terms of reaching the best solution are the instances \texttt{Boston} and \texttt{Dublin}; these are indeed the largest one in terms of number of vertices/edges, see Table~\ref{tab:big_instances_chars}.  
-   		Again, one can clearly see that with the increase of $k$ value, the average times of reaching the best solution significantly increase. For the hardest problem, when $k=4$, reaching the best solutions for the two largest instances demand a huge amount of time, about 10,000 seconds. %These  average times, as expected, increase also with the instance size growth. This as the result affects the number of performed \textsc{Vns} iterations which significantly decreases as more time will be needed to perform a \textsc{Vns} iteration due to the   computationally intensive local search procedure that runs in quadratic runtime w.r.t. the instance size.
-   \end{itemize}
+\begin{itemize}
+  		\item  For $k=1$, VNS outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for large instances.  
+  		\item Concerning the results for $k=2$, VNS outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: VNS produces $\approx$ 5--15\% improvement over the second best PG approach. 
+  		\item The situation is similar for $k=4$. VNS outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where VNS achieved a score 165 over BS4 which achieved a score 193). For the large instances, VNS again outperforms PG in all cases. 
+  		
+\end{itemize}
  
 
- 
- 
   \begin{table}
   	\caption{Results for k=1.}
   	\label{tab:k1}  
@@ -665,7 +660,7 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
 		Southampton&\bf{97}&97.8&BS4&112&113.2\\
 		Sunderland&\bf{142}&142.5&BS4&162&163.6\\
 		York&\bf{129}&130.1&BS4&144&145.8\\ \hline \hline
-		Belgrade&\bf{344}&346.3&SG&372&374.5\\
+		Belgrade&\bf{344}&346.3&PG&372&374.5\\
 		Berlin&\bf{408}&409.2&PG&444&446.2\\
 		Boston&\bf{341}&341&PG&367&368.7\\
 		Dublin&\bf{363}&363&PG&388&390.2\\
@@ -677,36 +672,9 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
 \end{table}
 
 
-\pgfplotstableread{ % Read the data into a table macro
-	City	k1	k2	k4
-	Dublin	3301.775	5190.116	10035.541
-	Boston	3313.146	5707.734	9339.97
-	Berlin	2943.355	3363.764	3574.488
-	Belgrade	2604.035	3454.216	3441.493
-	Minsk	2086.718	2864.217	3364.123
-}\testdata
+The average times (in seconds) for reaching the best solution in VNS are shown as stacked bar graphs in Figures~\ref{fig:timeSmall}-\ref{fig:timeBig}.
+The smaller the size of an instance, the less time VNS takes on average to reach the best solution. Figures~\ref{fig:timeSmall}-\ref{fig:timeBig} clearly show that as $k$ increases, the average times to reach the best solutions increase rapidly. In case of the large instances, it can be seen from Figure~\ref{fig:timeBig} that the most time consuming instances in terms of reaching the best solution are \texttt{Boston} and \texttt{Dublin}. These two instances are indeed the largest in terms of number of vertices/edges (see Table~\ref{tab:big_instances_chars}).  
 
-
-\begin{figure}
-	\begin{tikzpicture}
-		\begin{axis}[
-			legend style={legend columns=1,at={(1,1)},anchor=north east},
-			xbar stacked,   % Stacked horizontal bars
-			bar width=5pt,
-			height=110pt,
-			width=0.45\textwidth,
-			ytick=data,     % Use as many tick labels as y coordinates
-			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
-			]
-			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
-			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
-			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
-			\legend{k=1, k=2,k=4}
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Average times (in seconds) of finding the best solution for big cities.}
-	\label{fig:timeBig}  
-\end{figure}
 
 \pgfplotstableread{ % Read the data into a table macro
 	City	k1	k2	k4
@@ -754,17 +722,46 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
 \end{figure}
 
 
+\pgfplotstableread{ % Read the data into a table macro
+	City	k1	k2	k4
+	Dublin	3301.775	5190.116	10035.541
+	Boston	3313.146	5707.734	9339.97
+	Berlin	2943.355	3363.764	3574.488
+	Belgrade	2604.035	3454.216	3441.493
+	Minsk	2086.718	2864.217	3364.123
+}\testdata
+
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			height=110pt,
+			width=0.45\textwidth,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+			]
+			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+			\legend{k=1, k=2,k=4}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for big cities.}
+	\label{fig:timeBig}  
+\end{figure}
  
 \section{Conclusions and future work}
 
  
- In this paper we studied the $k$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem is solved so-far by a few constructive, incremental approaches. We proposed the well-known variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates feasible as well as unfeasible solutions considering the two metric scores: one which evaluates how far is the solution from being feasible and the second which takes the cardinalty of   solution.  Moreover, an efficient swap-based local search procedure incorporating best-improvement strategy plays a big role by achieving feasible solutions of reasonable quality in the \textsc{Vns}.  Efficiency of our \textsc{Vns} is confirmed on the real-world benchmark set from literature by comparing it to the existing state-of-the-art approaches -- a few greedy and the beam search approach. More in details, on all 20 small-sized and 5 large-sized instances, \textsc{Vns} delivered state-of-the-art results in terms of the obtained solution quality; the relative average percentage differences mostly range from 5-15\% in favor of \textsc{Vns}. 
+ In this paper we have studied the $k$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing non-exact state-of-the-art approaches. 
  
- For future work, one could consider improving the \textsc{Vns} to perform more efficiently on large-scale graphs modeling social networks; the proposed local search needs to be significantly adapted as the best-improvement strategy is hardly a viable option on huge instances, due to  its high time complexity.  We could study performances of \textsc{Vns} and other approaches more deeply for spotting their weaknesses and strengths more clear w.r.t.\  wide range of graph sizes with different densities. Comparing our \textsc{Vns} with state-of-the-art black-box exact solvers like \textsc{Cplex} or \textsc{Gurobi} is our next task to do. 
+ For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved with state-of-the art solvers, such as Cplex or Gurobi. 
   
-  \fxnote{Marko: stigao dovde!}
 \section*{Acknowledgments} 
-TODO
+We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations. 
 %%
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
