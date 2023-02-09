@@ -162,7 +162,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all considered problem instances with $k \in {1, 2, 4}$.
+In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
   
 \end{abstract}
   
@@ -197,7 +197,7 @@ One of the best known classes of problems studied from theoretical, computationa
 In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
 The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that every vertex not belonging to $D$ is adjacent to at least $k$ vertices in $D$~\cite{lan2013algorithmic}. A minimum $k$-domination set represents the optimal solution of MkDP. The NP-completeness of the $k$-domination decision problem is formally proved for the split graphs, see details in the above citation. (Note that the definition of this problem is not unique in the literature -- there is a definition where the goal is to find a minimum cardinality vertex set $D$ such that every vertex of $G$ is within distance $k$ of some vertex in $D$~\cite{chang1983k}.) 
  
-Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the leading heuristic approach for small-to-medium sized real-world instances. 
+Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small-to-medium sized real-world instances. 
  
 MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-domination set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
 
@@ -242,7 +242,7 @@ As for the search space of the MkDP, we adapt it to the needs of our VNS. Not on
 In this section, we first give an overview of the variable neighborhood search (VNS). Then we introduce the main components of VNS for solving MkDP: the fitness function, the shaking procedure and the efficient local search.
  
   \subsection{Variable neighborhood search}
- \emph{Variable neighborhood search} is a single-based solution metaheuristic proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach is to systematically exchange neighborhoods of the current best solution (incumbent solution) to avoid getting stuck in a local optimum. VNS has proven to be one of the most powerful metaheuristic, achieving excellent results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+ \emph{Variable neighborhood search} is a single-based solution metaheuristic proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach is to systematically exchange neighborhoods of the current best solution (incumbent solution) to avoid getting stuck in a local optimum. VNS has proven to be one of the most powerful metaheuristic, achieving excellent results on diverse classes of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
  The VNS for solving the MkDP is given in Algorithm~\ref{alg:vns}. 
  
@@ -282,10 +282,10 @@ In this section, we first give an overview of the variable neighborhood search (
   Then the algorithm enters the main loop (lines \ref{vns:main_loop_start}-\ref{vns:main_loop_end}). The loop is run until at least one of the termination criteria is met. At each iteration of the loop, the following steps are executed: 
   
   \begin{itemize}
-  	\item \texttt{Shaking}($\mathcal{N}_d(D_{best})$) -- a solution $D'$ is selected at random from the set of solutions belonging to the $d$-th neighborhood structure around the solution $D_{best}$.
+  	\item \texttt{Shaking}($\mathcal{N}_d(D_{best})$) -- a solution $D'$ is selected   randomly from the set of solutions belonging to the $d$-th neighborhood structure around the solution $D_{best}$.
   	\item  \texttt{LocalSearch} -- the selected solution $D'$ may be improved by a local search procedure, as explained in Section~\ref{sec:local_search}.
   	\item The solution $D'$ becomes new incumbent if it has better fitness than the previous incumbent. Alternatively, it may become new incumbent with probability $p_{move}$ if its fitness is the same. In both cases, $d$ is reset to $d_{\min}$. The parameter $d_{max}$ is dynamically set to $\min(d_{\max\_init}, |D_{best}|/2)$ to prevent neighborhoods that are too large, i.e., neighborhoods larger than half  the incumbent size. 
-  	\item  If the solution $D'$ does not become new incumbent, d is increased -- this further increases diversification. If this increase leads to $d> d_{max}$, $d$ is circularly reset to $d_{min}$.
+  	\item  If the solution $D'$ does not become new incumbent, $d$ is increased -- this further increases diversification. If this increase leads to $d> d_{max}$, $d$ is circularly reset to $d_{min}$.
    \end{itemize}
     
 \subsection{Fitness function}\label{subsec:fit}
@@ -398,7 +398,7 @@ In this section we analyze the quality of the proposed VNS method. For this purp
 \end{itemize}
 
 
-\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instanc, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
  
  \begin{table}
  	\caption{Large-sized instance characteristics.}
@@ -415,7 +415,7 @@ In this section we analyze the quality of the proposed VNS method. For this purp
  
  The characteristics of 20 small to medium sized instances can be found in~\cite{corcoran2021heuristics}.
  Unlike the five large networks, these 20 instances are exactly the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
-Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges} show the number of vertices and edges of these instances.  
+Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and edges of these instances.  
 
 \pgfplotstableread{ % Read the data into a table macro
     CityName	|V|
@@ -507,13 +507,13 @@ Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges} show the number of vert
  
  
  \emph{Testing environment}. Experiments were performed on a computer running Intel Core i9-9900KF CPU @3.6GHz with 64GB RAM, under Microsoft Windows 10 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
- PG and VNS algorithms are run ten times for each problem instance. 
+ PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
  
  
   The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 2000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
    
 \subsection{Parameters tuning}
-   As mentioned earlier, VNS for MkDPA has four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. The range of parameters used for tuning are given in Table~\ref{tab:domain_tuning}.
+   As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. The range of parameters used for tuning are given in Table~\ref{tab:domain_tuning}.
    
     \begin{table}[ht]
     	\caption{VNS parameter ranges.}  
@@ -534,7 +534,7 @@ Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges} show the number of vert
 	\item $num\_parents\_mating = 5$ -- number of chromosomes selected as parents for the mating pool;
 	\item $sol\_per\_pop = 10$ -- number of chromosomes in the population;
 	\item $mutation\_probability = 0.1$  -- the mutation probability;
-	\item $num\_genes = 4$ -- number of genes in the chromosome, the same as the number of control parameters. 
+	\item $num\_genes = 4$ -- number of genes in the chromosome, the same as the number of control parameters of VNS. 
 \end{itemize}
   
    %Details on the obtained configurations of the VNS %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
@@ -548,8 +548,8 @@ Figure ~\ref{fig:novertex} and Figure ~\ref{fig:noedges} show the number of vert
 The following conclusions can be drawn from these results. 
    
 \begin{itemize}
-  		\item  For $k=1$, VNS outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for large instances.  
-  		\item Concerning the results for $k=2$, VNS outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: VNS produces $\approx$ 5--15\% improvement over the second best PG approach. 
+  		\item  For $k=1$, VNS outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for the large-sized instances.  
+  		\item Concerning the results for $k=2$, VNS outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: VNS produces $\approx$ 5--15\% improvement rate over the second best PG approach. 
   		\item The situation is similar for $k=4$. VNS outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where VNS achieved a score 165 over BS4 which achieved a score 193). For the large instances, VNS again outperforms PG in all cases. 
   		
 \end{itemize}
@@ -756,9 +756,9 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 \section{Conclusions and future work}
 
  
- In this paper we have studied the $k$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing non-exact state-of-the-art approaches. 
+ In this paper we have studied the $k$-domination problem, $k \in \mathbb{N}$,  a generalized version of the prominent minimum domination problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing heuristic state-of-the-art approaches. 
  
- For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved with state-of-the art solvers, such as Cplex or Gurobi. 
+ For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved by state-of-the art solvers, such as Cplex or Gurobi. 
   
 \section*{Acknowledgments} 
 We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations. 
