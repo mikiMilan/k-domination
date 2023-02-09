@@ -150,9 +150,6 @@
 }
  
  
- 
- 
-
 %%
 %% By default, the full list of authors will be used in the page
 %% headers. Often, this list is too long, and will overlap
@@ -165,7 +162,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of nodes of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbours from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) meta-heuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared with the best known heuristic approaches from the literature: the beam search and a few greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all the considered problem instances with $k \in {1, 2, 4}$.
+In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all considered problem instances with $k \in {1, 2, 4}$.
   
 \end{abstract}
   
@@ -192,201 +189,201 @@ In this paper we are concerned with solving a generalized version of the well-kn
 
 \section{Introduction}
 A graph $G=(V,E)$ is an abstract mathematical structure 
-where $V$ represents a set of elements called vertices and   a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In the context of this work, we deal with  simple undirected graphs which have no loops and where edges have no directions, that is $e = \{u,v\}  = uv = vu \in E$.   Graphs serve as models of many real-world problems describing relations between various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. One of the most prominent classes of problems that have been studied for decades from theoretical, computational and practical aspects are dominating problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{domination problem}. The subset $D \subset V$ is called a \emph{domination set} iff each vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. Finding the smallest possible dominating set $D$ of graph $G$ w.r.t.\ its cardinalty defines \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order},  etc. From algorithmic point of view, this problem is NP--hard. It is solved by many exact approaches such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of graph~\cite{karci2020new}, etc. On the other hand, heuristic approaches appear to be dominant in the literature, for example a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant-colony optimization~\cite{ho2006enhanced}, just to name a few. There are many generalizations of MDSP proposed in the literature that arise from practice: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+in which $V$ represents a set of elements called vertices (or nodes) and a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In this paper, we are concerned with simple undirected graphs that have no loops and where the edges have no directions, i.e., $e = \{u,v\} = uv = vu \in E$.   Graphs serve as models for many real-world problems describing relationships among various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. 
+
+One of the best known classes of problems studied from theoretical, computational and practical points of view are dominating problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{domination problem}. The subset $D \subset V$ is called \emph{domination set} if every vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
 
 
-In the course of this work, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$.  Note that the definition for this problem is ambiguous in the literature. One variant asks for finding a minimum cardinality vertex set $ D$ such that every vertex of $G$ is within distance $k$ from some vertex in $D$~\cite{chang1983k}. 
-In this paper we take the following definition from the literature.   A $k$-\emph{dominating}  set  $D$ of a graph $G$ is a subset such that every vertex does not belong to $D$ is adjacent with at least $k$ vertices in  $D$~\cite{lan2013algorithmic}. A minimum $k$--dominating set represents the optimal solution of MkDP.  NP-completeness of the $k$-domination problem is formally proven for the split graphs, %where the problem is studied from an algorithmic point of view,
- see details in the aforementioned citation. A Beam search approach to solve the MkDP is proposed by Corcoran and Gagarin   in~\cite{corcoran2021heuristics}, so-far leading heuristic approach on small-to-middle sized real-world instances. A few greedy approaches are proposed by Couture et al.~\cite{couture2006incremental}, Gagarin and Corcoran~\cite{gagarin2018multiple}, and  Gagarin et al.~\cite{gagarin2013randomized} who proposed a randomized version of a greedy algorithm. Any of the proposed methods in the literature do not scale well with the instance size increase.   
-Applications of MkDP can be found in  distributed systems  ~\cite{wang2013minimising} where  a $k$-dominating set in these systems represents a set of processors such that each processor outside the set has to have at least $k$ neighbors in the set.
-In this work we propose  a variable neighborhood search (VNS) meta-heuristic to solve the MkDP.    The main algorithm components of this algorithm are:
+In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
+The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that every vertex not belonging to $D$ is adjacent to at least $k$ vertices in $D$~\cite{lan2013algorithmic}. A minimum $k$-domination set represents the optimal solution of MkDP. The NP-completeness of the $k$-domination decision problem is formally proved for the split graphs, see details in the above citation. (Note that the definition of this problem is not unique in the literature -- there is a definition where the goal is to find a minimum cardinality vertex set $D$ such that every vertex of $G$ is within distance $k$ of some vertex in $D$~\cite{chang1983k}.) 
+ 
+Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the leading heuristic approach for small-to-medium sized real-world instances. 
+ 
+MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-domination set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
+
+We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
+\begin{comment}
+The main algorithm components of this algorithm are:
 \begin{itemize}
 	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
 	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima. It is based on swap operations. 
 	\item An efficient swap--based  best-improvement local search mechanism   has been applied. It is equipped with an quick partial evaluation of the fitness function, executed in linear time.
- 
 \end{itemize}
-Contributions of the paper are as follow.
+\end{comment}
+The contributions of our work can be summarized as follows:
 \begin{itemize}
-	\item An efficient VNS algorithm is constructed, which performs differently from  the currently dominant constructive and mainly incremental approaches from the literature.
 	
-	\item The control parameters of the VNS are tuned by %two kinds of tuning tools: the Grid Search algorithm~\cite{ranjan2019k} and 
-	an evolutionary-based tuning tool, found as the open-source Python library~\texttt{PyGAD}~\cite{gad2021pygad}.  
-	\item The configuration of VNS, obtained by the above-mentioned tuning tool, is able to achieve new state-of-the-art results concerning all small and large-sized real-world problem instances from the literature. %they are compared to the two greedy algorithms and the BS approach from the literature. 
-	\item  \textsc{Vns} approach scales better with increase in the instance size than so-far leading literature approaches. 
-	%\item VNS is able to quickly produce solutions of a reasonable quality which is not the case of the state-of-the-art incremental approaches from the literature.
-	%\item Concerning the (five) large-sized real instances, where BS could not finish within the proposed time limit, our VNS returns  in all cases a feasible solution quickly thus showing a better anytime behaviour than the competitor approaches. (TODO: provjeriti ovo...). The proposed \textsc{Vns} scales better with the instance size increase than the other literature approaches from literature. \fxnote{Provjeriti ovo...}
+	\item The control parameters of the VNS are tuned with genetic algorithm ~\texttt{PyGAD}~\cite{gad2021pygad}.  
+	
+	\item VNS for MkDPA significantly improves the state-of-the-art results for all considered problem instances, where $k \in \{1, 2, 4\}$.
+	
+	\item VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
+	
+	%\item  \textsc{Vns} approach scales better with increase in the instance size than so-far leading literature approaches. 
 \end{itemize}
 
-\section{Notation and problem definition }
+\section{Formal problem definition }
     
+Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ be fixed. For $v\in V$, $N(v)$ is a set of all adjacent vertices of $v$ in the graph $G$, i.e. $N(v)=\{w \mid vw \in E\}$. A set $D \subseteq V$ is called $k$-dominating if for every $v\in V \setminus D$ holds $|N(v) \cap D| \geq k$. The MkDP is an optimization problem whose objective is to find a $k$-domination set with minimal cardinality:
 
-    Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ is fixed. For $v\in V$, by $N(v)$ we define a set of all neighboring vertices of $v$ in graph  $G$, that is $\{w \mid uw \in E\}$. A set $D \subseteq V$ is called a $k$--dominating iff for each $v\in V \setminus D$ it holds $|N(v) \cap D| \geq k$.  The MkDP is an optimization problem that  among all $k$--dominating sets  of graph $G$  asks for finding one with a minimum cardinalty. 
+\begin{equation}
+\arg \min_{D \subseteq V } |D|
+\end{equation}
+\begin{equation}
+	s.t. \; \forall v \in V \setminus D, |N(v) \cap D| \geq k.
+\end{equation}
     
-    
-    This problem can be described by using a level of coverage of neighborhoods of vertex $v$ w.r.t.\ $D$
-    \begin{equation}
-    	C(D, v) = \min(k, |N(v) \cap D|)
-    \end{equation}
-and  formulated as the following optimization problem 
-\begin{align}
-    \arg \max_{D \subset V } \sum_{v \in V\setminus D} C(D,v) \\
-    s.t. \forall v \in V \setminus D, |N(v) \cap D| \geq k.
-\end{align}
-    
-\emph{Search space}.    Concerning the search space of the MkDP, we relax it by the needs of our VNS. It will not only deal with feasible solutions but also unfeasible ones  which are further  penalized, see Section~\ref{sec:vns}.  In other words, any subset of the set of vertices $V$ is a solution candidate in our VNS. Thus, the size of search space is exponential, i.e. $2^{|V|}$.  Further, any solution is encoded as a set structure consisting of those vertices that belong to the solution. 
+As for the search space of the MkDP, we adapt it to the needs of our VNS. Not only feasible solutions are handled, but also infeasible ones -- they are additionally penalized, see Section~\ref{sec:vns}. In other words, every subset of $V$ is a candidate solution in our VNS. Therefore, the size of the search space is $2^{|V|}$. 
+%Each solution is encoded as a set structure consisting of those vertices that belong to the solution. 
    
    
 \section{The proposed algorithm}\label{sec:vns}
 
-In this section we first give an overview over the variable neighborhood search (VNS) scheme. Then, the main details on the VNS to solve MkDP are provided: the fitness function, the shaking procedure and the efficient local search.
+In this section, we first give an overview of the variable neighborhood search (VNS). Then we introduce the main components of VNS for solving MkDP: the fitness function, the shaking procedure and the efficient local search.
  
   \subsection{Variable neighborhood search}
- \emph{Variable neighborhood search} is an effective meta-heuristic approach proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach consists of systematically exchanging the neighborhoods of incumbent solution in order to escape from getting stuck into local optimum. It is a single-point search meta-heuristic, which means it tries to improve always one solution per each iteration. VNS had been shown as one of the most powerful meta-heuristic, obtaining state-of-the-art results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+ \emph{Variable neighborhood search} is a single-based solution metaheuristic proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach is to systematically exchange neighborhoods of the current best solution (incumbent solution) to avoid getting stuck in a local optimum. VNS has proven to be one of the most powerful metaheuristic, achieving excellent results on a wide range of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
-  The basic VNS scheme for solving the MkDP is given in Algorithm~\ref{alg:vns}.
+ The VNS for solving the MkDP is given in Algorithm~\ref{alg:vns}. 
+ 
+ VNS generally requires at least two control parameters $d_{min}, d_{max} \in \mathbb{N}$, which define the increasing sizes of the neighborhood structures $\mathcal{N}_{d_{min}}(D), \ldots, \mathcal{N}_{d_{max}}(D)$ around given solution $D$. A solution $D'$ belongs to the neighborhood $\mathcal{N}_{d}(D)$ of the solution $D$ if it can be obtained from $D$ by removing $\min(d, |D|)$ vertices from $D$ and then adding $d$ vertices from $V \setminus D$ into $D$.
+ 
+ The third parameter commonly used in VNS is $p_{move} \in [0, 1]$. This parameter corresponds to the probability of moving to a new solution if it has the same quality (fitness) as the incumbent solution. 
+ Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-domination set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
+ The return value of VNS is called $D_{best}$ -- it is the incumbent solution. 
   
      \begin{algorithm}[!t] 
   	\caption{VNS scheme for solving MkDP}\label{alg:vns}
   	\begin{algorithmic}[1]
-  		\STATE \textbf{Input:} $d_{\min}$: minimum index of neighborhoods, $d_{\max}$: maximum index of neighborhoods, %neighborhood structures  $\mathcal{N}_{d_{\min}},\ldots, \mathcal{N}_{d_{\max}}$, 
-  		\emph{penalty}: penalty parameter for the fitness score; \emph{prob}: probability of accepting equally good solution 
-  		\STATE \textbf{Output:}   solution $s_{best}$
+  		\STATE \textbf{Input:} $d_{\min}$, $d_{\max}$, $p_{move}$, \emph{penalty}
+  		\STATE \textbf{Output:} best found solution $D_{best}$
   		\STATE $d \gets  d_{\min}$, $d_{\max\_init} \gets d_{\max}$
-  		\STATE  $s_{best} \gets \texttt{Initialize()}$ 
-         
-  		\WHILE{!(\texttt{TerminationCriteriaMet()})}  \label{vns:main_loop_start}
-  		\STATE  $s' \gets$  $\texttt{Shaking}(\mathcal{N}_d(s_{best}))$ \hspace{0.3cm}//\,shaking phase
-  		\STATE $s' \gets  \texttt{LocalSearch}(s {'})$
-  		\IF{ $fitness(s') < fitness(s_{best}) \vee (fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob)$ } \label{line:acceptance_incumbent_cond} %AcceptanceCriterion($s_{best}, s', fitness(\cdot)$)
-  	    \STATE $s _{best}\gets s'$
+  		\STATE  $D_{best} \gets \texttt{LocalSearch}(\emptyset)$ 
+  		\WHILE{\texttt{TerminationCriteriaNotMet()}}  \label{vns:main_loop_start}
+  		\STATE  $D' \gets$  $\texttt{Shaking}(\mathcal{N}_d(D_{best}))$
+  		\STATE $D'' \gets  \texttt{LocalSearch}(D')$
+  		\IF{ $fitness(D'') < fitness(D_{best}) \vee (fitness(D'') = fitness(D_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  p_{move})$ } \label{line:acceptance_incumbent_cond}
+  	    \STATE $D _{best}\gets D''$
   	    \STATE $d \gets d_{\min}$
-  	    \IF{$|s_{best}| \geq 4$}
-  	 	    \STATE  $d_{max} \gets \min(d_{\max\_init}, |s_{best}|/2)$   %\texttt{UpdateNeighbor}($d$) %$d \gets d_{min}$
-  	 	 \ELSE \STATE $d_{max} \gets d_{\max\_init}$ 
-  	 	     
-  	 	\ENDIF
+  	 	\STATE  $d_{max} \gets \min(d_{\max\_init}, |D_{best}|/2)$  
   		\ELSE 
-  		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, use next (VNS) neighborhood
+  		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, try with next neighborhood
   		\IF{$d > d_{max}$}
   		\STATE $d\gets d_{min}$
   		\ENDIF
   		\ENDIF
   		\ENDWHILE \label{vns:main_loop_end}
-  		\STATE \textbf{return} $s_{best}$
+  		\STATE \textbf{return} $D_{best}$
   	\end{algorithmic}
   \end{algorithm}
 
-VNS takes as the input parameters $d_{min}, d_{max} \in \mathbb{N}$ which serve to define a sequence of the considered neighborhood structures $\mathcal{N}_{d_{min}}, \ldots, \mathcal{N}_{d_{max}}$,  \emph{penalty} as a penalty parameter involved in the fitness function, and \emph{prob} parameter which serves in accepting new incumbent solution; more about the meanings of the later two parameters will be given in the next sections. 
-
-
-A solution $s'$ belongs to the neighborhood structure  $\mathcal{N}_{d}(s)$, $d=d_{\min}, \ldots,  d_{\max}$  around solution $s$ if it can be obtained from $s$ by first removing some $\min(d, |s|)$ vertices from $s$ and then adding $d$ vertices from $V$ into $s$. 
- 
-  Initially, the starting neighborhood $d$ is set to the smallest one, i.e. to $d_{min}$. 
-  Afterwards, initial solution $s_{best}$  have been generated as explained in Section~\ref{sec:init_solution}.  
-  Then, the algorithm steps into the main loop (lines \ref{vns:main_loop_start}--\ref{vns:main_loop_end}) until one of the termination criteria has met. At each iteration, the following steps are executed: %(usually time limit exceeded or number of iterations has reach
+  At the beginning, the neighborhood size $d$ is set to the smallest, i.e. to $d_{min}$. 
+  The initial incumbent solution $D_{best}$ is generated by performing local search on an empty set (local search is explained in Section~\ref{sec:local_search}).  
+  Then the algorithm enters the main loop (lines \ref{vns:main_loop_start}-\ref{vns:main_loop_end}). The loop is run until at least one of the termination criteria is met. At each iteration of the loop, the following steps are executed: 
   
   \begin{itemize}
-  	\item \texttt{Shaking}($\mathcal{N}_d(s_{best})$): the solutions of $d$-th neighborhood structure around solution $s_{best}$ are considered, where random solution $s'$ is picked and returned from there;
-  	\item  \texttt{LocalSearch}: the chosen solution $s'$ is possibly improved by a local search procedure, as explained in Section~\ref{sec:local_search};
-  	\item %\texttt{AcceptanceCriterion}($s_{best}, s', fitness(\cdot)$):  this function provides a condition when to accept a solution $s'$ for as new incumbent that is $s_{best} = s'$ which also triggers an update of $d$-value; otherwise $d$ is incrementally increased. 
-  	
-  	Solution $s'$ becomes a new incumbent iff it represents a feasible solution and the condition  at Line~\ref{line:acceptance_incumbent_cond} of Algorithm~\ref{alg:vns} is fulfilled. If it is fulfilled, $d$ is set back to $d_{\min}$ and 
-  	$d_{max}$ is dynamically adjusted to $\min(d_{\max\_init}, |s_{best}|/2)$ if $|s_{best}|\geq4$; otherwise $d_{\max}$ is set to $d_{\max\_init}$. In this way, it is not allowed to do shaking on more than a half of the overall nodes in the solution. This adjustment lead to an improved performance than without having it.  The purpose of variable $d_{max\_init}$ is storing the initial value of the variable $d_{max}$.
-  	\item  If the condition  at Line~\ref{line:acceptance_incumbent_cond}  is not fulfilled, d is incrementally increased. In case that $d> d_{max}$, $d$ is again set back to $d_{min}$.
+  	\item \texttt{Shaking}($\mathcal{N}_d(D_{best})$) -- a solution $D'$ is selected at random from the set of solutions belonging to the $d$-th neighborhood structure around the solution $D_{best}$.
+  	\item  \texttt{LocalSearch} -- the selected solution $D'$ may be improved by a local search procedure, as explained in Section~\ref{sec:local_search}.
+  	\item The solution $D'$ becomes new incumbent if it has better fitness than the previous incumbent. Alternatively, it may become new incumbent with probability $p_{move}$ if its fitness is the same. In both cases, $d$ is reset to $d_{\min}$. The parameter $d_{max}$ is dynamically set to $\min(d_{\max\_init}, |D_{best}|/2)$ to prevent neighborhoods that are too large, i.e., neighborhoods larger than half  the incumbent size. 
+  	\item  If the solution $D'$ does not become new incumbent, d is increased -- this further increases diversification. If this increase leads to $d> d_{max}$, $d$ is circularly reset to $d_{min}$.
    \end{itemize}
     
-    \subsection{Initialization} \label{sec:init_solution}
-      Before we enter the main loop in the \textsc{Vns}, solution $s_{best}$ is initialized to the empty solution    which is further improved by the \texttt{LocalSearch}() procedure, see details in Section~\ref{sec:local_search}. 
- 
-   \subsection{Fitness function}
-       In order to evaluate solution $s$, the following nonlinear \emph{fitness} function is used 
-       \begin{align}\label{eq:fitness}
-          \emph{fitness}(s) = ( 1+ penalty \cdot |s|) \times ( 1 + violate(s))
-       \end{align}
-       where 
-       \begin{align}
-       	   violate(s) = \sum_{v \in V \setminus s}   k - C(s, v)  
-       \end{align}
-   Note that this function evaluates both, feasible and unfeasible solutions. 
-       Motivation behind the integration of this function  in the search is threefold:
-       \begin{itemize}
-       	\item First, any feasible solution of size $|s|$ is favored over any unfeasible solution of the same (or a larger) cardinalty. 
-       	\item Between two unfeasible solutions of the same cardinalty, one whose \emph{violate}($\cdot$) score is smaller is preferred -- the solution is intuitively easier to be recreated into a feasible one.  
-       	\item Between two feasible solutions, a smaller cardinalty solution is preferred (the \emph{violate}  score in that case vanishes). 
-       \end{itemize}
-    % Note that a solution is structured as a set of all vertices that belong to it. 
-   
-   \begin{comment}
+\subsection{Fitness function}\label{subsec:fit}
+   To evaluate the solution $D$, the following nonlinear \emph{fitness} function is used:
+   \begin{align}\label{eq:fitness}
+      \emph{fitness}(D) = ( 1 + violations(D)) \cdot ( 1+ penalty \cdot |D|)
+   \end{align}
+   where 
+   \begin{align}
+   	   violations(D) = \sum_{v \in V \setminus D}{k-C(D, v)}
+   \end{align}
+   and 
+   \begin{align}
+   	 C(D, v) = \min(k, |N(v) \cap D|).
+   \end{align}
 
-   \subsection{Acceptance criterion}
-   
-   Solution $s'$ becomes a new incumbent iff it represents a feasible solution and  one of the following conditions is fulfilled
-   \begin{itemize}
-   	\item $fitness(s') < fitness(s_{best})$ 
-   	\item  $fitness(s') = fitness(s_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  prob  $, where \emph{prob}$\in$[$0,1$] is a parameter of the algorithm.
-   \end{itemize}
-    In the case the acceptance criterion is fulfilled, $d_{max}$ is set back to $\min(d_{max}, |s|/2)$ if $|s|\geq4$ , otherwise it remains unchanged (\texttt{UpdateNeighbor()}). The variable $d_{max\_init}$ stores the initial value of the variable $d_{max}$.
- \end{comment}   
-   %\subsection{Shaking}
-   % As we already mentioned, the purpose of shaking is escaping from stacking into local optima this it controls amount of diversification in \textsc{VNS} algorithm.  In case of MkDP, the shaking phase   around solution $s_{best}$ for $d$-th neighborhood is realized as follows: first $d= \min(d, |s|)$ vertices from $s_{best}$ has been removed, and  newly $d$ vertices from $V $ has been randomly added to $s_{best}$ generating solution $s'$. 
-    
-    
+It can be seen that $violations(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate domination set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $C(D, v) = k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. 
+
+Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
+\begin{itemize}
+ 		\item For sufficiently small values of the parameter \emph{penalty}, the feasibility of the solution is relatively preferred over the cardinality of the solution. This means that when comparing feasible and infeasible solutions, the feasible solution is favored. 
  
-   \subsection{Local search}\label{sec:local_search}
-  The purpose of local search (LS) is improving  solution $s'$ obtained in the shaking phase by applying a larger number of small changes on  the solution's structure. Therefore, defining  the ``small changes'' which reflects on the term LS neighboring relation, plays a crucial role in establishing an effective LS procedure.  For the MkDP,  pseudocode of the LS is given in Algorithm~\ref{alg:ls}.
-  
-  
+     	\item When comparing two infeasible solutions of the same cardinality, the \emph{less infeasible} solution is preferred, i.e. the one with the lower $violations(\cdot)$ value.  
+        
+        \item When comparing two feasible solutions, the one with the lower cardinality is preferred.
+\end{itemize}
+
+\subsection{Local search}\label{sec:local_search}
+The goal of local search (LS) is to improve the solution $D'$ obtained in the shaking phase by applying multiple local improvements to the structure of the solution. 
+The LS tailored to MkDP is described in Algorithm~\ref{alg:ls}.
+
   \begin{algorithm}[!t] 
   	\caption{\texttt{LocalSearch}}\label{alg:ls}
   	\begin{algorithmic}[1]
-  		\STATE \textbf{Input}: a solution $s$
-  		\STATE \textbf{Output}: a (possibly) improved solution
-  		\STATE improved $\gets$ True
-  		\STATE $best\_fit \gets fitness(s)$
-  		\STATE $best\_v \gets \emptyset$
- 
+  		\STATE \textbf{Input}: a solution $D$
+  		\STATE \textbf{Output}: a (possibly) improved solution $D_{best}$
+  		\STATE $D_{best} \gets D$
+  		\STATE $best_{fit} \gets fitness(D_{best})$
+ 		\\//\, first, achieve feasibility by adding vertices
+ 		\STATE improved $\gets$ True
   		\WHILE{\emph{improved}}
   		     \STATE $improved \gets  False$
-  		     \FOR{$v \in V \setminus s$}
-  		          \STATE $s' \gets s \cup \{v\}$
-  		          \IF{$fitness(s') < fitness(s)$}
-  		              \STATE $best\_v \gets v$
-  		              \STATE $best\_fit \gets fitness(s')$
+  		     \STATE $best_{v} \gets$ None
+  		     \FOR{$v \in V \setminus D_{best}$}
+  		          \STATE $D' \gets D_{best} \cup \{v\}$
+  		          \IF{$new_{fit} = fitness_{fast}(D') < best_{fit}$}
+  		              \STATE $best_v \gets v$
+  		              \STATE $best_{fit} \gets new_{fit}$
+  		              \STATE $improved \gets True$
   		          \ENDIF
   		     \ENDFOR
   		     \IF{\emph{improved}}
-  		         \STATE $s \gets s \cup \{best\_v\}$
-  		         \STATE $curr\_fit \gets best\_fit$
+  		         \STATE $D_{best} \gets D_{best} \cup \{best_v\}$
   		     \ENDIF
 
-  		\ENDWHILE   		    
+  		\ENDWHILE   	
+  		\\ //\, second, remove vertices, but keep the feasibility	    
   		 \STATE  $improved \gets True$
   		 \WHILE{\emph{improved}}
   		   \STATE $improved \gets  False$
-  		    \FOR{$v \in s$}
-  		       \STATE $s' \gets \setminus \{v\}$
-  		        \IF{$fitness(s') < fitness(s)$}
-  		             \STATE $best\_v \gets v$
-  		             \STATE $best\_fit \gets fitness(s')$
+  		    \STATE $best_{v} \gets$ None
+  		    \FOR{$v \in D_{best}$}
+  		       \STATE $D' \gets D_{best} \setminus \{v\}$
+  		        \IF{$new_{fit} = fitness_{fast}(D') < best_{fit}$}
+  		             \STATE $best_v \gets v$
+  		             \STATE $best_{fit} \gets new_{fit}$	              
+  		             \STATE $improved \gets True$
   		       \ENDIF
   		        \IF{\emph{improved}}
-  		       \STATE $s \gets s \setminus \{best\_v\}$
-  		       \STATE $curr\_fit \gets best\_fit$
+  		      		 \STATE $D_{best} \gets D_{best} \setminus \{best_v\}$
   		       \ENDIF
   		       
   		    \ENDFOR
   		\ENDWHILE
-  		\STATE return $s$
+  		\STATE return $D_{best}$
   	\end{algorithmic}
 \end{algorithm}
 
-Our LS procedure applies the best improvement strategy. At each step, it examines all vertices  out of solution $s$, and chooses the best one (if any) which contributes most to the improvement of the current fitness score; that vertex is then added to $s$. Afterwards, all options to removing a vertex from $s$ are examined and the best one is chosen and   removed from it.   The algorithm stops at the first iteration  in which no improvement in the fitness score has been detected.  We emphasize that the order of vertices  through which we iterate (Lines 8 and 23) is randomly given. 
+Our LS procedure consists of two phases. In the first phase, the vertices are added to achieve feasibility -- when the solution is not feasible. In the second phase, the vertices are removed to improve the objective function. The removal is done in a way that does not affect the feasibility previously achieved. 
+In both phases, the best improvement strategy is used. This means that all eligible vertices are checked for inclusion/exclusion and then the best vertex is included/excluded. 
+Each phase ends with the first iteration where no improvement in fitness is found.  
 
-\emph{Partial fitness evaluation}. Calculating fitness function (\ref{eq:fitness}) takes $O(|E|)$ time; its the most time consuming part is the calculation of $\emph{violate}(\cdot)$  function.   If graphs are dense, this complexity may get to  $O(n^2)$. Note that at each iteration in Algorithm~\ref{alg:ls},  fitness function evaluation is performed $|V|$ times. Thus, performing the \emph{fitness} evaluation every time from scratch is too costly. 
+\emph{Fast fitness evaluation}. Computing the fitness function (\ref{eq:fitness}) takes $O(|E|)$ time -- the most time consuming part is computing the $\emph{violations}(\cdot)$  function. For dense graphs, this complexity can go up to $O(|V|^2)$. Since local search makes many fitness function calls it is too costly to compute the fitness function from scratch every time. In order to execute \texttt{LocalSearch} procedure  efficiently, fast calculations of the fitness function are applied. Before LS enters the first \texttt{while} loop, $C(D_{best}, v), \forall v \in V$ for given solution $D_{best}$ are computed and saved. During vertex addition, that is  $D' = D_{best} \cup \{v\} $, $violations(D')$ is calculated in the following way: 
 
-In order to execute \texttt{LocalSearch} procedure  efficiently, partial calculations of the \emph{fitness} function are applied. More in details, before we enter the first \texttt{while} loop, $C(s, v), \forall v \in V$, values are pre-determined (cashed) for solution $s$, in the set structure. In case of a node addition, that is  $s' = s \cup \{v\} $, we do $violate(s') = violate(s) - C(s, v)  \texttt{I}_{(k> C(s,v))}  + \sum_{w\in N(v) \cap s'} \texttt{I}_{(k+1 > C(s, w))}  $ where \texttt{I} stands for the indicator function. 
-In case of a node removal, we apply a similar concept as for a node addition, that is, if $s' = s \setminus \{v\}$, then $violate(s') =  violate(s) + ( k - C(s, v)) \texttt{I}_{( k > C(s, v))} $+ $\sum_{ w \in   N(v)  \setminus s} \texttt{I}_{(k+1 \leq C(s, w)) }$. By encountering a new incumbent in \texttt{LocalSearch}, cache structure $C(s, \cdot)$ has been updated accordingly.
+\begin{multline}
+violations(D') = violations(D_{best}) \\
+- (k-C(D_{best}, v))  \texttt{I}_{(C(D_{best},v)<k)}  \\ 
+- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}
+\end{multline}
+
+where \texttt{I} stands for the indicator function. 
+
+The part $-(k- C(D_{best}, v)) \texttt{I}_{(C(D_{best},v)<k)}$ adjusts for the effect of the added vertex $v$, i.e., if $v$ was previously \emph{satisfied} before (satisfied the $k$-domination condition), then this indicator function takes the value zero, so nothing changes. This is true because $v$ remains satisfied -- it is now part of $k$-domination set. 
+Otherwise, if vertex $v$ has previously violated the $k$-domination condition, the total violations are reduced by the previous degree of vertex $v$ violation, i.e. $(k- C(D_{best}, v))$.
+
+The part $- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}$ adjust for the effect on the vertex $v$ neighbors, which were not in the $k$-domination set $D_{best}$, i.e. $W=N(v) \setminus D_{best}$. If some of these vertices $w \in W$ violated $k$-domination condition, adding the adjacent vertex $v$ to the solution reduces the total violations. Otherwise, if a vertex $w$ was satisfied, adding $v$ to the solution does not change anything.  
+ 
+In case of a vertex removal, the similar idea is used. 
 
 
 \section{Experimental evaluation}\label{sec:experiments}
@@ -556,7 +553,7 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
    		\item Concerning the results for $k=4$ presented in Table~\ref{tab:k4}, in case of all (20) small-sized instances the conclusions remain similar; the best performing approach is \textsc{Vns}, in some cases outperforming the best \textsc{Bs} configuration from the  literature by more than 15\% concerning the relative difference  between the obtained average solution qualities (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved the score 165 versus BS4 which achieved the score 193). For the large-sized instances, \textsc{Vns} again outperforms \textsc{PG} in all cases. 
    		\item From the above, we conclude that our \textsc{Vns} approach scales better with increase in the instance size than so-far leading incrementally-based literature approaches, such as \text{Bs} or the greedy methods. 
    		\item Concerning average times of reaching the best solution in \textsc{Vns}, these are shown in Figure~\ref{fig:timeSmall}--\ref{fig:timeBig} by means of stick plots. % In case of the small-sized instances, it is obvious that for the instance \texttt{Oxford},  the smallest instance among the others, 
-   		The smaller the size of an instance, the smaller is the average time of \textsc{Vns}  to reach the best solution.  In Figure~\ref{fig:timeSmall}, one can clearly see that with the increase of $k$, the average times of reaching the best solutions are rapidly grow thus the problem gets harder to solve. In case of the large-sized instances, one can see  from  Figure~\ref{fig:timeBig} that the most time demanding instances in terms of reaching the best solution are the instances \texttt{Boston} and \texttt{Dublin}; these are indeed the largest one in terms of number of nodes/edges, see Table~\ref{tab:big_instances_chars}.  
+   		The smaller the size of an instance, the smaller is the average time of \textsc{Vns}  to reach the best solution.  In Figure~\ref{fig:timeSmall}, one can clearly see that with the increase of $k$, the average times of reaching the best solutions are rapidly grow thus the problem gets harder to solve. In case of the large-sized instances, one can see  from  Figure~\ref{fig:timeBig} that the most time demanding instances in terms of reaching the best solution are the instances \texttt{Boston} and \texttt{Dublin}; these are indeed the largest one in terms of number of vertices/edges, see Table~\ref{tab:big_instances_chars}.  
    		Again, one can clearly see that with the increase of $k$ value, the average times of reaching the best solution significantly increase. For the hardest problem, when $k=4$, reaching the best solutions for the two largest instances demand a huge amount of time, about 10,000 seconds. %These  average times, as expected, increase also with the instance size growth. This as the result affects the number of performed \textsc{Vns} iterations which significantly decreases as more time will be needed to perform a \textsc{Vns} iteration due to the   computationally intensive local search procedure that runs in quadratic runtime w.r.t. the instance size.
    \end{itemize}
  
@@ -761,7 +758,7 @@ In this section we provide the analysis of the quality of the proposed \textsc{V
 \section{Conclusions and future work}
 
  
- In this paper we studied the $k$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem is solved so-far by a few constructive, incremental approaches. We proposed the well-known variable neighborhood search (VNS) meta-heuristic to solve this problem. It is equipped with an effective fitness function that evaluates feasible as well as unfeasible solutions considering the two metric scores: one which evaluates how far is the solution from being feasible and the second which takes the cardinalty of   solution.  Moreover, an efficient swap-based local search procedure incorporating best-improvement strategy plays a big role by achieving feasible solutions of reasonable quality in the \textsc{Vns}.  Efficiency of our \textsc{Vns} is confirmed on the real-world benchmark set from literature by comparing it to the existing state-of-the-art approaches -- a few greedy and the beam search approach. More in details, on all 20 small-sized and 5 large-sized instances, \textsc{Vns} delivered state-of-the-art results in terms of the obtained solution quality; the relative average percentage differences mostly range from 5-15\% in favor of \textsc{Vns}. 
+ In this paper we studied the $k$-domination problem, $k \in \mathbf{N}$,  a generalized version of the prominent minimum domination problem. This problem is solved so-far by a few constructive, incremental approaches. We proposed the well-known variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates feasible as well as unfeasible solutions considering the two metric scores: one which evaluates how far is the solution from being feasible and the second which takes the cardinalty of   solution.  Moreover, an efficient swap-based local search procedure incorporating best-improvement strategy plays a big role by achieving feasible solutions of reasonable quality in the \textsc{Vns}.  Efficiency of our \textsc{Vns} is confirmed on the real-world benchmark set from literature by comparing it to the existing state-of-the-art approaches -- a few greedy and the beam search approach. More in details, on all 20 small-sized and 5 large-sized instances, \textsc{Vns} delivered state-of-the-art results in terms of the obtained solution quality; the relative average percentage differences mostly range from 5-15\% in favor of \textsc{Vns}. 
  
  For future work, one could consider improving the \textsc{Vns} to perform more efficiently on large-scale graphs modeling social networks; the proposed local search needs to be significantly adapted as the best-improvement strategy is hardly a viable option on huge instances, due to  its high time complexity.  We could study performances of \textsc{Vns} and other approaches more deeply for spotting their weaknesses and strengths more clear w.r.t.\  wide range of graph sizes with different densities. Comparing our \textsc{Vns} with state-of-the-art black-box exact solvers like \textsc{Cplex} or \textsc{Gurobi} is our next task to do. 
   
