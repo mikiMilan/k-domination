@@ -49,7 +49,7 @@
 \usepackage{tikz,pgfplots,pgfplotstable}
 \pgfplotsset{scaled x ticks = false}
 
-\fxsetup{status=draft} % <====== add this line
+%\fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
@@ -62,9 +62,9 @@
 %% values in them; it is your responsibility as an author to replace
 %% the commands and values with those provided to you when you
 %% complete the rights form.
-%\setcopyright{acmcopyright}
-%\copyrightyear{2023}
-%\acmYear{2023}
+\setcopyright{acmcopyright}
+\copyrightyear{2023}
+\acmYear{2023}
 
 
 %% These commands are for a PROCEEDINGS abstract or paper.
@@ -128,7 +128,7 @@
 \author{A.K.}
 \affiliation{%
   \institution{Faculty of Mathematics, Univeristy of Belgrade}
-  \streetaddress{--}
+  \streetaddress{Studentski trg 16}
   \city{Belgrade}
   \country{Serbia}}
 \email{ kartelj@math.rs}
@@ -165,6 +165,24 @@
 In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a genetic algorithm. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
   
 \end{abstract}
+
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10003752.10003809.10003716.10011136.10011797</concept_id>
+	<concept_desc>Theory of computation~Optimization with randomized search heuristics</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003752.10003809.10003716.10011136.10011797.10011799</concept_id>
+	<concept_desc>Theory of computation~Evolutionary algorithms</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Theory of computation~Optimization with randomized search heuristics}
+\ccsdesc[300]{Theory of computation~Evolutionary algorithms}
   
 %%
 %% Keywords. The author(s) should pick words that accurately describe
@@ -191,15 +209,15 @@ In this paper we are concerned with solving a generalized version of the well-kn
 A graph $G=(V,E)$ is an abstract mathematical structure 
 in which $V$ represents a set of elements called vertices (or nodes) and a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In this paper, we are concerned with simple undirected graphs that have no loops and where the edges have no directions, i.e., $e = \{u,v\} = uv = vu \in E$.   Graphs serve as models for many real-world problems describing relationships among various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. 
 
-One of the best known classes of problems studied from theoretical, computational and practical points of view are dominating problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{domination problem}. The subset $D \subset V$ is called \emph{domination set} if every vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if every vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
 
 
 In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
-The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that every vertex not belonging to $D$ is adjacent to at least $k$ vertices in $D$~\cite{lan2013algorithmic}. A minimum $k$-domination set represents the optimal solution of MkDP. The NP-completeness of the $k$-domination decision problem is formally proved for the split graphs, see details in the above citation. (Note that the definition of this problem is not unique in the literature -- there is a definition where the goal is to find a minimum cardinality vertex set $D$ such that every vertex of $G$ is within distance $k$ of some vertex in $D$~\cite{chang1983k}.) 
+The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that every vertex not belonging to $D$ is adjacent to at least $k$ vertices in $D$~\cite{lan2013algorithmic}. A minimum $k$-dominating set represents the optimal solution of MkDP. The NP-completeness of the $k$-domination decision problem is formally proved for the split graphs, see details in the above citation. (Note that the definition of this problem is not unique in the literature -- there is a definition where the goal is to find a minimum cardinality vertex set $D$ such that every vertex of $G$ is within distance $k$ of some vertex in $D$~\cite{chang1983k}.) 
  
-Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small-to-medium sized real-world instances. 
+Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small to medium sized real-world instances. 
  
-MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-domination set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
+MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-dominating set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
 
 We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
 \begin{comment}
@@ -224,7 +242,7 @@ The contributions of our work can be summarized as follows:
 
 \section{Formal problem definition }
     
-Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ be fixed. For $v\in V$, $N(v)$ is a set of all adjacent vertices of $v$ in the graph $G$, i.e. $N(v)=\{w \mid vw \in E\}$. A set $D \subseteq V$ is called $k$-dominating if for every $v\in V \setminus D$ holds $|N(v) \cap D| \geq k$. The MkDP is an optimization problem whose objective is to find a $k$-domination set with minimal cardinality:
+Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ be fixed. For $v\in V$, $N(v)$ is a set of all adjacent vertices of $v$ in the graph $G$, i.e. $N(v)=\{w \mid vw \in E\}$. A set $D \subseteq V$ is called $k$-dominating set if for every $v\in V \setminus D$ holds $|N(v) \cap D| \geq k$. The MkDP is an optimization problem whose objective is to find a $k$-dominating set with minimal cardinality:
 
 \begin{equation}
 \arg \min_{D \subseteq V } |D|
@@ -249,7 +267,7 @@ In this section, we first give an overview of the variable neighborhood search (
  VNS generally requires at least two control parameters $d_{min}, d_{max} \in \mathbb{N}$, which define the increasing sizes of the neighborhood structures $\mathcal{N}_{d_{min}}(D), \ldots, \mathcal{N}_{d_{max}}(D)$ around given solution $D$. A solution $D'$ belongs to the neighborhood $\mathcal{N}_{d}(D)$ of the solution $D$ if it can be obtained from $D$ by removing $\min(d, |D|)$ vertices from $D$ and then adding $d$ vertices from $V \setminus D$ into $D$.
  
  The third parameter commonly used in VNS is $p_{move} \in [0, 1]$. This parameter corresponds to the probability of moving to a new solution if it has the same quality (fitness) as the incumbent solution. 
- Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-domination set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
+ Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-dominating set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
  The return value of VNS is called $D_{best}$ -- it is the incumbent solution. 
   
      \begin{algorithm}[!t] 
@@ -302,7 +320,7 @@ In this section, we first give an overview of the variable neighborhood search (
    	 C(D, v) = \min(k, |N(v) \cap D|).
    \end{align}
 
-It can be seen that $violations(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate domination set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $C(D, v) = k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. 
+It can be seen that $violations(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate dominating set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. 
 
 Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
 \begin{itemize}
@@ -378,17 +396,17 @@ violations(D') = violations(D_{best}) \\
 
 where \texttt{I} stands for the indicator function. 
 
-The part $-(k- C(D_{best}, v)) \texttt{I}_{(C(D_{best},v)<k)}$ adjusts for the effect of the added vertex $v$, i.e., if $v$ was previously \emph{satisfied} before (satisfied the $k$-domination condition), then this indicator function takes the value zero, so nothing changes. This is true because $v$ remains satisfied -- it is now part of $k$-domination set. 
+The part $-(k- C(D_{best}, v)) \texttt{I}_{(C(D_{best},v)<k)}$ adjusts for the effect of the added vertex $v$, i.e., if $v$ was previously \emph{satisfied} before (satisfied the $k$-domination condition), then this indicator function takes the value zero, so nothing changes. This is true because $v$ remains satisfied -- it is now part of $k$-dominating set. 
 Otherwise, if vertex $v$ has previously violated the $k$-domination condition, the total violations are reduced by the previous degree of vertex $v$ violation, i.e. $(k- C(D_{best}, v))$.
 
-The part $- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}$ adjust for the effect on the vertex $v$ neighbors, which were not in the $k$-domination set $D_{best}$, i.e. $W=N(v) \setminus D_{best}$. If some of these vertices $w \in W$ violated $k$-domination condition, adding the adjacent vertex $v$ to the solution reduces the total violations. Otherwise, if a vertex $w$ was satisfied, adding $v$ to the solution does not change anything.  
+The part $- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}$ adjust for the effect on the vertex $v$ neighbors, which were not in the $k$-dominating set $D_{best}$, i.e. $W=N(v) \setminus D_{best}$. If some of these vertices $w \in W$ violated $k$-domination condition, adding the adjacent vertex $v$ to the solution reduces the total violations. Otherwise, if a vertex $w$ was satisfied, adding $v$ to the solution does not change anything.  
  
 In case of a vertex removal, the similar idea is used. 
 
 
 \section{Experimental evaluation}\label{sec:experiments}
 
-In this section we analyze the quality of the proposed VNS method. For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
+In this section we analyze the quality of the proposed VNS method.\footnote{All instances, source codes of the VNS and GA tuning algorithms, and detailed experimental results are available on the GitHub page for this work: \url{anonymous URL}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
 
 \begin{itemize}
 	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG;
@@ -398,7 +416,7 @@ In this section we analyze the quality of the proposed VNS method. For this purp
 \end{itemize}
 
 
-\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instanc, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
  
  \begin{table}
  	\caption{Large-sized instance characteristics.}
@@ -509,7 +527,6 @@ Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and ed
  \emph{Testing environment}. Experiments were performed on a computer running Intel Core i9-9900KF CPU @3.6GHz with 64GB RAM, under Microsoft Windows 10 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
  PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
  
- 
   The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 2000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
    
 \subsection{Parameters tuning}
@@ -530,11 +547,11 @@ Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and ed
    As for the tuning tool, we have decided to use genetic algorithm called \texttt{PyGAD}. This implementation, proposed in ~\cite{gad2021pygad}, is available as an open-source Python library. All (20) small to medium sized problem instances were tuned separately  for each $k\in \{1, 2, 4\}$, resulting in a total of 60 control parameter configurations. 
     \texttt{PyGAD} was used as an outer optimizer calling the inner VNS method in a multiprocessing manner -- each \texttt{PyGAD} chromosome (solution) encodes a single VNS control parameter configuration and corresponds to a separate process. VNS was limited to 100 iterations. The \texttt{PyGAD} parameters were as follows:
 \begin{itemize}
-	\item $num\_generations = 50$ -- number of generations;
-	\item $num\_parents\_mating = 5$ -- number of chromosomes selected as parents for the mating pool;
-	\item $sol\_per\_pop = 10$ -- number of chromosomes in the population;
-	\item $mutation\_probability = 0.1$  -- the mutation probability;
-	\item $num\_genes = 4$ -- number of genes in the chromosome, the same as the number of control parameters of VNS. 
+	\item \emph{num\_generations = 50} -- number of generations;
+	\item \emph{num\_parents\_mating = 5} -- number of chromosomes selected as parents for the mating pool;
+	\item \emph{sol\_per\_pop = 10} -- number of chromosomes in the population;
+	\item \emph{mutation\_probability = 0.1}  -- the mutation probability;
+	\item \emph{num\_genes = 4} -- number of genes in the chromosome, the same as the number of control parameters of VNS. 
 \end{itemize}
   
    %Details on the obtained configurations of the VNS %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
@@ -717,7 +734,7 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 			\legend{k=1, k=2,k=4}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Average times (in seconds) of finding the best solution for small cities.}
+	\caption{Average times (in seconds) of finding the best solution for small to medium sized instances.}
 	\label{fig:timeSmall}  
 \end{figure}
 
@@ -749,14 +766,14 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 			\legend{k=1, k=2,k=4}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Average times (in seconds) of finding the best solution for big cities.}
+	\caption{Average times (in seconds) of finding the best solution for large instances.}
 	\label{fig:timeBig}  
 \end{figure}
  
 \section{Conclusions and future work}
 
  
- In this paper we have studied the $k$-domination problem, $k \in \mathbb{N}$,  a generalized version of the prominent minimum domination problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing heuristic state-of-the-art approaches. 
+ In this paper we have studied the $k$-domination problem, $k \in \mathbb{N}$,  a generalized version of the prominent minimum dominating set problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing heuristic state-of-the-art approaches. 
  
  For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved by state-of-the art solvers, such as Cplex or Gurobi. 
   
@@ -766,7 +783,7 @@ We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{gecco_poster_literature}
+\bibliography{gecco_2023}
 
 %%
 %% If your work has an appendix, this is the place to put it.
