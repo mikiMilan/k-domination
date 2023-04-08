@@ -2,7 +2,7 @@ from time import time
 from random import shuffle, random, seed
 from read_graph import read_graph
 from networkx import DiGraph, Graph
-from unit import fitness, fitness_rec_rem, fitness_rec_add
+from unit import fitness, fitness_rec_rem, fitness_rec_add, cache_rec_add, cache_rec_rem
 import sys
 
 
@@ -69,14 +69,9 @@ class VNS:
                         improved = True
             
             if improved:
+                cache_rec_add(s, best_v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
                 s.add(best_v)
                 curr_fit = best_fit
-                cache = {}
-                check_fit =  fitness(s, self.graph, self.k, cache)
-                print("Improved to "+str(curr_fit))
-                if not self.fitness_equal(curr_fit, check_fit):
-                    print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
-                    exit(1)
 
         # now simple removal
         improved = True
@@ -94,14 +89,9 @@ class VNS:
                         improved = True
             
             if improved:
+                cache_rec_rem(s, best_v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
                 s.remove(best_v)
                 curr_fit = best_fit
-                cache = {}
-                check_fit =  fitness(s, self.graph, self.k, cache)
-                print("Improved to "+str(curr_fit))
-                if not self.fitness_equal(curr_fit, check_fit):
-                    print("Error in incremental fitness true fitness is "+str(check_fit)+" and incremental is "+str(curr_fit))
-                    exit(1)
 
         return curr_fit
 

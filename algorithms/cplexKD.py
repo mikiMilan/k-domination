@@ -35,7 +35,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
     	if y[i].varValue == 1: 
     		solution.append(i)
     		#print(y[i].name)
-    print(solution)
+    # print(solution)
     #print("Problem status: ", LpStatus[model.status])
     #print("Solution status: ", LpSolution[model.sol_status])
     
@@ -50,11 +50,11 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
 
 
 if __name__ == '__main__':
-    timelimit: float = 180 #sec
-    g = read_graph("cities_small_instances/oxford.txt")
-    # g = read_graph("random_instances/NEW-V1000-P0.2-G0.txt")
+    timelimit: float = 3600 #sec
+    # g = read_graph("cities_big_instances/berlin.txt")
+    g = read_graph("random_instances/NEW-V1000-P0.1-G0.txt")
     curr = time()
-    primal, dual, status = ILP(g, 2, timelimit)
+    primal, dual, status = ILP(g, 4, timelimit)
     time_execute = time() - curr
     print(time_execute, primal, dual, status)
     

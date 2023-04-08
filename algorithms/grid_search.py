@@ -1,4 +1,4 @@
-from vns import VNS
+from test import VNS
 from read_graph import read_graph
 from math import inf
 
@@ -49,25 +49,21 @@ if __name__ == '__main__':
     vns = VNS(instance, g, k=4, d_min=1, d_max_init=100, time_limit=time_limit, iteration_max=iteration_max, prob=0.5, penalty=0.01, rseed=12345)
 
     # define grid parameters
-    d_min_space = (1, 10, 2)
-    d_max_init_space = (10, 101, 10)
-    prob_space = (0, 1, 0.2)
-    penalty_space = (0.001, 0.02, 0.004)
+    d_min_space = {1, 4, 16}
+    d_max_init_space = {25, 50, 75, 100}
+    prob_space = {0, 0.25, 0.5, 0.75, 1}
+    penalty_space = {0.005, 0.01, 0.015, 0.02}
     space = []
-    for dmn in range(d_min_space[0], d_min_space[1], d_min_space[2]):
-        for dmx in range(d_max_init_space[0], d_max_init_space[1], d_max_init_space[2]):
-            prob = prob_space[0]
-            while prob < prob_space[1]:
-                penalty = penalty_space[0]
-                while penalty < penalty_space[1]:
+    for dmn in d_min_space:
+        for dmx in d_max_init_space:
+            for prob in prob_space:
+                for penalty in penalty_space:
                     space.append((dmn, dmx, prob, penalty))
-                    penalty += penalty_space[2]
-                prob += prob_space[2]
 
     print("length grid space: ", len(space))
-    # print(space)
+    print(space)
 
     gr = grid_search(vns=vns, param_space=space)
-    # res = gr.run()
+    res = gr.run()
 
     # print(res)
