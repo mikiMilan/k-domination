@@ -1,0 +1,793 @@
+%%
+%% This is file `sample-sigconf.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `sigconf')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-sigconf.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%%
+%% Commands for TeXCount
+%TC:macro \cite [option:text,text]
+%TC:macro \citep [option:text,text]
+%TC:macro \citet [option:text,text]
+%TC:envir table 0 1
+%TC:envir table* 0 1
+%TC:envir tabular [ignore] word
+%TC:envir displaymath 0 word
+%TC:envir math 0 word
+%TC:envir comment 0 0
+%%
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[dvipsnames,format=sigconf,anonymous=true,review=true]{acmart}
+	
+\usepackage{soul}
+\usepackage{fixme}
+
+\usepackage{amsmath}
+ % \usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tikz,pgfplots,pgfplotstable}
+\pgfplotsset{scaled x ticks = false}
+
+%\fxsetup{status=draft} % <====== add this line
+\newtheorem{definition}{Definition}
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{acmcopyright}
+\copyrightyear{2023}
+\acmYear{2023}
+\setcopyright{rightsretained}
+\acmConference[GECCO '23 Companion]{Genetic and Evolutionary Computation
+	Conference Companion}{July 15--19, 2023}{Lisbon, Portugal}
+\acmBooktitle{Genetic and Evolutionary Computation Conference Companion
+	(GECCO '23 Companion), July 15--19, 2023, Lisbon,
+	Portugal}\acmDOI{10.1145/3583133.3590607}
+\acmISBN{979-8-4007-0120-7/23/07}
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{Variable neighborhood search for solving the $k$-domination problem}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Milan Predojević}
+ 
+\email{milan.predojevic@pmf.unibl.org}
+\orcid{xxxx-xxxx-xxxx}
+\author{M.P.}
+%\authornotemark[1]
+%\email{webmaster@marysville-ohio.com}
+\affiliation{%
+  \institution{Faculty of Sciences and Mathematics, University of Banja Luka}
+  \streetaddress{Mladen Stojanovi\'c 2}
+  \city{Banja Luka}
+  \state{Serb Republic}
+  \country{Bosnia and Herzegovina}
+  \postcode{78000}
+}
+
+\author{Aleksandar Kartelj}
+\author{A.K.}
+\affiliation{%
+  \institution{Faculty of Mathematics, Univeristy of Belgrade}
+  \streetaddress{Studentski trg 16}
+  \city{Belgrade}
+  \country{Serbia}}
+\email{ kartelj@math.rs}
+
+\author{Marko Djukanović}
+ 
+\email{marko.djukanovic@pmf.unibl.org}
+\orcid{xxxx-xxxx-xxxx}
+\author{M.D.}
+%\authornotemark[1]
+%\email{webmaster@marysville-ohio.com}
+\affiliation{%
+	\institution{Faculty of Sciences and Mathematics, University of Banja Luka}
+	\streetaddress{Mladen Stojanovi\'c 2}
+	\city{Banja Luka}
+	\state{Serb Republic}
+	\country{Bosnia and Herzegovina}
+	\postcode{78000}
+}
+ 
+ 
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+\renewcommand{\shortauthors}{Predojevic et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The VNS is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the VNS are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The VNS provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
+  
+\end{abstract}
+
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10003752.10003809.10003716.10011136.10011797</concept_id>
+	<concept_desc>Theory of computation~Optimization with randomized search heuristics</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003752.10003809.10003716.10011136.10011797.10011799</concept_id>
+	<concept_desc>Theory of computation~Evolutionary algorithms</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Theory of computation~Optimization with randomized search heuristics}
+\ccsdesc[300]{Theory of computation~Evolutionary algorithms}
+  
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{Variable neighborhood search, graph domination, genetic algorithm,  parameter tuning}
+
+%% A "teaser" image appears between the author and affiliation
+%% information and the body of the document, and typically spans the
+%% page.
+%\begin{teaserfigure}
+%  \includegraphics[width=\textwidth]{sampleteaser}
+%  \caption{Seattle Mariners at Spring Training, 2010.}
+%  \Description{Enjoying the baseball game from the third-base
+%  seats. Ichiro Suzuki preparing to bat.}
+%  \label{fig:teaser}
+%\end{teaserfigure}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\section{Introduction}
+A graph $G=(V,E)$ is an abstract mathematical structure 
+in which $V$ represents a set of elements called vertices (or nodes) and a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In this paper, we are concerned with simple undirected graphs that have no loops and where the edges have no directions, i.e., $e = \{u,v\} = uv = vu \in E$.   Graphs serve as models for many real-world problems describing relationships among various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. 
+
+One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if every vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+
+
+In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
+The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that every vertex not belonging to $D$ is adjacent to at least $k$ vertices in $D$~\cite{lan2013algorithmic}. A minimum $k$-dominating set represents the optimal solution of MkDP. The NP-completeness of the $k$-domination decision problem is formally proved for the split graphs, see details in the above citation. (Note that the definition of this problem is not unique in the literature -- there is a definition where the goal is to find a minimum cardinality vertex set $D$ such that every vertex of $G$ is within distance $k$ of some vertex in $D$~\cite{chang1983k}.) 
+ 
+Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small to medium sized real-world instances. 
+ 
+MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-dominating set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
+
+We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
+\begin{comment}
+The main algorithm components of this algorithm are:
+\begin{itemize}
+	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
+	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima. It is based on swap operations. 
+	\item An efficient swap--based  best-improvement local search mechanism   has been applied. It is equipped with an quick partial evaluation of the fitness function, executed in linear time.
+\end{itemize}
+\end{comment}
+The contributions of our work can be summarized as follows:
+\begin{itemize}
+	
+	\item The control parameters of the VNS are tuned with genetic algorithm ~\texttt{PyGAD}~\cite{gad2021pygad}.  
+	
+	\item VNS for MkDPA significantly improves the state-of-the-art results for all considered problem instances, where $k \in \{1, 2, 4\}$.
+	
+	\item VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
+	
+	%\item  VNS approach scales better with increase in the instance size than so-far leading literature approaches. 
+\end{itemize}
+
+\section{Formal problem definition }
+    
+Let $G=(V,E)$ be a simple undirected graph and $k \in \mathbb{N}$ be fixed. For $v\in V$, $N(v)$ is a set of all adjacent vertices of $v$ in the graph $G$, i.e. $N(v)=\{w \mid vw \in E\}$. A set $D \subseteq V$ is called $k$-dominating set if for every $v\in V \setminus D$ holds $|N(v) \cap D| \geq k$. The MkDP is an optimization problem whose objective is to find a $k$-dominating set with minimal cardinality:
+
+\begin{equation}
+\arg \min_{D \subseteq V } |D|
+\end{equation}
+\begin{equation}
+	s.t. \; \forall v \in V \setminus D, |N(v) \cap D| \geq k.
+\end{equation}
+    
+As for the search space of the MkDP, we adapt it to the needs of our VNS. Not only feasible solutions are handled, but also infeasible ones -- they are additionally penalized, see Section~\ref{sec:vns}. In other words, every subset of $V$ is a candidate solution in our VNS. Therefore, the size of the search space is $2^{|V|}$. 
+%Each solution is encoded as a set structure consisting of those vertices that belong to the solution. 
+   
+   
+\section{The proposed algorithm}\label{sec:vns}
+
+In this section, we first give an overview of the variable neighborhood search (VNS). Then we introduce the main components of VNS for solving MkDP: the fitness function, the shaking procedure and the efficient local search.
+ 
+  \subsection{Variable neighborhood search}
+ \emph{Variable neighborhood search} is a single-based solution metaheuristic proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach is to systematically exchange neighborhoods of the current best solution (incumbent solution) to avoid getting stuck in a local optimum. VNS has proven to be one of the most powerful metaheuristic, achieving excellent results on diverse classes of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
+  
+ The VNS for solving the MkDP is given in Algorithm~\ref{alg:vns}. 
+ 
+ VNS generally requires at least two control parameters $d_{min}, d_{max} \in \mathbb{N}$, which define the increasing sizes of the neighborhood structures $\mathcal{N}_{d_{min}}(D), \ldots, \mathcal{N}_{d_{max}}(D)$ around given solution $D$. A solution $D'$ belongs to the neighborhood $\mathcal{N}_{d}(D)$ of the solution $D$ if it can be obtained from $D$ by removing $\min(d, |D|)$ vertices from $D$ and then adding $d$ vertices from $V \setminus D$ into $D$.
+ 
+ The third parameter commonly used in VNS is $p_{move} \in [0, 1]$. This parameter corresponds to the probability of moving to a new solution if it has the same quality (fitness) as the incumbent solution. 
+ Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-dominating set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
+ The return value of VNS is called $D_{best}$ -- it is the incumbent solution. 
+  
+     \begin{algorithm}[!t] 
+  	\caption{VNS scheme for solving MkDP}\label{alg:vns}
+  	\begin{algorithmic}[1]
+  		\STATE \textbf{Input:} $d_{\min}$, $d_{\max}$, $p_{move}$, \emph{penalty}
+  		\STATE \textbf{Output:} best found solution $D_{best}$
+  		\STATE $d \gets  d_{\min}$, $d_{\max\_init} \gets d_{\max}$
+  		\STATE  $D_{best} \gets \texttt{LocalSearch}(\emptyset)$ \label{vns:init}
+  		\WHILE{\texttt{TerminationCriteriaNotMet()}}  \label{vns:main_loop_start}
+  		\STATE  $D' \gets$  $\texttt{Shaking}(\mathcal{N}_d(D_{best}))$
+  		\STATE $D'' \gets  \texttt{LocalSearch}(D')$
+  		\IF{ $fitness(D'') < fitness(D_{best}) \vee (fitness(D'') = fitness(D_{best})\  \wedge\ r \in U_{\left[0, 1\right]} <  p_{move})$ } \label{line:acceptance_incumbent_cond}
+  	    \STATE $D _{best}\gets D''$
+  	    \STATE $d \gets d_{\min}$
+  	 	\STATE  $d_{max} \gets \min(d_{\max\_init}, |D_{best}|/2)$  \label{vns:implicit_bound}
+  		\ELSE 
+  		\STATE $d \gets d + 1$ \hspace{0.3cm}//\, try with next neighborhood
+  		\IF{$d > d_{max}$}
+  		\STATE $d\gets d_{min}$
+  		\ENDIF
+  		\ENDIF
+  		\ENDWHILE \label{vns:main_loop_end}
+  		\STATE \textbf{return} $D_{best}$
+  	\end{algorithmic}
+  \end{algorithm}
+
+  At the beginning, the neighborhood size $d$ is set to the smallest, i.e. to $d_{min}$. 
+  The initial incumbent solution $D_{best}$ is generated by performing local search on an empty set (local search is explained in Section~\ref{sec:local_search}).  
+  Then the algorithm enters the main loop (lines \ref{vns:main_loop_start}-\ref{vns:main_loop_end}). The loop is run until at least one of the termination criteria is met. At each iteration of the loop, the following steps are executed: 
+  
+  \begin{itemize}
+  	\item \texttt{Shaking}($\mathcal{N}_d(D_{best})$) -- a solution $D'$ is selected   randomly from the set of solutions belonging to the $d$-th neighborhood structure around the solution $D_{best}$.
+  	\item  \texttt{LocalSearch} -- the selected solution $D'$ may be improved by a local search procedure, as explained in Section~\ref{sec:local_search}.
+  	\item The solution $D'$ becomes new incumbent if it has better fitness than the previous incumbent. Alternatively, it may become new incumbent with probability $p_{move}$ if its fitness is the same. In both cases, $d$ is reset to $d_{\min}$. The parameter $d_{max}$ is dynamically set to $\min(d_{\max\_init}, |D_{best}|/2)$ to prevent neighborhoods that are too large, i.e., neighborhoods larger than half  the incumbent size. 
+  	\item  If the solution $D'$ does not become new incumbent, $d$ is increased -- this further increases diversification. If this increase leads to $d> d_{max}$, $d$ is circularly reset to $d_{min}$.
+   \end{itemize}
+    
+\subsection{Fitness function}\label{subsec:fit}
+   To evaluate the solution $D$, the following nonlinear \emph{fitness} function is used:
+   \begin{align}\label{eq:fitness}
+      \emph{fitness}(D) = ( 1 + violations(D)) \cdot ( 1+ penalty \cdot |D|)
+   \end{align}
+   where 
+   \begin{align}
+   	   violations(D) = \sum_{v \in V \setminus D}{k-C(D, v)}
+   \end{align}
+   and 
+   \begin{align}
+   	 C(D, v) = \min(k, |N(v) \cap D|).
+   \end{align}
+
+It can be seen that $violations(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate dominating set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. 
+
+Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
+\begin{itemize}
+ 		\item For sufficiently small values of the parameter \emph{penalty}, the feasibility of the solution is relatively preferred over the cardinality of the solution. This means that when comparing feasible and infeasible solutions, the feasible solution is favored. 
+ 
+     	\item When comparing two infeasible solutions of the same cardinality, the \emph{less infeasible} solution is preferred, i.e. the one with the lower $violations(\cdot)$ value.  
+        
+        \item When comparing two feasible solutions, the one with the lower cardinality is preferred.
+\end{itemize}
+
+\subsection{Local search}\label{sec:local_search}
+The goal of local search (LS) is to improve the solution $D'$ obtained in the shaking phase by applying multiple local improvements to the structure of the solution. 
+The LS tailored to MkDP is described in Algorithm~\ref{alg:ls}.
+
+  \begin{algorithm}[!t] 
+  	\caption{\texttt{LocalSearch}}\label{alg:ls}
+  	\begin{algorithmic}[1]
+  		\STATE \textbf{Input}: a solution $D$
+  		\STATE \textbf{Output}: a (possibly) improved solution $D_{best}$
+  		\STATE $D_{best} \gets D$
+  		\STATE $best_{fit} \gets fitness(D_{best})$
+ 		\\//\, first, achieve feasibility by adding vertices
+ 		\STATE improved $\gets$ True
+  		\WHILE{\emph{improved}}
+  		     \STATE $improved \gets  False$
+  		     \STATE $best_{v} \gets$ None
+  		     \FOR{$v \in V \setminus D_{best}$}
+  		          \STATE $D' \gets D_{best} \cup \{v\}$
+  		          \IF{$new_{fit} = fitness_{fast}(D') < best_{fit}$}
+  		              \STATE $best_v \gets v$
+  		              \STATE $best_{fit} \gets new_{fit}$
+  		              \STATE $improved \gets True$
+  		          \ENDIF
+  		     \ENDFOR
+  		     \IF{\emph{improved}}
+  		         \STATE $D_{best} \gets D_{best} \cup \{best_v\}$
+  		     \ENDIF
+
+  		\ENDWHILE   	
+  		\\ //\, second, remove vertices, but keep the feasibility	    
+  		 \STATE  $improved \gets True$
+  		 \WHILE{\emph{improved}}
+  		   \STATE $improved \gets  False$
+  		    \STATE $best_{v} \gets$ None
+  		    \FOR{$v \in D_{best}$}
+  		       \STATE $D' \gets D_{best} \setminus \{v\}$
+  		        \IF{$new_{fit} = fitness_{fast}(D') < best_{fit}$}
+  		             \STATE $best_v \gets v$
+  		             \STATE $best_{fit} \gets new_{fit}$	              
+  		             \STATE $improved \gets True$
+  		       \ENDIF
+  		        \IF{\emph{improved}}
+  		      		 \STATE $D_{best} \gets D_{best} \setminus \{best_v\}$
+  		       \ENDIF
+  		       
+  		    \ENDFOR
+  		\ENDWHILE
+  		\STATE return $D_{best}$
+  	\end{algorithmic}
+\end{algorithm}
+
+Our LS procedure consists of two phases. In the first phase, the vertices are added to achieve feasibility -- when the solution is not feasible. In the second phase, the vertices are removed to improve the objective function. The removal is done in a way that does not affect the feasibility previously achieved. 
+In both phases, the best improvement strategy is used. This means that all eligible vertices are checked for inclusion/exclusion and then the best vertex is included/excluded. 
+Each phase ends with the first iteration where no improvement in fitness is found.  
+
+\emph{Fast fitness evaluation}. Computing the fitness function (\ref{eq:fitness}) takes $O(|E|)$ time -- the most time consuming part is computing the $\emph{violations}(\cdot)$  function. For dense graphs, this complexity can go up to $O(|V|^2)$. Since local search makes many fitness function calls it is too costly to compute the fitness function from scratch every time. In order to execute \texttt{LocalSearch} procedure  efficiently, fast calculations of the fitness function are applied. Before LS enters the first \texttt{while} loop, $C(D_{best}, v), \forall v \in V$ for given solution $D_{best}$ are computed and saved. During vertex addition, that is  $D' = D_{best} \cup \{v\} $, $violations(D')$ is calculated in the following way: 
+
+\begin{multline}
+violations(D') = violations(D_{best}) \\
+- (k-C(D_{best}, v))  \texttt{I}_{(C(D_{best},v)<k)}  \\ 
+- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}
+\end{multline}
+
+where \texttt{I} stands for the indicator function. 
+
+The part $-(k- C(D_{best}, v)) \texttt{I}_{(C(D_{best},v)<k)}$ adjusts for the effect of the added vertex $v$, i.e., if $v$ was previously \emph{satisfied} before (satisfied the $k$-domination condition), then this indicator function takes the value zero, so nothing changes. This is true because $v$ remains satisfied -- it is now part of $k$-dominating set. 
+Otherwise, if vertex $v$ has previously violated the $k$-domination condition, the total violations are reduced by the previous degree of vertex $v$ violation, i.e. $(k- C(D_{best}, v))$.
+
+The part $- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}$ adjust for the effect on the vertex $v$ neighbors, which were not in the $k$-dominating set $D_{best}$, i.e. $W=N(v) \setminus D_{best}$. If some of these vertices $w \in W$ violated $k$-domination condition, adding the adjacent vertex $v$ to the solution reduces the total violations. Otherwise, if a vertex $w$ was satisfied, adding $v$ to the solution does not change anything.  
+ 
+In case of a vertex removal, the similar idea is used. 
+
+
+\section{Experimental evaluation}\label{sec:experiments}
+
+In this section we analyze the quality of the proposed VNS method.\footnote{All instances, source codes of the VNS and GA tuning algorithms, and detailed experimental results are available on the GitHub page for this work: \url{anonymous URL}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
+
+\begin{itemize}
+	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG;
+	\item Greedy method from~\cite{gagarin2018multiple}, denoted by PG;
+	\item Beam search approach from~\cite{corcoran2021heuristics}, denoted by BS;
+	\item VNS approach, as described in Section~\ref{sec:vns}, denoted by VNS.  
+\end{itemize}
+
+
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
+ 
+ \begin{table}
+ 	\caption{Large-sized instance characteristics.}
+ 	\label{tab:big_instances_chars}  
+ 	\begin{tabular}{lrr}
+ 		City      & $|V|$ & $|E|$ \\ \hline
+ 		Belgrade      & 19,586 & 7,561,185  \\ 
+ 		Berlin        & 29,461 & 9,944,851 \\
+ 	    Boston        & 44,797 & 28,164,740 \\
+ 	    Dublin        & 37,982 & 21,630,466 \\
+ 	    Minsk         & 10,487 & 1,375,618 \\ \hline
+ 	\end{tabular}
+ \end{table}
+ 
+ The characteristics of 20 small to medium sized instances can be found in~\cite{corcoran2021heuristics}.
+ Unlike the five large networks, these 20 instances are exactly the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
+Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and edges of these instances.  
+
+\pgfplotstableread{ % Read the data into a table macro
+    CityName	|V|
+    Manchester	1991
+    Nottingham	1739
+    Belfast	1700
+    Leeds	1647
+    Sheffield	1582
+    Bristol	1569
+    Leicester	1531
+    Sunderland	1346
+    Liverpool	1273
+    Exeter	1250
+    Coventry	1175
+    Glasgow	1137
+    Cardiff	1123
+    Plymouth	1122
+    Newcastle	1109
+    York	1044
+    Brighton	976
+    Bath	910
+    Southampton	796
+    Oxford  479
+}\testdata
+
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			height=250pt,
+			width=0.45\textwidth,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{CityName}  % Get the labels from the Label column of the \datatable
+			]
+            \addplot [fill=cyan!20!green!40] table [x=|V|, meta=CityName,y expr=\coordindex] {\testdata};   % "First" column against the data index
+            \legend{No. vertices}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{The number of vertices in the small to medium sized instances.}
+	\label{fig:novertex}
+\end{figure}
+
+\pgfplotstableread{ % Read the data into a table macro
+    CityName	|E|
+    Manchester	77286
+    Belfast	62617
+    Leeds	56511
+    Nottingham	51595
+    Sheffield	50534
+    Leicester	48219
+    Bristol	47522
+    Liverpool	42564
+    Sunderland	42013
+    Plymouth	35070
+    Brighton	35012
+    Exeter	31997
+    Coventry	26689
+    Newcastle	26614
+    Glasgow	24323
+    York	23774
+    Cardiff	23057
+    Southampton	19942
+    Bath	18560
+    Oxford	8396
+}\testdata
+
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			height=250pt,
+			width=0.45\textwidth,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{CityName}  % Get the labels from the Label column of the \datatable
+			]
+            \addplot [fill=cyan!20!green!40] table [x=|E|, meta=CityName,y expr=\coordindex] {\testdata};   % "First" column against the data index
+            \legend{No. edges}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{The number of edges in the small to medium sized instances.}
+	\label{fig:noedges}
+\end{figure}
+ 
+ 
+ \emph{Testing environment}. Experiments were performed on a computer running Intel Core i9-9900KF CPU @3.6GHz with 64GB RAM, under Microsoft Windows 10 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
+ PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
+ 
+  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 2000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
+   
+\subsection{Parameters tuning}
+   As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. The range of parameters used for tuning are given in Table~\ref{tab:domain_tuning}.
+   
+    \begin{table}[ht]
+    	\caption{VNS parameter ranges.}  
+    	\label{tab:domain_tuning}
+   	\begin{tabular}{lll}
+    Parameter       & Domain & Step \\ \hline
+   	$d_{min}$  &  [1, 10] & 1 \\
+   	$d_{max}$  & [2, 100] & 1\\
+   	$p_{move}$    & [0, 1] & 0.05 \\
+   	$penalty$ & [0.001, 0.02]  & 0.001 \\ \hline
+   	\end{tabular}
+   \end{table}
+   
+   As for the tuning tool, we have decided to use genetic algorithm called \texttt{PyGAD}. This implementation, proposed in ~\cite{gad2021pygad}, is available as an open-source Python library. All (20) small to medium sized problem instances were tuned separately  for each $k\in \{1, 2, 4\}$, resulting in a total of 60 control parameter configurations. 
+    \texttt{PyGAD} was used as an outer optimizer calling the inner VNS method in a multiprocessing manner -- each \texttt{PyGAD} chromosome (solution) encodes a single VNS control parameter configuration and corresponds to a separate process. VNS was limited to 100 iterations. The \texttt{PyGAD} parameters were as follows:
+\begin{itemize}
+	\item \emph{num\_generations = 50} -- number of generations;
+	\item \emph{num\_parents\_mating = 5} -- number of chromosomes selected as parents for the mating pool;
+	\item \emph{sol\_per\_pop = 10} -- number of chromosomes in the population;
+	\item \emph{mutation\_probability = 0.1}  -- the mutation probability;
+	\item \emph{num\_genes = 4} -- number of genes in the chromosome, the same as the number of control parameters of VNS. 
+\end{itemize}
+  
+   %Details on the obtained configurations of the VNS %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
+   %  can be found at \url{XXxxxx.com}
+     
+ Parameter tuning for large instances was too inefficient. Therefore, we used reasonable manually configured parameters for these instances: $d_{min}=1, d_{max} = + \infty, p_{move}=0.5, penalty = 0.01$. (Note that $d_{max}$ has implicit upper bound -- it is set in line~\ref{vns:implicit_bound} of Algorithm~\ref{alg:vns}.)
+
+\subsection{Experimental results }
+ Tables~\ref{tab:k1}-\ref{tab:k4} contain the experimental results for $k \in \{1, 2,4\}$, respectively. The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
+ 
+The following conclusions can be drawn from these results. 
+   
+\begin{itemize}
+  		\item  For $k=1$, VNS outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for the large-sized instances.  
+  		\item Concerning the results for $k=2$, VNS outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: VNS produces $\approx$ 5--15\% improvement rate over the second best PG approach. 
+  		\item The situation is similar for $k=4$. VNS outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where VNS achieved a score 165 over BS4 which achieved a score 193). For the large instances, VNS again outperforms PG in all cases. 
+  		
+\end{itemize}
+ 
+
+  \begin{table}
+  	\caption{Results for k=1.}
+  	\label{tab:k1}  
+ 	\begin{tabular}{l|rr|rlrr}
+ 	\hline
+ 	\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+ 	\hline
+	City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+	Bath&\bf{38}&38&BS4&43&44.6\\
+	Belfast&\bf{39}&39&BS4&48&50.2\\
+	Brighton&\bf{21}&21&BS4&28&28.2\\
+	Bristol&\bf{37}&37&BS2&46&47.4\\
+	Cardiff&\bf{39}&39&BS4&48&50.6\\
+	Coventry&\bf{38}&38.2&BS4&44&44.8\\
+	Exeter&\bf{38}&38&BS4&50&50.6\\
+	Glasgow&\bf{50}&50.2&BS4&58&59.2\\
+	Leeds&\bf{40}&40&BS4&51&52.4\\
+	Leicester&\bf{38}&38&BS4&51&51.5\\
+	Liverpool&\bf{28}&28&BS4&38&38.4\\
+	Manchester&\bf{38}&38.8&BS4&45&45.9\\
+	Newcastle&\bf{44}&44&BS4&51&52.6\\
+	Nottingham&\bf{44}&44&BS4&55&56.6\\
+	Oxford&\bf{24}&24&BS4&27&27.9\\
+	Plymouth&\bf{31}&31&BS4&39&40.3\\
+	Sheffield&\bf{42}&42&BS4&51&52.5\\
+	Southampton&\bf{25}&25&BS4&28&29.6\\
+	Sunderland&\bf{36}&36&BS4&46&46.3\\
+	York&\bf{32}&32&BS4&39&39.1\\  \hline  \hline
+	Belgrade&\bf{85}&88.4&PG&103&103.4\\
+	Berlin&\bf{102}&104.5&PG&125&125.9\\
+	Boston&\bf{99}&101.2&PG&101&102.7\\
+	Dublin&\bf{93}&99&PG&112&113.8\\
+	Minsk&\bf{100}&102&PG&125&126\\
+	\hline
+
+	
+ 	\end{tabular}
+ \end{table}
+
+\begin{table}
+	\caption{Results for $k=2$.}
+	\label{tab:k2}  
+	\begin{tabular}{l|rr|rlr}
+		\hline
+		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\hline
+		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+		Bath&\bf{71}&71.8&BS1&86&89\\
+		Belfast&\bf{76}&76.2&BS4&96&97.6\\
+		Brighton&\bf{40}&41.1&BS4&49&49.4\\
+		Bristol&\bf{73}&73.7&BS4&91&94\\
+		Cardiff&\bf{79}&79.4&BS4&92&95.6\\
+		Coventry&\bf{73}&73.2&BS4&84&85.1\\
+		Exeter&\bf{77}&77.3&BS4&94&95.7\\
+		Glasgow&\bf{93}&94.2&BS4&108&110.6\\
+		Leeds&\bf{79}&80.5&BS4&98&99.6\\
+		Leicester&\bf{75}&75.2&BS4&93&94.1\\
+		Liverpool&\bf{57}&57&BS4&71&72\\
+		Manchester&\bf{77}&78.4&BS4&90&91.5\\
+		Newcastle&\bf{83}&84.3&BS4&94&95.4\\
+		Nottingham&\bf{84}&85.3&BS4&102&103.3\\
+		Oxford&\bf{47}&47&BS4&54&54.9\\
+		Plymouth&\bf{62}&62.1&BS4&73&75\\
+		Sheffield&\bf{84}&84.7&BS4&97&98.9\\
+		Southampton&\bf{50}&50.1&BS4&60&61.1\\
+		Sunderland&\bf{73}&73.7&BS4&87&89.1\\
+		York&\bf{68}&68&BS4&77&77.6\\ \hline \hline
+		Belgrade&\bf{169}&172.3&PG&196&197.3\\
+		Berlin&\bf{206}&207.1&PG&239&240.1\\
+		Boston&\bf{181}&194.6&PG&190&191.6\\
+		Dublin&\bf{181}&184.4&PG&209&211.3\\
+		Minsk&\bf{197}&201.1&PG&238&240.4\\
+		\hline
+
+	\end{tabular}
+\end{table}
+
+\begin{table}
+	\caption{Results for $k=4$.}
+	\label{tab:k4}  
+	\begin{tabular}{l|rr|rlrr}
+		\hline
+		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
+		\hline
+		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
+		Bath&\bf{139}&140.4&BS4&159&160\\
+		Belfast&\bf{147}&148.5&BS4&177&179.6\\
+		Brighton&\bf{78}&79.3&BS4&92&94.8\\
+		Bristol&\bf{145}&146.7&BS4&175&176.4\\
+		Cardiff&\bf{160}&161.9&BS4&181&183.2\\
+		Coventry&\bf{150}&150.6&BS4&170&172.6\\
+		Exeter&\bf{157}&158.3&BS4&181&182.3\\
+		Glasgow&\bf{174}&175.4&BS4&197&199.8\\
+		Leeds&\bf{152}&152.4&BS4&186&187.1\\
+		Leicester&\bf{151}&152.6&BS4&175&177.7\\
+		Liverpool&\bf{112}&114&BS4&132&133\\
+		Manchester&\bf{154}&156.4&BS4&177&178.5\\
+		Newcastle&\bf{153}&154.8&BS2&169&171.5\\
+		Nottingham&\bf{165}&166.6&BS4&193&195.2\\
+		Oxford&\bf{89}&89.2&BS2&99&100.8\\
+		Plymouth&\bf{115}&116&BS4&135&137\\
+		Sheffield&\bf{160}&161.6&BS4&180&182.2\\
+		Southampton&\bf{97}&97.8&BS4&112&113.2\\
+		Sunderland&\bf{142}&142.5&BS4&162&163.6\\
+		York&\bf{129}&130.1&BS4&144&145.8\\ \hline \hline
+		Belgrade&\bf{344}&346.3&PG&372&374.5\\
+		Berlin&\bf{408}&409.2&PG&444&446.2\\
+		Boston&\bf{341}&341&PG&367&368.7\\
+		Dublin&\bf{363}&363&PG&388&390.2\\
+		Minsk&\bf{387}&391.5&PG&454&457.6\\
+		\hline
+
+		
+	\end{tabular}
+\end{table}
+
+
+The average times (in seconds) for reaching the best solution in VNS are shown as stacked bar graphs in Figures~\ref{fig:timeSmall}-\ref{fig:timeBig}.
+The smaller the size of an instance, the less time VNS takes on average to reach the best solution. Figures~\ref{fig:timeSmall}-\ref{fig:timeBig} clearly show that as $k$ increases, the average times to reach the best solutions increase rapidly. In case of the large instances, it can be seen from Figure~\ref{fig:timeBig} that the most time consuming instances in terms of reaching the best solution are \texttt{Boston} and \texttt{Dublin}. These two instances are indeed the largest in terms of number of vertices/edges (see Table~\ref{tab:big_instances_chars}).  
+
+
+\pgfplotstableread{ % Read the data into a table macro
+	City	k1	k2	k4
+	Manchester	844.078	1608.695	2584.787
+	Nottingham	85.132	1125.304	1827.64
+	Belfast	66.681	865.443	1800.359
+	Sunderland	44.395	187.461	2464.102
+	Leicester	233.02	462.418	1729.272
+	Newcastle	88.577	378.578	1147.646
+	Leeds	132.67	291.423	1078.052
+	Liverpool	192.537	239.716	981.006
+	Bristol	129.058	571.793	638.25
+	Coventry	144.585	300.407	826.953
+	Brighton	89.172	292.017	858.973
+	Sheffield	78.21	289.042	850.464
+	Plymouth	55.003	205.265	919.927
+	Cardiff	41.944	181.9	679.325
+	Exeter	52.443	285.106	387.588
+	Bath	60.934	256.686	285.744
+	Glasgow	90.929	110.067	376.057
+	York	28.401	111.923	359.89
+	Southampton	7.778	147.781	203.324
+	Oxford	18.758	6.93	23.79
+}\testdata
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			width=0.45\textwidth,
+			height=300pt,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+			]
+			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+			\legend{k=1, k=2,k=4}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for small to medium sized instances.}
+	\label{fig:timeSmall}  
+\end{figure}
+
+
+\pgfplotstableread{ % Read the data into a table macro
+	City	k1	k2	k4
+	Dublin	3301.775	5190.116	10035.541
+	Boston	3313.146	5707.734	9339.97
+	Berlin	2943.355	3363.764	3574.488
+	Belgrade	2604.035	3454.216	3441.493
+	Minsk	2086.718	2864.217	3364.123
+}\testdata
+
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}[
+			legend style={legend columns=1,at={(1,1)},anchor=north east},
+			xbar stacked,   % Stacked horizontal bars
+			bar width=5pt,
+			height=110pt,
+			width=0.45\textwidth,
+			ytick=data,     % Use as many tick labels as y coordinates
+			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
+			]
+			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
+			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
+			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
+			\legend{k=1, k=2,k=4}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average times (in seconds) of finding the best solution for large instances.}
+	\label{fig:timeBig}  
+\end{figure}
+ 
+\section{Conclusions and future work}
+
+ 
+ In this paper we have studied the $k$-domination problem, $k \in \mathbb{N}$,  a generalized version of the prominent minimum dominating set problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our VNS has been validated on the real-world benchmark, where it has been shown that VNS outperform all existing heuristic state-of-the-art approaches. 
+ 
+ For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved by state-of-the art solvers, such as Cplex or Gurobi. 
+  
+\section*{Acknowledgments} 
+We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations. 
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{gecco_2023}
+
+%%
+%% If your work has an appendix, this is the place to put it.
+%\appendix
+ 
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigconf.tex'.
