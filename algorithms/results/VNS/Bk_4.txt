@@ -1,0 +1,15 @@
+belgrade.txt, 12345, 334, 3566.92, True, 3601.24
+belgrade.txt, 22411, 335, 3259.37, True, 3601.87
+belgrade.txt, 25233, 332, 3589.57, True, 3602.76
+belgrade.txt, 52331, 338, 3510.34, True, 3603.63
+belgrade.txt, 54278, 336, 3335.62, True, 3605.60
+belgrade.txt, 54433, 338, 3258.84, True, 3602.73
+belgrade.txt, 66655, 340, 3383.16, True, 3609.25
+belgrade.txt, 68531, 337, 3380.68, True, 3600.40
+belgrade.txt, 87744, 336, 3362.47, True, 3605.94
+belgrade.txt, 98811, 340, 3358.35, True, 3605.30
+berlin.txt, 12345, 390, 3298.58, True, 3659.82
+berlin.txt, 22411, 387, 3078.50, True, 3609.02
+berlin.txt, 25233, 388, 3415.80, True, 3609.62
+berlin.txt, 52331, 394, 3439.83, True, 3627.62
+berlin.txt, 54278, 391, 3457.59, True, 3627.70
