@@ -24,12 +24,16 @@ if __name__ == '__main__':
     
     
     instance_dir = 'cities_small_instances'
-    instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
-                      'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
-                      'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
-                      'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
-                      'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
-                  
+    instances = ['southampton.txt', 'sunderland.txt', 'york.txt']
+
+    '''
+    'bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+                        'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
+                        'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
+                        'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
+                      'sheffield.txt', 
+    '''
+
     '''
     instance_dir = 'cities_big_instances'
     instances = ['belgrade.txt', 'berlin.txt', 'boston.txt', 'dublin.txt', 'minsk.txt']'''
@@ -38,7 +42,7 @@ if __name__ == '__main__':
 
     batches = ceil(len(seeds)/paralellism)
 
-    for k in [4, 2, 1]:
+    for k in [2, 1]:
         file_name_res = 'results/VNS/k_' + str(k) + '.txt'
         for instance in instances:
             graph_open = instance_dir+'/'+instance

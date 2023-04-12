@@ -13,7 +13,7 @@ def task(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, pen
 
 
 if __name__ == '__main__':
-    paralellism = 1
+    paralellism = 2
     iteration_max = 1000000
     time_limit = 3600
     d_min = 1
@@ -32,13 +32,13 @@ if __name__ == '__main__':
                   
     '''
     instance_dir = 'cities_big_instances'
-    instances = ['belgrade.txt', 'berlin.txt', 'boston.txt', 'dublin.txt', 'minsk.txt']
+    instances = [ 'minsk.txt'] #'belgrade.txt', 'berlin.txt','boston.txt', 'dublin.txt', 
 
-    seeds = [12345, 22411, 25233, 52331, 54278, 54433, 66655, 68531, 87744, 98811]
+    seeds = [22411, 25233, 52331, 54278, 66655, 68531, 87744, 98811] #54433 12345, 
 
     batches = ceil(len(seeds)/paralellism)
 
-    for k in [4, 2, 1]:
+    for k in [1]:
         file_name_res = 'results/VNS/Bk_' + str(k) + '.txt'
         for instance in instances:
             graph_open = instance_dir+'/'+instance
