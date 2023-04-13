@@ -66,11 +66,8 @@ Comments from \textit{Reviewer\ \#1}
 \end{center}
 
 \begin{leftbar}
-  Komentari... tačka po tačka
-   
-   \begin{enumerate}
-   	\item  The authors claim to have made a comprehensive and fair  
-   \end{enumerate}
+
+In this paper an interesting implementation of VNS algorithm is proposed. The only issue I found is missing explanation why the parameters are tuned using Genetic Algorithm and not some other package, for example IRACE? Other than that, the reported results are really outstanding.
 
 \end{leftbar}
 \textbf{Answers}.  TODO
@@ -78,28 +75,138 @@ Comments from \textit{Reviewer\ \#1}
  
  
  
-\begin{center} Comments from \textit{Reviewer\ \#2}
-	
+\begin{center} 
+	Comments from \textit{Reviewer\ \#2}
 \end{center}
 
 \begin{leftbar}
   
- This paper  ...
-  
+The main contributions of the paper are summarized in the introduction (Sec. 1). Some of them, however, are not properly supported by the experiments presented later.
+\begin{enumerate}
+	\item Authors claim that the VNS significantly improves the state-of-the-art, but the comparison to the literature is not completely fair. Different from the literature approaches, the VNS uses specific parameter configurations for each instance. Besides that, the termination criteria of the literature approaches are not discussed and contrasted to those used for the VNS, and using different machines or different running time limits (for example) may impact in the quality of the results. 
+	\item Regarding the third conclusion, which states that "VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches proposed in the literature", the paper only shows the quality of the final solutions and the running time required by the VNS to find them, but no information about the solutions found during the execution is given. It would be interesting to visualize the performance profile of some runs, identifying the best solutions found over time, comparing with the same visualizations for the literature approaches (and then argue that the VNS is the only approach that finds good solutions quickly). Moreover, Figures 3 and 4 show running times larger than 30 minutes (i.e., larger than the termination criterion) for most instances and values of k, which cannot be considered "quickly" without a more informed discussion.
+\end{enumerate}
 \end{leftbar}
 
-\emph{Answers}. TODO 
+\emph{Answers}. 
+
+\begin{enumerate}
+	\item In the new version of the paper, a single parameter configuration was used for all instances. The configuration was obtained by the grid search method on a random sample of 20 instances (medium of instances and k from [1,2,4]).
+	
+	In the paper, we added a didcusia that justifies the comparisons:
+	"This choice of termination criteria is inspired by the times presented in the literature ~\cite{corcoran2021heuristics}. The best results were given by BS4, where 4 stands for beam widths. For that algorithm, the authors for k=2 showed mean running times in seconds of 1736, 8834, 1257, 7156 and 3327 for the cities of Bath, Belfast, Brighton, Bristol and Cardiff respectively.
+	
+	As stated in ~\cite{corcoran2021heuristics}, all algorithms were implemented in the Python programming language and executed on a desktop computer with an Intel Core i7-8700 CPU. The criteria for termination of SG, PG and BS is finding the first feasible solution."
+	
+	Unfortunately, the source code from the literature ~\cite{corcoran2021heuristics} is not available and therefore we are not able to perform the comparisons as you described.
+	
+	\item We have been offered to accept this work as a poster. We accepted that, and because of that we are limited with the number of pages (4). For this reason, we are unable to provide a detailed analysis of what is requested. Implicitly, from the definition of the VNS algorithm and the previous citation/answer, it can be concluded that VNS generates many "good" solutions in a reasonable amount of time, which is not the case with BS4.
+\end{enumerate}
+
+
+\begin{leftbar}	
+According to Section 3, the proposed VNS algorithm explores neighborhoods with different sizes (number of vertices added and removed from the solution). However, such variable neighborhood strategy is used only in the shaking procedure, where a neighboring solution of a given local optima is randomly selected from one of these neighborhoods. The local search does not explore different neighborhoods. Instead, it performs a simple iterative (best) improvement procedure. Based on this, can you call this algorithm a VNS?
+\end{leftbar}
+
+	\emph{Answers}. The proposed VNS is defined in the literature ~\cite{mladenovic1997variable} and we only refer to it. I would disagree with "Local search doesn't explore different neighborhoods". Local search tries to find a local minimum (best neighbor) in a "fast" way.
+
+
 
 \begin{leftbar}
+Regarding the running time limit (30 minutes), it would be interesting to scale the time limit according to the size of instance. Figures 3 and 4 show that the required computational effort increases as instance size grows. Besides that, the paper should mention the termination criteria of the approaches from the literature and how it compares to the one used in the experimental evaluation, to ensure a fair comparison of results.	
+\end{leftbar}
+
+\emph{Answers}. Due to page limitations we are unable to display this scaling. 
+
+Thank you for your comments regarding the comparison and . In the work, we have added the following all the posuses that explain what was done:
+
+"This choice of termination criteria is inspired by the times presented in the literature ~\cite{corcoran2021heuristics}. The best results were given by BS4, where 4 stands for beam widths. For that algorithm, the authors for k=2 showed mean running times in seconds of 1736, 8834, 1257, 7156 and 3327 for the cities of Bath, Belfast, Brighton, Bristol and Cardiff respectively.
+
+As stated in ~\cite{corcoran2021heuristics}, all algorithms were implemented in the Python programming language and executed on a desktop computer with an Intel Core i7-8700 CPU. The criteria for termination of SG, PG and BS is finding the first feasible solution."
+
+
+\begin{leftbar}
+The parameter tuning step, detailed in Section 4.1, does not follow a well-established methodology for this task. First, the instances should be split into training and testing sets. The tuning is performed using the training set, and the parameter configurations are evaluated on the testing set. This avoids the so-called overtuning, producing parameter configurations whose performance is the same when solving new/unseen instances. As a consequence, we can compare the algorithm (with the produced configuration) with other approaches from the literature, since the latter use a single configuration/algorithm to solve all instances. In contrast, if specific configurations are used for each instance (as presented in the paper), the tuning time should be accounted in the comparison.
 	
-	This paper  ...
+\end{leftbar}
+
+\emph{Answers}. Yes, we did this very badly. In the new version of the paper, a single parameter configuration was used for all instances. The configuration was obtained by the grid search method on a random sample of 20 instances.
+
+\begin{leftbar}
+Finally, Tables 3 - 5 present the results for the VNS and the best approach from the literature. It would be better to show the complete results, i.e. for all tested algorithms.
+	
+\end{leftbar}
+
+\emph{Answers}. Due to page limitations, we are unable to provide a more detailed view. We are of the opinion that this is enough, because we have singled out the best solution with which we are comparing it.  
+
+
+\begin{leftbar}
+Minor issues:
+\begin{enumerate}
+  \item More detail about the applications of the k-domination problem (lines 100 - 103) can be given.
+  \item The discussion about the results (lines 499 - 512) are repetitive, since the observations are the same for the different values of k. It could be summarized.
+  \item Figures 3 and 4 can use filling patterns for the different values of k to ease the visualization in grayscale.
+  \item The running times reported in Figures 3 and 4 are averages over how many replications?
+  \item Instead of using the experimental results reported in the literature (for SG, PG and BS), why not running them again, given that the source code is available?
+  \item If space is an issue to accomodate any suggestion, Tables 3, 4 and 5 can be aggregated in a single table, Figures 3 and 4 can be aggregated in a single figure, and Figures 1 and 2 can be replaced by a single table, aggregated with Table 1.
+\end{enumerate}
+    
+    
+\end{leftbar}
+
+\emph{Answers}. 
+\begin{enumerate}
+	
+\item Unfortunately, we do not have enough space for a more detailed description.
+\item TODO: dobar prijedlog.
+\item TODO: radicu kako je covjek rekao
+\item For a maximum of 20,000 iterations/repetitions. If the displayed time is less than 1800s, it means that exactly 20,000 iterations have occurred, which terminated the VNS. We don't think this is worth discussing and that's why it's not explained in detail.
+\item The source code is not available. We only received instances from the authors.
+\item This is a good appetizer, thank you. We did as you said. 
+ 
+\end{enumerate}
+
+\begin{center} Comments from \textit{Reviewer\ \#3}
+	
+\end{center}
+
+
+\begin{leftbar}
+...
+	
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+
+\begin{leftbar}
+...
+	
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+
+\begin{leftbar}
+...
 	
 \end{leftbar}
 
 \emph{Answers}. TODO 
  
- 
- 
+
+
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{com_lit}
+
+%%
+%% If your work has an appendix, this is the place to put it.
+%\appendix
+
 \end{document}
 
 

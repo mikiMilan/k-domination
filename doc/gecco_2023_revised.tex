@@ -48,6 +48,7 @@
 \usepackage{algorithmic}
 \usepackage{tikz,pgfplots,pgfplotstable}
 \pgfplotsset{scaled x ticks = false}
+\usepackage{comment}
 
 %\fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
@@ -228,13 +229,9 @@ The main algorithm components of this algorithm are:
 \end{comment}
 The contributions of our work can be summarized as follows:
 \begin{itemize}
-	
-	\item The control parameters of the VNS are tuned with genetic algorithm ~\texttt{PyGAD}~\cite{gad2021pygad}.  
-	
 	\item VNS for MkDPA significantly improves the state-of-the-art results for all considered problem instances, where $k \in \{1, 2, 4\}$.
 	
 	\item VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
-	
 	%\item  VNS approach scales better with increase in the instance size than so-far leading literature approaches. 
 \end{itemize}
 
@@ -429,9 +426,30 @@ In this section we analyze the quality of the proposed VNS method.\footnote{All 
  	\end{tabular}
  \end{table}
  
+ 
+  \begin{table}
+ 	\caption{Small to medium sized instances characteristics.}
+ 	\label{tab:small_instances_chars}  
+ 	\begin{tabular}{lrr|lrr}
+ 		City      & $|V|$ & $|E|$ 			& City     & $|V|$ & $|E|$ \\ \hline
+ 		Belgrade      & 19,586 & 7,561,185  &Belgrade      & 19,586 & 7,561,185\\ 
+ 		Berlin        & 29,461 & 9,944,851  &Belgrade      & 19,586 & 7,561,185\\
+ 		Boston        & 44,797 & 28,164,740  &Belgrade      & 19,586 & 7,561,185\\
+ 		Dublin        & 37,982 & 21,630,466  &Belgrade      & 19,586 & 7,561,185\\
+ 		Minsk         & 10,487 & 1,375,618  &Belgrade      & 19,586 & 7,561,185\\
+ 		Belgrade      & 19,586 & 7,561,185  &Belgrade      & 19,586 & 7,561,185\\ 
+ 		Berlin        & 29,461 & 9,944,851  &Belgrade      & 19,586 & 7,561,185\\
+ 		Boston        & 44,797 & 28,164,740  &Belgrade      & 19,586 & 7,561,185\\
+ 		Dublin        & 37,982 & 21,630,466  &Belgrade      & 19,586 & 7,561,185\\
+ 		Minsk         & 10,487 & 1,375,618  &Belgrade      & 19,586 & 7,561,185\\ \hline
+ 	\end{tabular}
+ \end{table}
+ 
  The characteristics of 20 small to medium sized instances can be found in~\cite{corcoran2021heuristics}.
  Unlike the five large networks, these 20 instances are exactly the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
-Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and edges of these instances.  
+Table~\ref{tab:small_instances_chars} show the number of vertices and edges of these instances.  
+\begin{comment}
+	content...
 
 \pgfplotstableread{ % Read the data into a table macro
     CityName	|V|
@@ -520,45 +538,30 @@ Figures~\ref{fig:novertex}--\ref{fig:noedges} show the number of vertices and ed
 	\caption{The number of edges in the small to medium sized instances.}
 	\label{fig:noedges}
 \end{figure}
- 
+\end{comment}}
  
  \emph{Testing environment}. Experiments were performed on a computer running Intel Core i9-9900KF CPU @3.6GHz with 64GB RAM, under Microsoft Windows 10 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
  PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
  
-  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 2000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
-   
-\subsection{Parameters tuning}
-   As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. The range of parameters used for tuning are given in Table~\ref{tab:domain_tuning}.
-   
-    \begin{table}[ht]
-    	\caption{VNS parameter ranges.}  
-    	\label{tab:domain_tuning}
-   	\begin{tabular}{lll}
-    Parameter       & Domain & Step \\ \hline
-   	$d_{min}$  &  [1, 10] & 1 \\
-   	$d_{max}$  & [2, 100] & 1\\
-   	$p_{move}$    & [0, 1] & 0.05 \\
-   	$penalty$ & [0.001, 0.02]  & 0.001 \\ \hline
-   	\end{tabular}
-   \end{table}
-   
-   As for the tuning tool, we have decided to use genetic algorithm called \texttt{PyGAD}. This implementation, proposed in ~\cite{gad2021pygad}, is available as an open-source Python library. All (20) small to medium sized problem instances were tuned separately  for each $k\in \{1, 2, 4\}$, resulting in a total of 60 control parameter configurations. 
-    \texttt{PyGAD} was used as an outer optimizer calling the inner VNS method in a multiprocessing manner -- each \texttt{PyGAD} chromosome (solution) encodes a single VNS control parameter configuration and corresponds to a separate process. VNS was limited to 100 iterations. The \texttt{PyGAD} parameters were as follows:
-\begin{itemize}
-	\item \emph{num\_generations = 50} -- number of generations;
-	\item \emph{num\_parents\_mating = 5} -- number of chromosomes selected as parents for the mating pool;
-	\item \emph{sol\_per\_pop = 10} -- number of chromosomes in the population;
-	\item \emph{mutation\_probability = 0.1}  -- the mutation probability;
-	\item \emph{num\_genes = 4} -- number of genes in the chromosome, the same as the number of control parameters of VNS. 
-\end{itemize}
+  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
   
-   %Details on the obtained configurations of the VNS %per each small-sized instance and each $k\in \{1, 2, 4\}$ produced by \texttt{PyGAD} tool 
-   %  can be found at \url{XXxxxx.com}
-     
- Parameter tuning for large instances was too inefficient. Therefore, we used reasonable manually configured parameters for these instances: $d_{min}=1, d_{max} = + \infty, p_{move}=0.5, penalty = 0.01$. (Note that $d_{max}$ has implicit upper bound -- it is set in line~\ref{vns:implicit_bound} of Algorithm~\ref{alg:vns}.)
+  This choice of termination criteria is inspired by the times presented in the literature ~\cite{corcoran2021heuristics}. The best results were given by BS4, where 4 stands for beam widths. For that algorithm, the authors for k=2 showed mean running times in seconds of 1736, 8834, 1257, 7156 and 3327 for the cities of Bath, Belfast, Brighton, Bristol and Cardiff respectively.
+  
+  As stated in ~\cite{corcoran2021heuristics}, all algorithms were implemented in the Python programming language and executed on a desktop computer with an Intel Core i7-8700 CPU. The criteria for termination of SG, PG and BS is finding the first feasible solution.
+   
+
+   \emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended by the literature~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:
+
+	\begin{itemize}
+		\item $d_{max}\in{\left\lbrace 5, 10, 15, 20, 25, 30, 40, 50, 100\right\rbrace }$
+		\item $p_{move}\in{\left\lbrace 0, 0.25, 0.5, 0.75, 1\right\rbrace }$
+		\item $penalty\in{\left\lbrace 0.005, 0.01, 0.015, 0.02\right\rbrace }$
+	\end{itemize}
+
+	A sample of 20 instances for grid search by width was chosen randomly from the set of small and medium instances and for  $k\in \{1, 2, 4\}$. A grid search by height was performed on a set of 180 configurations. For each instance and each configuration, the value of the fitness function was calculated. VNS was limited to 100 iterations. The best configuration $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$ was obtained using the rank method.
 
 \subsection{Experimental results }
- Tables~\ref{tab:k1}-\ref{tab:k4} contain the experimental results for $k \in \{1, 2,4\}$, respectively. The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
+ Tables~\ref{tab:k124} contain the experimental results for $k \in \{1, 2,4\}$.\textbf{Treba popraviti citav pasus} The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
  
 The following conclusions can be drawn from these results. 
    
@@ -569,7 +572,48 @@ The following conclusions can be drawn from these results.
   		
 \end{itemize}
  
-
+ 
+   \begin{table*}[t]
+ 	\caption{Results}
+ 	\label{tab:k124}  
+ 	\begin{tabular}{l|rr|rlr|rr|rlr|rr|rlr}
+ 		\hline
+ 		\multicolumn{1}{c|}{ } & \multicolumn{5}{c|}{ Results for k=1 } & \multicolumn{5}{c|}{ Results for k=2 } & \multicolumn{5}{c}{ Results for k=4 }\\ 
+ 		\hline
+ 		City & Best & Avg. & Alg. & Best & Avg.  & Best & Avg. & Alg. & Best & Avg.& Best & Avg. & Alg. & Best & Avg.\\ \hline
+ 		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\
+		Bath&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6&\bf{38}&38&BS4&43&44.6\\ 		
+ 		\hline
+ 		
+ 		
+ 	\end{tabular}
+ \end{table*}
+ 
+ 
+\begin{comment}
   \begin{table}
   	\caption{Results for k=1.}
   	\label{tab:k1}  
@@ -685,10 +729,11 @@ The following conclusions can be drawn from these results.
 		
 	\end{tabular}
 \end{table}
-
+\end{comment}
 
 The average times (in seconds) for reaching the best solution in VNS are shown as stacked bar graphs in Figures~\ref{fig:timeSmall}-\ref{fig:timeBig}.
 The smaller the size of an instance, the less time VNS takes on average to reach the best solution. Figures~\ref{fig:timeSmall}-\ref{fig:timeBig} clearly show that as $k$ increases, the average times to reach the best solutions increase rapidly. In case of the large instances, it can be seen from Figure~\ref{fig:timeBig} that the most time consuming instances in terms of reaching the best solution are \texttt{Boston} and \texttt{Dublin}. These two instances are indeed the largest in terms of number of vertices/edges (see Table~\ref{tab:big_instances_chars}).  
+
 
 
 \pgfplotstableread{ % Read the data into a table macro
@@ -721,8 +766,8 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 			legend style={legend columns=1,at={(1,1)},anchor=north east},
 			xbar stacked,   % Stacked horizontal bars
 			bar width=5pt,
-			width=0.45\textwidth,
-			height=300pt,
+			width=500pt,
+			height=200pt,
 			ytick=data,     % Use as many tick labels as y coordinates
 			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
 			]
@@ -736,37 +781,6 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 	\label{fig:timeSmall}  
 \end{figure}
 
-
-\pgfplotstableread{ % Read the data into a table macro
-	City	k1	k2	k4
-	Dublin	3301.775	5190.116	10035.541
-	Boston	3313.146	5707.734	9339.97
-	Berlin	2943.355	3363.764	3574.488
-	Belgrade	2604.035	3454.216	3441.493
-	Minsk	2086.718	2864.217	3364.123
-}\testdata
-
-
-\begin{figure}
-	\begin{tikzpicture}
-		\begin{axis}[
-			legend style={legend columns=1,at={(1,1)},anchor=north east},
-			xbar stacked,   % Stacked horizontal bars
-			bar width=5pt,
-			height=110pt,
-			width=0.45\textwidth,
-			ytick=data,     % Use as many tick labels as y coordinates
-			yticklabels from table={\testdata}{City}  % Get the labels from the Label column of the \datatable
-			]
-			\addplot [fill=cyan!20!green!40] table [x=k1, meta=City,y expr=\coordindex] {\testdata};   % "First" column against the data index
-			\addplot [fill=cyan!60!green!20] table [x=k2, meta=City,y expr=\coordindex] {\testdata};
-			\addplot [fill=cyan!10] table [x=k4, meta=City,y expr=\coordindex] {\testdata};
-			\legend{k=1, k=2,k=4}
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Average times (in seconds) of finding the best solution for large instances.}
-	\label{fig:timeBig}  
-\end{figure}
  
 \section{Conclusions and future work}
 
