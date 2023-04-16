@@ -101,6 +101,8 @@ class VNS:
         best_time = 0
         s_accept = set([])
         fit = self.local_search_best(s_accept)
+        if fit[0]==0:
+            best_time = time() - start_time
         iteration = 1
         d = self.d_min
 

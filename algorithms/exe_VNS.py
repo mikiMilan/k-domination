@@ -14,8 +14,8 @@ def task(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, pen
 
 if __name__ == '__main__':
     paralellism = 5
-    iteration_max = 1000000
-    time_limit = 3600
+    iteration_max = 20000
+    time_limit = 1800
     d_min = 1
     d_max = 50
     prob = 0.5
@@ -24,26 +24,18 @@ if __name__ == '__main__':
     
     
     instance_dir = 'cities_small_instances'
-    instances = ['southampton.txt', 'sunderland.txt', 'york.txt']
-
-    '''
-    'bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
-                        'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
-                        'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
-                        'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
-                      'sheffield.txt', 
-    '''
-
-    '''
-    instance_dir = 'cities_big_instances'
-    instances = ['belgrade.txt', 'berlin.txt', 'boston.txt', 'dublin.txt', 'minsk.txt']'''
+    instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
+                'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
+                'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
+                'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
+                'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
 
     seeds = [12345, 22411, 25233, 52331, 54278, 54433, 66655, 68531, 87744, 98811]
 
     batches = ceil(len(seeds)/paralellism)
 
-    for k in [2, 1]:
-        file_name_res = 'results/VNS/k_' + str(k) + '.txt'
+    for k in [1.2,4]:
+        file_name_res = 'results/VNS/new_k_' + str(k) + '.txt'
         for instance in instances:
             graph_open = instance_dir+'/'+instance
             print("Reading graph!")
