@@ -580,12 +580,36 @@ The following conclusions can be drawn from these results.
    \begin{table*}[t]
  	\caption{Results}
  	\label{tab:k124}  
- 	\begin{tabular}{l|rrr|rlrr|rrr|rlrr|rrr|rlrr}
+ 	\begin{tabular}{l|rr|rlr|rr|rlr|rr|rlr}
  		\hline
- 		\multicolumn{1}{c|}{ } & \multicolumn{7}{c|}{ Results for k=1 } & \multicolumn{7}{c|}{ Results for k=2 } & \multicolumn{7}{c}{ Results for k=4 }\\ 
+ 		\multicolumn{1}{c|}{ } & \multicolumn{5}{c|}{ Results for k=1 } & \multicolumn{5}{c|}{ Results for k=2 } & \multicolumn{5}{c}{ Results for k=4 }\\ 
  		\hline
- 		City & Best & Avg. & Dev.  & Alg. & Best & Avg. & Dev.  & Best & Avg. & Dev. & Alg. & Best & Avg.& Dev. & Best & Avg. & Dev. & Alg. & Best & Avg. & Dev. \\ \hline
- 		Bath&\bf{38}&38&38&BS4&43&44.6&44.6&\bf{38}&38&38&BS4&43&44.6&44.6&\bf{38}&38&38&BS4&43&44.6&44.6\\	
+ 		City & Avg. & Dev.  & Alg. & Avg. & Dev. & Avg. & Dev. & Alg. & Avg.& Dev. & Avg. & Dev. & Alg. & Avg. & Dev. \\ \hline
+ 		Bath&\bf{38}&0&BS4&44.6&0.9&\bf{71.1}&0.3&BS1&89&1.4&\bf{140.1}&0.7&BS4&160&1.1\\
+ 		Belfast&\bf{39}&0&BS4&50.2&1.5&\bf{76.3}&0.5&BS4&97.6&1&\bf{148.3}&0.7&BS4&179.6&2\\
+ 		Brighton&\bf{21}&0&BS4&28.2&0.6&\bf{40.1}&0.3&BS4&49.4&0.5&\bf{78}&0.5&BS4&94.8&1.9\\
+ 		Bristol&\bf{37}&0&BS2&47.4&1&\bf{73.8}&0.4&BS4&94&1.4&\bf{146.6}&1.1&BS4&176.4&0.8\\
+ 		Cardiff&\bf{39}&0&BS4&50.6&1&\bf{78.3}&0.5&BS4&95.6&1.6&\bf{157.5}&0.8&BS4&183.2&1.4\\
+ 		Coventry&\bf{38}&0&BS4&44.8&0.4&\bf{73}&0&BS4&85.1&0.7&\bf{149.2}&0.9&BS4&172.6&1.4\\
+ 		Exeter&\bf{38}&0&BS4&50.6&0.5&\bf{77}&0&BS4&95.7&1&\bf{158.1}&0.7&BS4&182.3&0.6\\
+ 		Glasgow&\bf{50.1}&0.3&BS4&59.2&0.7&\bf{94}&0.5&BS4&110.6&1.7&\bf{175.2}&0.9&BS4&199.8&1.6\\
+ 		Leeds&\bf{40}&0&BS4&52.4&0.8&\bf{79.5}&0.5&BS4&99.6&1&\bf{152.8}&0.8&BS4&187.1&0.7\\
+ 		Leicester&\bf{38}&0&BS4&51.5&0.5&\bf{75}&0&BS4&94.1&0.8&\bf{149.3}&0.7&BS4&177.7&1.8\\
+ 		Liverpool&\bf{28}&0&BS4&38.4&0.5&\bf{57}&0.5&BS4&72&0.8&\bf{112.8}&0.6&BS4&133&0.8\\
+ 		Manchester&\bf{38.3}&0.7&BS4&45.9&0.5&\bf{77.9}&0.3&BS4&91.5&0.9&\bf{155.2}&0.6&BS4&178.5&1\\
+ 		Newcastle&\bf{44}&0&BS4&52.6&1.1&\bf{83.6}&0.5&BS4&95.4&1.1&\bf{152.4}&0.5&BS2&171.5&1.2\\
+ 		Nottingham&\bf{44}&0&BS4&56.6&0.8&\bf{84.7}&0.5&BS4&103.3&0.8&\bf{164.2}&0.8&BS4&195.2&1.2\\
+ 		Oxford&\bf{24}&0&BS4&27.9&0.5&\bf{47}&0&BS4&54.9&0.7&\bf{89}&0&BS2&100.8&0.9\\
+ 		Plymouth&\bf{31}&0&BS4&40.3&0.8&\bf{61.3}&0.5&BS4&75&1.1&\bf{115.6}&0.5&BS4&137&1.2\\
+ 		Sheffield&\bf{42}&0&BS4&52.5&0.7&\bf{84.6}&0.5&BS4&98.9&1.3&\bf{161.4}&0.8&BS4&182.2&1.2\\
+ 		Southampton&\bf{25}&0&BS4&29.6&0.8&\bf{49.2}&0.4&BS4&61.1&0.7&\bf{97.6}&0.5&BS4&113.2&1.4\\
+ 		Sunderland&\bf{36}&0&BS4&46.3&0.4&\bf{73}&0&BS4&89.1&1.1&\bf{141}&0.5&BS4&163.6&1\\
+ 		York&\bf{32}&0&BS4&39.1&0.3&\bf{68}&0&BS4&77.6&0.6&\bf{130.4}&0.5&BS4&145.8&1.2\\
+ 		Belgrade&\bf{86.5}&1.5&PG&103.4&0.5&\bf{171.1}&2.4&PG&197.3&0.9&\bf{341.9}&2.2&SG&374.5&1.4\\
+ 		Berlin&\bf{102.1}&1.9&PG&125.9&0.5&\bf{204.9}&1.9&PG&240.1&1.2&\bf{396.4}&3.1&PG&446.2&1.8\\
+ 		Boston&\bf{94.3}&1.9&PG&102.7&1.3&\bf{175.4}&2&PG&191.6&0.9&\bf{341}&0&PG&368.7&1.5\\
+ 		Dublin&\bf{101.5}&1.1&PG&113.8&1.2&\bf{193.2}&4.8&PG&211.3&2.7&\bf{363}&0&PG&390.2&2\\
+ 		Minsk&\bf{102.1}&1.1&PG&126&0.9&\bf{200}&1.9&PG&240.4&1.4&\bf{387.7}&3.5&PG&457.6&2.4\\
  		\hline
  		
  		
