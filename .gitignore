@@ -18,3 +18,9 @@ doc/gecco_2023_poster.synctex(busy)
 doc/gecco_2023_poster.synctex.gz
 algorithms/.vscode/
 *.log
+/doc/gecco_2023_revised.synctex.gz
+/doc/gecco_2023_revised.aux
+/doc/gecco_2023_revised.bbl
+/doc/gecco_2023_revised.blg
+/doc/gecco_2023_revised.out
+/doc/gecco_2023_revised.pdf
