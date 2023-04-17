@@ -50,7 +50,7 @@
 \pgfplotsset{scaled x ticks = false}
 \usepackage{comment}
 
-%\fxsetup{status=draft} % <====== add this line
+ \fxsetup{status=draft} % <====== add this line
 \newtheorem{definition}{Definition}
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
@@ -203,7 +203,7 @@ In this paper we are concerned with solving a generalized version of the well-kn
 A graph $G=(V,E)$ is an abstract mathematical structure 
 in which $V$ represents a set of elements called vertices (or nodes) and a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In this paper, we are concerned with simple undirected graphs that have no loops and where the edges have no directions, i.e., $e = \{u,v\} = uv = vu \in E$.   Graphs serve as models for many real-world problems describing relationships among various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. 
 
-One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if every vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if each vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
 
 
 In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
@@ -402,7 +402,7 @@ In case of a vertex removal, the similar idea is used.
 
 \section{Experimental evaluation}\label{sec:experiments}
 
-In this section we analyze the quality of the proposed VNS method.\footnote{\textcolor{red}{All instances, source codes of the VNS and grid search tuning algorithms, and detailed experimental results are available on the GitHub page for this work: \\\url{https://github.com/mikiMilan/k-domination}}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
+In this section we analyze the quality of the proposed VNS method.\footnote{\textcolor{red}{All instances, source codes of the VNS and grid search tuning algorithms, and detailed experimental results are publicly available on the GitHub page of this work: \\\url{https://github.com/mikiMilan/k-domination}}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
 
 \begin{itemize}
 	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG;
@@ -412,7 +412,7 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
 \end{itemize}
 
 
-\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks \textcolor{red}{of large cities changed} over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled through reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks \textcolor{red}{of large cities change} over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}
 
 %, so their properties are given in %Table~\ref{tab:big_instances_chars}.  
 
@@ -555,12 +555,10 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
  
   The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
   
-  \textcolor{red}{This choice of termination criteria is inspired by the times presented in the literature ~\cite{corcoran2021heuristics}. The best results were given by BS4, where 4 stands for beam widths. For that algorithm, the authors for k=2 showed mean running times in seconds of 1736, 8834, 1257, 7156 and 3327 for the cities of Bath, Belfast, Brighton, Bristol and Cardiff respectively.}
-  
-  \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were implemented in the Python programming language and executed on a desktop computer with an Intel Core i7-8700 CPU. The criteria for termination of SG, PG and BS is finding the first feasible solution.}
+  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU\fxnote{Procesorska brzina treba da stoji ovdje kao najrelevantniji kriterij.}. The  terminating criterion of SG, PG and BS is when matching the first feasible solution.}
    
 
-   \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended by the literature~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:}
+   \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended in  ~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:}
 
 	\begin{itemize}
 		\item $d_{max}\in{\left\lbrace 5, 10, 15, 20, 25, 30, 40, 50, 100\right\rbrace }$
@@ -568,7 +566,7 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
 		\item $penalty\in{\left\lbrace 0.005, 0.01, 0.015, 0.02\right\rbrace }$
 	\end{itemize}
 
-	\textcolor{red}{A sample of 20 instances for grid search by width was chosen randomly from the set of small and medium instances and for  $k\in \{1, 2, 4\}$. A grid search by height was performed on a set of 180 configurations. For each instance and each configuration, the value of the fitness function was calculated. VNS was limited to 100 iterations. The best configuration $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$ was obtained using the rank method.}
+	\textcolor{red}{A sample of 20 instances for grid search by width was chosen randomly from the set of small and medium instances and for  $k\in \{1, 2, 4\}$. A grid search by height was performed on a set of 180 configurations. For each instance and each configuration, the value of the fitness function was calculated. VNS was limited to 100 iterations. The best configuration   was obtained using the rank method and is as follows: $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$.}
 
 \subsection{Experimental results }
  Tables~\ref{tab:k124} contain the experimental results for $k \in \{1, 2,4\}$.\textcolor{red}{Treba popraviti ostatak} The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
