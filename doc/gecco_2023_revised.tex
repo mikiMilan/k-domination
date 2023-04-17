@@ -172,21 +172,16 @@ In this paper we are concerned with solving a generalized version of the well-kn
 	<concept_desc>Theory of computation~Optimization with randomized search heuristics</concept_desc>
 	<concept_significance>500</concept_significance>
 	</concept>
-	<concept>
-	<concept_id>10003752.10003809.10003716.10011136.10011797.10011799</concept_id>
-	<concept_desc>Theory of computation~Evolutionary algorithms</concept_desc>
-	<concept_significance>300</concept_significance>
-	</concept>
+	
 	</ccs2012>
 \end{CCSXML}
 
 \ccsdesc[500]{Theory of computation~Optimization with randomized search heuristics}
-\ccsdesc[300]{Theory of computation~Evolutionary algorithms}
   
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Variable neighborhood search, graph domination, genetic algorithm,  parameter tuning}
+\keywords{Variable neighborhood search, graph domination, \textcolor{red}{metaheuristics, combinatorial optimization}}
 
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
@@ -328,7 +323,9 @@ Therefore, the proposed fitness function evaluates both feasible and infeasible 
 
 \subsection{Local search}\label{sec:local_search}
 The goal of local search (LS) is to improve the solution $D'$ obtained in the shaking phase by applying multiple local improvements to the structure of the solution. 
-The LS tailored to MkDP is described in Algorithm~\ref{alg:ls}.
+
+\begin{comment}
+    The LS tailored to MkDP is described in Algorithm~\ref{alg:ls}.
 
   \begin{algorithm}[!t] 
   	\caption{\texttt{LocalSearch}}\label{alg:ls}
@@ -376,12 +373,15 @@ The LS tailored to MkDP is described in Algorithm~\ref{alg:ls}.
   		\STATE return $D_{best}$
   	\end{algorithmic}
 \end{algorithm}
+\end{comment}
+
 
 Our LS procedure consists of two phases. In the first phase, the vertices are added to achieve feasibility -- when the solution is not feasible. In the second phase, the vertices are removed to improve the objective function. The removal is done in a way that does not affect the feasibility previously achieved. 
 In both phases, the best improvement strategy is used. This means that all eligible vertices are checked for inclusion/exclusion and then the best vertex is included/excluded. 
 Each phase ends with the first iteration where no improvement in fitness is found.  
 
-\emph{Fast fitness evaluation}. Computing the fitness function (\ref{eq:fitness}) takes $O(|E|)$ time -- the most time consuming part is computing the $\emph{violations}(\cdot)$  function. For dense graphs, this complexity can go up to $O(|V|^2)$. Since local search makes many fitness function calls it is too costly to compute the fitness function from scratch every time. In order to execute \texttt{LocalSearch} procedure  efficiently, fast calculations of the fitness function are applied. Before LS enters the first \texttt{while} loop, $C(D_{best}, v), \forall v \in V$ for given solution $D_{best}$ are computed and saved. During vertex addition, that is  $D' = D_{best} \cup \{v\} $, $violations(D')$ is calculated in the following way: 
+\begin{comment}
+    \emph{Fast fitness evaluation}. Computing the fitness function (\ref{eq:fitness}) takes $O(|E|)$ time -- the most time consuming part is computing the $\emph{violations}(\cdot)$  function. For dense graphs, this complexity can go up to $O(|V|^2)$. Since local search makes many fitness function calls it is too costly to compute the fitness function from scratch every time. In order to execute \texttt{LocalSearch} procedure  efficiently, fast calculations of the fitness function are applied. Before LS enters the first \texttt{while} loop, $C(D_{best}, v), \forall v \in V$ for given solution $D_{best}$ are computed and saved. During vertex addition, that is  $D' = D_{best} \cup \{v\} $, $violations(D')$ is calculated in the following way: 
 
 \begin{multline}
 violations(D') = violations(D_{best}) \\
@@ -397,11 +397,12 @@ Otherwise, if vertex $v$ has previously violated the $k$-domination condition, t
 The part $- \sum_{w\in N(v) \setminus D_{best}} \texttt{I}_{(C(D_{best}, w)<k)}$ adjust for the effect on the vertex $v$ neighbors, which were not in the $k$-dominating set $D_{best}$, i.e. $W=N(v) \setminus D_{best}$. If some of these vertices $w \in W$ violated $k$-domination condition, adding the adjacent vertex $v$ to the solution reduces the total violations. Otherwise, if a vertex $w$ was satisfied, adding $v$ to the solution does not change anything.  
  
 In case of a vertex removal, the similar idea is used. 
+\end{comment}
 
 
 \section{Experimental evaluation}\label{sec:experiments}
 
-In this section we analyze the quality of the proposed VNS method.\footnote{All instances, source codes of the VNS and GA tuning algorithms, and detailed experimental results are available on the GitHub page for this work: \url{anonymous URL}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
+In this section we analyze the quality of the proposed VNS method.\footnote{\textcolor{red}{All instances, source codes of the VNS and grid search tuning algorithms, and detailed experimental results are available on the GitHub page for this work: \\\url{https://github.com/mikiMilan/k-domination}}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
 
 \begin{itemize}
 	\item The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG;
@@ -411,9 +412,12 @@ In this section we analyze the quality of the proposed VNS method.\footnote{All 
 \end{itemize}
 
 
-\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}, so their properties are given in Table~\ref{tab:big_instances_chars}.  
- 
- \begin{table}
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled as reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: Belgrade, Berlin, Boston, Dublin, and Minsk. Since the road networks \textcolor{red}{of large cities changed} over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}
+
+%, so their properties are given in %Table~\ref{tab:big_instances_chars}.  
+
+\begin{comment}
+    \begin{table}
  	\caption{Large-sized instance characteristics.}
  	\label{tab:big_instances_chars}  
  	\begin{tabular}{lrr}
@@ -447,9 +451,13 @@ In this section we analyze the quality of the proposed VNS method.\footnote{All 
  	\end{tabular}
  \end{table}
  
+\end{comment}
+
+ 
  The characteristics of 20 small to medium sized instances can be found in~\cite{corcoran2021heuristics}.
  Unlike the five large networks, these 20 instances are exactly the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
-\textcolor{red}{Table~\ref{tab:small_instances_chars} show the number of vertices and edges of these instances.}  
+
+%\textcolor{red}{Table~\ref{tab:small_instances_chars} show the number %of vertices and edges of these instances.}  
 \begin{comment}
 	content...
 
@@ -573,174 +581,54 @@ The following conclusions can be drawn from these results.
   		\item The situation is similar for $k=4$. VNS outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where VNS achieved a score 165 over BS4 which achieved a score 193). For the large instances, VNS again outperforms PG in all cases. 
   		
 \end{itemize}
- 
- 
- \textcolor{red}{Trebamo se dogovoriti sta cemo prikazati u tabeli - jedan od autora je trazio std devijaciju}
+
  
    \begin{table*}[t]
+   \scriptsize
  	\caption{Results}
  	\label{tab:k124}  
- 	\begin{tabular}{l|rr|rlr|rr|rlr|rr|rlr}
+ 	\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
  		\hline
- 		\multicolumn{1}{c|}{ } & \multicolumn{5}{c|}{ Results for k=1 } & \multicolumn{5}{c|}{ Results for k=2 } & \multicolumn{5}{c}{ Results for k=4 }\\ 
+ 		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Dimension} & \multicolumn{6}{c|}{ Results for k=1 } & \multicolumn{6}{c|}{ Results for k=2 } & \multicolumn{6}{c}{ Results for k=4 }\\ 
  		\hline
- 		City & Avg. & Dev.  & Alg. & Avg. & Dev. & Avg. & Dev. & Alg. & Avg.& Dev. & Avg. & Dev. & Alg. & Avg. & Dev. \\ \hline
- 		Bath&\bf{38}&0&BS4&44.6&0.9&\bf{71.1}&0.3&BS1&89&1.4&\bf{140.1}&0.7&BS4&160&1.1\\
- 		Belfast&\bf{39}&0&BS4&50.2&1.5&\bf{76.3}&0.5&BS4&97.6&1&\bf{148.3}&0.7&BS4&179.6&2\\
- 		Brighton&\bf{21}&0&BS4&28.2&0.6&\bf{40.1}&0.3&BS4&49.4&0.5&\bf{78}&0.5&BS4&94.8&1.9\\
- 		Bristol&\bf{37}&0&BS2&47.4&1&\bf{73.8}&0.4&BS4&94&1.4&\bf{146.6}&1.1&BS4&176.4&0.8\\
- 		Cardiff&\bf{39}&0&BS4&50.6&1&\bf{78.3}&0.5&BS4&95.6&1.6&\bf{157.5}&0.8&BS4&183.2&1.4\\
- 		Coventry&\bf{38}&0&BS4&44.8&0.4&\bf{73}&0&BS4&85.1&0.7&\bf{149.2}&0.9&BS4&172.6&1.4\\
- 		Exeter&\bf{38}&0&BS4&50.6&0.5&\bf{77}&0&BS4&95.7&1&\bf{158.1}&0.7&BS4&182.3&0.6\\
- 		Glasgow&\bf{50.1}&0.3&BS4&59.2&0.7&\bf{94}&0.5&BS4&110.6&1.7&\bf{175.2}&0.9&BS4&199.8&1.6\\
- 		Leeds&\bf{40}&0&BS4&52.4&0.8&\bf{79.5}&0.5&BS4&99.6&1&\bf{152.8}&0.8&BS4&187.1&0.7\\
- 		Leicester&\bf{38}&0&BS4&51.5&0.5&\bf{75}&0&BS4&94.1&0.8&\bf{149.3}&0.7&BS4&177.7&1.8\\
- 		Liverpool&\bf{28}&0&BS4&38.4&0.5&\bf{57}&0.5&BS4&72&0.8&\bf{112.8}&0.6&BS4&133&0.8\\
- 		Manchester&\bf{38.3}&0.7&BS4&45.9&0.5&\bf{77.9}&0.3&BS4&91.5&0.9&\bf{155.2}&0.6&BS4&178.5&1\\
- 		Newcastle&\bf{44}&0&BS4&52.6&1.1&\bf{83.6}&0.5&BS4&95.4&1.1&\bf{152.4}&0.5&BS2&171.5&1.2\\
- 		Nottingham&\bf{44}&0&BS4&56.6&0.8&\bf{84.7}&0.5&BS4&103.3&0.8&\bf{164.2}&0.8&BS4&195.2&1.2\\
- 		Oxford&\bf{24}&0&BS4&27.9&0.5&\bf{47}&0&BS4&54.9&0.7&\bf{89}&0&BS2&100.8&0.9\\
- 		Plymouth&\bf{31}&0&BS4&40.3&0.8&\bf{61.3}&0.5&BS4&75&1.1&\bf{115.6}&0.5&BS4&137&1.2\\
- 		Sheffield&\bf{42}&0&BS4&52.5&0.7&\bf{84.6}&0.5&BS4&98.9&1.3&\bf{161.4}&0.8&BS4&182.2&1.2\\
- 		Southampton&\bf{25}&0&BS4&29.6&0.8&\bf{49.2}&0.4&BS4&61.1&0.7&\bf{97.6}&0.5&BS4&113.2&1.4\\
- 		Sunderland&\bf{36}&0&BS4&46.3&0.4&\bf{73}&0&BS4&89.1&1.1&\bf{141}&0.5&BS4&163.6&1\\
- 		York&\bf{32}&0&BS4&39.1&0.3&\bf{68}&0&BS4&77.6&0.6&\bf{130.4}&0.5&BS4&145.8&1.2\\
- 		Belgrade&\bf{86.5}&1.5&PG&103.4&0.5&\bf{171.1}&2.4&PG&197.3&0.9&\bf{341.9}&2.2&SG&374.5&1.4\\
- 		Berlin&\bf{102.1}&1.9&PG&125.9&0.5&\bf{204.9}&1.9&PG&240.1&1.2&\bf{396.4}&3.1&PG&446.2&1.8\\
- 		Boston&\bf{94.3}&1.9&PG&102.7&1.3&\bf{175.4}&2&PG&191.6&0.9&\bf{341}&0&PG&368.7&1.5\\
- 		Dublin&\bf{101.5}&1.1&PG&113.8&1.2&\bf{193.2}&4.8&PG&211.3&2.7&\bf{363}&0&PG&390.2&2\\
- 		Minsk&\bf{102.1}&1.1&PG&126&0.9&\bf{200}&1.9&PG&240.4&1.4&\bf{387.7}&3.5&PG&457.6&2.4\\
+ 		City & $|V|$ & $|E|$ & Avg. & SD& t & Alg. & Avg. & SD & Avg. & SD & t& Alg. & Avg.& SD & Avg. & SD & t& Alg. & Avg. & SD \\ \hline
+ 		Bath& 910& 18,560 &\bf{38}&0&xxxx&BS4&44.6&0.9&\bf{71.1}&0.3&xxxx&BS1&89&1.4&\bf{140.1}&0.7&xxxx&BS4&160&1.1\\
+ 		Belfast&1,700&62,617&\bf{39}&0&xxxx&BS4&50.2&1.5&\bf{76.3}&0.5&xxxx&BS4&97.6&1&\bf{148.3}&0.7&xxxx&BS4&179.6&2\\
+ 		Brighton&976&35,012&\bf{21}&0&xxxx&BS4&28.2&0.6&\bf{40.1}&0.3&xxxx&BS4&49.4&0.5&\bf{78}&0.5&xxxx&BS4&94.8&1.9\\
+ 		Bristol&1,569&47,522&\bf{37}&0&xxxx&BS2&47.4&1&\bf{73.8}&0.4&xxxx&BS4&94&1.4&\bf{146.6}&1.1&xxxx&BS4&176.4&0.8\\
+ 		Cardiff&1,127&23,155&\bf{39}&0&xxxx&BS4&50.6&1&\bf{78.3}&0.5&xxxx&BS4&95.6&1.6&\bf{157.5}&0.8&xxxx&BS4&183.2&1.4\\
+ 		Coventry&1,175&26,689&\bf{38}&0&xxxx&BS4&44.8&0.4&\bf{73}&0&xxxx&BS4&85.1&0.7&\bf{149.2}&0.9&xxxx&BS4&172.6&1.4\\
+ 		Exeter&1,250&31,997&\bf{38}&0&xxxx&BS4&50.6&0.5&\bf{77}&0&xxxx&BS4&95.7&1&\bf{158.1}&0.7&xxxx&BS4&182.3&0.6\\
+ 		Glasgow&1,137&24,323&\bf{50.1}&0.3&xxxx&BS4&59.2&0.7&\bf{94}&0.5&xxxx&BS4&110.6&1.7&\bf{175.2}&0.9&xxxx&BS4&199.8&1.6\\
+ 		Leeds&1,647&56,511&\bf{40}&0&xxxx&BS4&52.4&0.8&\bf{79.5}&0.5&xxxx&BS4&99.6&1&\bf{152.8}&0.8&xxxx&BS4&187.1&0.7\\
+ 		Leicester&1,531&48,219&\bf{38}&0&xxxx&BS4&51.5&0.5&\bf{75}&0&xxxx&BS4&94.1&0.8&\bf{149.3}&0.7&xxxx&BS4&177.7&1.8\\
+ 		Liverpool&1,273&42,564&\bf{28}&0&xxxx&BS4&38.4&0.5&\bf{57}&0.5&xxxx&BS4&72&0.8&\bf{112.8}&0.6&xxxx&BS4&133&0.8\\
+ 		Manchester&1,991&77,286&\bf{38.3}&0.7&xxxx&BS4&45.9&0.5&\bf{77.9}&0.3&xxxx&BS4&91.5&0.9&\bf{155.2}&0.6&xxxx&BS4&178.5&1\\
+ 		Newcastle&1,109&26,614&\bf{44}&0&xxxx&BS4&52.6&1.1&\bf{83.6}&0.5&xxxx&BS4&95.4&1.1&\bf{152.4}&0.5&xxxx&BS2&171.5&1.2\\
+ 		Nottingham&1,739&51,595&\bf{44}&0&xxxx&BS4&56.6&0.8&\bf{84.7}&0.5&xxxx&BS4&103.3&0.8&\bf{164.2}&0.8&xxxx&BS4&195.2&1.2\\
+ 		Oxford&479&8,396&\bf{24}&0&xxxx&BS4&27.9&0.5&\bf{47}&0&xxxx&BS4&54.9&0.7&\bf{89}&0&xxxx&BS2&100.8&0.9\\
+ 		Plymouth&1,122&35,070&\bf{31}&0&xxxx&BS4&40.3&0.8&\bf{61.3}&0.5&xxxx&BS4&75&1.1&\bf{115.6}&0.5&xxxx&BS4&137&1.2\\
+ 		Sheffield&1,582&50,534&\bf{42}&0&xxxx&BS4&52.5&0.7&\bf{84.6}&0.5&xxxx&BS4&98.9&1.3&\bf{161.4}&0.8&xxxx&BS4&182.2&1.2\\
+ 		Southampton&796&19,942&\bf{25}&0&xxxx&BS4&29.6&0.8&\bf{49.2}&0.4&xxxx&BS4&61.1&0.7&\bf{97.6}&0.5&xxxx&BS4&113.2&1.4\\
+ 		Sunderland&1,346&42,013&\bf{36}&0&xxxx&BS4&46.3&0.4&\bf{73}&0&xxxx&BS4&89.1&1.1&\bf{141}&0.5&xxxx&BS4&163.6&1\\
+ 		York&1,044&23,774&\bf{32}&0&xxxx&BS4&39.1&0.3&\bf{68}&0&xxxx&BS4&77.6&0.6&\bf{130.4}&0.5&xxxx&BS4&145.8&1.2\\
+ 		Belgrade&1,9586&7,561,185&\bf{86.5}&1.5&xxxx&PG&103.4&0.5&\bf{171.1}&2.4&xxxx&PG&197.3&0.9&\bf{341.9}&2.2&xxxx&SG&374.5&1.4\\
+ 		Berlin&29,461&9,944,851&\bf{102.1}&1.9&xxxx&PG&125.9&0.5&\bf{204.9}&1.9&xxxx&PG&240.1&1.2&\bf{396.4}&3.1&xxxx&PG&446.2&1.8\\
+ 		Boston&44,797&28,164,740&\bf{94.3}&1.9&xxxx&PG&102.7&1.3&\bf{175.4}&2&xxxx&PG&191.6&0.9&\bf{341}&0&xxxx&PG&368.7&1.5\\
+ 		Dublin&37,982&21,630,466&\bf{101.5}&1.1&xxxx&PG&113.8&1.2&\bf{193.2}&4.8&xxxx&PG&211.3&2.7&\bf{363}&0&xxxx&PG&390.2&2\\
+ 		Minsk&10,487&1,375,618&\bf{102.1}&1.1&xxxx&PG&126&0.9&\bf{200}&1.9&xxxx&PG&240.4&1.4&\bf{387.7}&3.5&xxxx&PG&457.6&2.4\\
  		\hline
- 		
- 		
+ 				
  	\end{tabular}
  \end{table*}
  
- 
+The average times (in seconds) for reaching the best solution in VNS \textcolor{red}{are also shown in ~\ref{tab:k124}}.
+The smaller the size of an instance, the less time VNS takes on average to reach the best solution \textcolor{red}{-- Table~\ref{tab:k124}} clearly show that as $k$ increases, the average times to reach the best solutions increase rapidly. In case of the large instances, it can be seen that the most time consuming instances in terms of reaching the best solution are \texttt{Boston} and \texttt{Dublin}. These two instances are indeed the largest in terms of number of vertices/edges.
+
+%(see Table~\ref{tab:big_instances_chars}).  
+
 \begin{comment}
-  \begin{table}
-  	\caption{Results for k=1.}
-  	\label{tab:k1}  
- 	\begin{tabular}{l|rr|rlrr}
- 	\hline
- 	\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
- 	\hline
-	City & Best & Avg. & Alg. & Best & Avg. \\ \hline
-	Bath&\bf{38}&38&BS4&43&44.6\\
-	Belfast&\bf{39}&39&BS4&48&50.2\\
-	Brighton&\bf{21}&21&BS4&28&28.2\\
-	Bristol&\bf{37}&37&BS2&46&47.4\\
-	Cardiff&\bf{39}&39&BS4&48&50.6\\
-	Coventry&\bf{38}&38.2&BS4&44&44.8\\
-	Exeter&\bf{38}&38&BS4&50&50.6\\
-	Glasgow&\bf{50}&50.2&BS4&58&59.2\\
-	Leeds&\bf{40}&40&BS4&51&52.4\\
-	Leicester&\bf{38}&38&BS4&51&51.5\\
-	Liverpool&\bf{28}&28&BS4&38&38.4\\
-	Manchester&\bf{38}&38.8&BS4&45&45.9\\
-	Newcastle&\bf{44}&44&BS4&51&52.6\\
-	Nottingham&\bf{44}&44&BS4&55&56.6\\
-	Oxford&\bf{24}&24&BS4&27&27.9\\
-	Plymouth&\bf{31}&31&BS4&39&40.3\\
-	Sheffield&\bf{42}&42&BS4&51&52.5\\
-	Southampton&\bf{25}&25&BS4&28&29.6\\
-	Sunderland&\bf{36}&36&BS4&46&46.3\\
-	York&\bf{32}&32&BS4&39&39.1\\  \hline  \hline
-	Belgrade&\bf{85}&88.4&PG&103&103.4\\
-	Berlin&\bf{102}&104.5&PG&125&125.9\\
-	Boston&\bf{99}&101.2&PG&101&102.7\\
-	Dublin&\bf{93}&99&PG&112&113.8\\
-	Minsk&\bf{100}&102&PG&125&126\\
-	\hline
-
-	
- 	\end{tabular}
- \end{table}
-
-\begin{table}
-	\caption{Results for $k=2$.}
-	\label{tab:k2}  
-	\begin{tabular}{l|rr|rlr}
-		\hline
-		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
-		\hline
-		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
-		Bath&\bf{71}&71.8&BS1&86&89\\
-		Belfast&\bf{76}&76.2&BS4&96&97.6\\
-		Brighton&\bf{40}&41.1&BS4&49&49.4\\
-		Bristol&\bf{73}&73.7&BS4&91&94\\
-		Cardiff&\bf{79}&79.4&BS4&92&95.6\\
-		Coventry&\bf{73}&73.2&BS4&84&85.1\\
-		Exeter&\bf{77}&77.3&BS4&94&95.7\\
-		Glasgow&\bf{93}&94.2&BS4&108&110.6\\
-		Leeds&\bf{79}&80.5&BS4&98&99.6\\
-		Leicester&\bf{75}&75.2&BS4&93&94.1\\
-		Liverpool&\bf{57}&57&BS4&71&72\\
-		Manchester&\bf{77}&78.4&BS4&90&91.5\\
-		Newcastle&\bf{83}&84.3&BS4&94&95.4\\
-		Nottingham&\bf{84}&85.3&BS4&102&103.3\\
-		Oxford&\bf{47}&47&BS4&54&54.9\\
-		Plymouth&\bf{62}&62.1&BS4&73&75\\
-		Sheffield&\bf{84}&84.7&BS4&97&98.9\\
-		Southampton&\bf{50}&50.1&BS4&60&61.1\\
-		Sunderland&\bf{73}&73.7&BS4&87&89.1\\
-		York&\bf{68}&68&BS4&77&77.6\\ \hline \hline
-		Belgrade&\bf{169}&172.3&PG&196&197.3\\
-		Berlin&\bf{206}&207.1&PG&239&240.1\\
-		Boston&\bf{181}&194.6&PG&190&191.6\\
-		Dublin&\bf{181}&184.4&PG&209&211.3\\
-		Minsk&\bf{197}&201.1&PG&238&240.4\\
-		\hline
-
-	\end{tabular}
-\end{table}
-
-\begin{table}
-	\caption{Results for $k=4$.}
-	\label{tab:k4}  
-	\begin{tabular}{l|rr|rlrr}
-		\hline
-		\multicolumn{1}{c}{ } & \multicolumn{2}{|c}{VNS} & \multicolumn{3}{|c}{Literature} \\
-		\hline
-		City & Best & Avg. & Alg. & Best & Avg. \\ \hline
-		Bath&\bf{139}&140.4&BS4&159&160\\
-		Belfast&\bf{147}&148.5&BS4&177&179.6\\
-		Brighton&\bf{78}&79.3&BS4&92&94.8\\
-		Bristol&\bf{145}&146.7&BS4&175&176.4\\
-		Cardiff&\bf{160}&161.9&BS4&181&183.2\\
-		Coventry&\bf{150}&150.6&BS4&170&172.6\\
-		Exeter&\bf{157}&158.3&BS4&181&182.3\\
-		Glasgow&\bf{174}&175.4&BS4&197&199.8\\
-		Leeds&\bf{152}&152.4&BS4&186&187.1\\
-		Leicester&\bf{151}&152.6&BS4&175&177.7\\
-		Liverpool&\bf{112}&114&BS4&132&133\\
-		Manchester&\bf{154}&156.4&BS4&177&178.5\\
-		Newcastle&\bf{153}&154.8&BS2&169&171.5\\
-		Nottingham&\bf{165}&166.6&BS4&193&195.2\\
-		Oxford&\bf{89}&89.2&BS2&99&100.8\\
-		Plymouth&\bf{115}&116&BS4&135&137\\
-		Sheffield&\bf{160}&161.6&BS4&180&182.2\\
-		Southampton&\bf{97}&97.8&BS4&112&113.2\\
-		Sunderland&\bf{142}&142.5&BS4&162&163.6\\
-		York&\bf{129}&130.1&BS4&144&145.8\\ \hline \hline
-		Belgrade&\bf{344}&346.3&PG&372&374.5\\
-		Berlin&\bf{408}&409.2&PG&444&446.2\\
-		Boston&\bf{341}&341&PG&367&368.7\\
-		Dublin&\bf{363}&363&PG&388&390.2\\
-		Minsk&\bf{387}&391.5&PG&454&457.6\\
-		\hline
-
-		
-	\end{tabular}
-\end{table}
-\end{comment}
-
-The average times (in seconds) for reaching the best solution in VNS are shown as stacked bar graphs in Figures~\ref{fig:timeSmall}-\ref{fig:timeBig}.
-The smaller the size of an instance, the less time VNS takes on average to reach the best solution. Figures~\ref{fig:timeSmall}-\ref{fig:timeBig} clearly show that as $k$ increases, the average times to reach the best solutions increase rapidly. In case of the large instances, it can be seen from Figure~\ref{fig:timeBig} that the most time consuming instances in terms of reaching the best solution are \texttt{Boston} and \texttt{Dublin}. These two instances are indeed the largest in terms of number of vertices/edges (see Table~\ref{tab:big_instances_chars}).  
-
- \textcolor{red}{Trebamo se dogovoriti kako cemo prikazati vremena - imali smo gresaka u verziji koju smo poslali. npr. nusu samo dublin i boston izasli iz opsega od 30 min bilo ih je jos. U NOVIM rezultatima takvog odstupanja NEMA.}
-
-
+    
 \pgfplotstableread{ % Read the data into a table macro
 	City	k1	k2	k4
 	Manchester	844.078	1608.695	2584.787
@@ -784,6 +672,8 @@ The smaller the size of an instance, the less time VNS takes on average to reach
 	\label{fig:timeSmall}  
 \end{figure}
 
+\end{comment}
+
  
 \section{Conclusions and future work}
 
@@ -793,7 +683,8 @@ The smaller the size of an instance, the less time VNS takes on average to reach
  For future work, one could consider improving the VNS to work more efficiently with very large graphs, such as social networks. Also, VNS could be compared to exact approaches such as integer linear programming models, solved by state-of-the art solvers, such as Cplex or Gurobi. 
   
 \section*{Acknowledgments} 
-We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations. 
+We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations. \\
+\textcolor{red}{A.~Kartelj was supported by grant 451-03-47/2023-01/200104 funded by Ministry of Science Technological Development and Innovations of the Republic of Serbia.}
 %%
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
