@@ -172,29 +172,105 @@ Minor issues:
 
 
 \begin{leftbar}
- \textcolor{red}{Nisam stigao odgovoriti na ova pitanja, mada su zamjerke slične kao i prvog autora}
-
-	
+There is a fundamental issue with the tuning performed, which is done per instance without any intention of searching for parameter configurations that can generalize to unseen instances. Moreover, it seems the same effort was not applied to tune the other competing algorithms, which makes the comparison quite unfair. In particular, beam-search has a number of very fundamental parameters that would benefit from being tuned according to the instance size.	
 \end{leftbar}
 
 \emph{Answers}. TODO 
 
 
 \begin{leftbar}
-...
-	
+The approach makes even less sense in the case of parameters such as dmin and dmax that have a strong effect in constraining the set of solutions that are searched. Moreover, a wrong value of those parameters can effectively make impossible finding an infeasible solution. Thus tuning them only makes sense if one knows the actual optimal solution, which is not generally true. For unseen instances of a given size, one could calculate good values based on the properties of the graph.	
 \end{leftbar}
 
 \emph{Answers}. TODO 
 
 
 \begin{leftbar}
-...
-	
+Another issue is that results on small and medium instances are taken from a different paper but it is unclear if those papers used a similar termination criterion on a similar powerful computer. Even assuming that for the small and medium instances the timelimit of 30 minutes is not reached and the VNS stops after the maximum number of 2000 iterations, it is unclear how those iterations are comparable with the termination criterion of SG, PG and BS.
 \end{leftbar}
 
 \emph{Answers}. TODO 
  
+\begin{leftbar}
+The paper lists as a contribution that the parameters are tuned. But properly tuning parameters is just a step of proper experimental comparison and not a scientific contribution. It would similar to saying that a contribution of the paper is to do statistical tests to assess significance.
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+The tables should report variance (or std. deviation) to show the variance of across multiple runs. Without variances, it cannot be said if the performance difference is sufficiently clear or a statistical test is needed to assess significance.
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+The tables could also report running times, both for VNS and the algorithm of the literature (there is plenty of space in the paper).
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+The paper claims that VNS is stopped after 30 minutes, however, figures 3 and 4 show runtimes longer than 1800 seconds
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+The stacked bars in Figs 3 and 4 are difficult to understand: For example, does a run for Manchester with k=4 take 5000 seconds or 5000 - 2500? Having the bars side by side will make more sense and avoid such questions.	
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+"The time limit of 30 minutes is not checked during initialization […] This means that VNS can take more than 30 minutes to finish"
+-> However, it also means that VNS does not execute and only the initial local search has an effect. So one may wonder how much of the work reported is done by the initial local search rather than the actual VNS algorithm.
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+"each processor outside the must have" -> the dominating set?
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+"All (20) small to medium sized problem instances were tuned separately for each $k\in\left\lbrace 1, 2, 4\right\rbrace $, resulting in a total of 60 control parameter configurations. […] Parameter tuning for large instances was too inefficient. Therefore, we used reasonable manually configured parameters for these
+instances"
+-> This approach is fundamentally wrong since it is overfitting the parameters to each problem instance. Which parameter settings should be used for a new unseen instance of the problem? The fact that it was not possible to extrapolate the parameters found in small and medium sized instances to larger instances clearly indicates that nothing was learned from this tuning effort due to being too specific and not general enough.
+
+This is why actual parameter tuning methods encourage a clear separation between training and testing instances. See:
+
+https://doi.org/10.1613/jair.2861
+
+https://doi.org/10.1016/j.orp.2016.09.002
+
+Moreover, the parameters could be tuned per groups of similar instance size and an extrapolation done for larger instances: Franco Mascia, Mauro Birattari, and Thomas Stützle. Tuning Algorithms for Tackling Large Instances: An Experimental Protocol. In P. M. Pardalos and G. Nicosia, editors, Learning and Intelligent Optimization, 7th International Conference, LION 7, volume 7997 of Lecture Notes in Computer Science, pp. 410–422. Springer, Heidelberg, 2013.	
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+\begin{leftbar}
+	The datasets and codes could have been made available for review via the supplementary material or an anonymous Zenodo upload.
+\end{leftbar}
+
+\emph{Answers}. TODO 
+
+
+
+\begin{center} Comments from \textit{Reviewer\ \#4}
+
+\end{center}
+
+\begin{leftbar}
+	The paper proposes an efficient search metaheuristic for solving the k-domination problem.
+	
+	It describes the motivation and method clearly. The experiment description, including parameter tuning, is detailed and could thus be likely reproduced from the paper.
+	
+	The algorithmic components are motivated well (both in terms of efficiency and solution quality) and demonstrably improve over the chosen baselines empirically. While I feel that I cannot judge whether the baselines and benchmark are appropriate for the evaluation, the results are convincing to me. I therefore recommend accepting the paper.
+\end{leftbar}
+
+\emph{Answers}. TODO 
 
 
 

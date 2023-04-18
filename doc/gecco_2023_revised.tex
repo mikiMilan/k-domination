@@ -555,7 +555,7 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
  
   The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
   
-  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU\fxnote{Procesorska brzina treba da stoji ovdje kao najrelevantniji kriterij.}. The  terminating criterion of SG, PG and BS is when matching the first feasible solution.}
+  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU @3.20GHz. The terminating criterion of SG, PG and BS is when matching the first feasible solution.}
    
 
    \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended in  ~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:}
@@ -590,31 +590,31 @@ The following conclusions can be drawn from these results.
  		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Dimension} & \multicolumn{6}{c|}{ Results for k=1 } & \multicolumn{6}{c|}{ Results for k=2 } & \multicolumn{6}{c}{ Results for k=4 }\\ 
  		\hline
  		City & $|V|$ & $|E|$ & Avg. & SD& t & Alg. & Avg. & SD & Avg. & SD & t& Alg. & Avg.& SD & Avg. & SD & t& Alg. & Avg. & SD \\ \hline
- 		Bath& 910& 18,560 &\bf{38}&0&xxxx&BS4&44.6&0.9&\bf{71.1}&0.3&xxxx&BS1&89&1.4&\bf{140.1}&0.7&xxxx&BS4&160&1.1\\
- 		Belfast&1,700&62,617&\bf{39}&0&xxxx&BS4&50.2&1.5&\bf{76.3}&0.5&xxxx&BS4&97.6&1&\bf{148.3}&0.7&xxxx&BS4&179.6&2\\
- 		Brighton&976&35,012&\bf{21}&0&xxxx&BS4&28.2&0.6&\bf{40.1}&0.3&xxxx&BS4&49.4&0.5&\bf{78}&0.5&xxxx&BS4&94.8&1.9\\
- 		Bristol&1,569&47,522&\bf{37}&0&xxxx&BS2&47.4&1&\bf{73.8}&0.4&xxxx&BS4&94&1.4&\bf{146.6}&1.1&xxxx&BS4&176.4&0.8\\
- 		Cardiff&1,127&23,155&\bf{39}&0&xxxx&BS4&50.6&1&\bf{78.3}&0.5&xxxx&BS4&95.6&1.6&\bf{157.5}&0.8&xxxx&BS4&183.2&1.4\\
- 		Coventry&1,175&26,689&\bf{38}&0&xxxx&BS4&44.8&0.4&\bf{73}&0&xxxx&BS4&85.1&0.7&\bf{149.2}&0.9&xxxx&BS4&172.6&1.4\\
- 		Exeter&1,250&31,997&\bf{38}&0&xxxx&BS4&50.6&0.5&\bf{77}&0&xxxx&BS4&95.7&1&\bf{158.1}&0.7&xxxx&BS4&182.3&0.6\\
- 		Glasgow&1,137&24,323&\bf{50.1}&0.3&xxxx&BS4&59.2&0.7&\bf{94}&0.5&xxxx&BS4&110.6&1.7&\bf{175.2}&0.9&xxxx&BS4&199.8&1.6\\
- 		Leeds&1,647&56,511&\bf{40}&0&xxxx&BS4&52.4&0.8&\bf{79.5}&0.5&xxxx&BS4&99.6&1&\bf{152.8}&0.8&xxxx&BS4&187.1&0.7\\
- 		Leicester&1,531&48,219&\bf{38}&0&xxxx&BS4&51.5&0.5&\bf{75}&0&xxxx&BS4&94.1&0.8&\bf{149.3}&0.7&xxxx&BS4&177.7&1.8\\
- 		Liverpool&1,273&42,564&\bf{28}&0&xxxx&BS4&38.4&0.5&\bf{57}&0.5&xxxx&BS4&72&0.8&\bf{112.8}&0.6&xxxx&BS4&133&0.8\\
- 		Manchester&1,991&77,286&\bf{38.3}&0.7&xxxx&BS4&45.9&0.5&\bf{77.9}&0.3&xxxx&BS4&91.5&0.9&\bf{155.2}&0.6&xxxx&BS4&178.5&1\\
- 		Newcastle&1,109&26,614&\bf{44}&0&xxxx&BS4&52.6&1.1&\bf{83.6}&0.5&xxxx&BS4&95.4&1.1&\bf{152.4}&0.5&xxxx&BS2&171.5&1.2\\
- 		Nottingham&1,739&51,595&\bf{44}&0&xxxx&BS4&56.6&0.8&\bf{84.7}&0.5&xxxx&BS4&103.3&0.8&\bf{164.2}&0.8&xxxx&BS4&195.2&1.2\\
- 		Oxford&479&8,396&\bf{24}&0&xxxx&BS4&27.9&0.5&\bf{47}&0&xxxx&BS4&54.9&0.7&\bf{89}&0&xxxx&BS2&100.8&0.9\\
- 		Plymouth&1,122&35,070&\bf{31}&0&xxxx&BS4&40.3&0.8&\bf{61.3}&0.5&xxxx&BS4&75&1.1&\bf{115.6}&0.5&xxxx&BS4&137&1.2\\
- 		Sheffield&1,582&50,534&\bf{42}&0&xxxx&BS4&52.5&0.7&\bf{84.6}&0.5&xxxx&BS4&98.9&1.3&\bf{161.4}&0.8&xxxx&BS4&182.2&1.2\\
- 		Southampton&796&19,942&\bf{25}&0&xxxx&BS4&29.6&0.8&\bf{49.2}&0.4&xxxx&BS4&61.1&0.7&\bf{97.6}&0.5&xxxx&BS4&113.2&1.4\\
- 		Sunderland&1,346&42,013&\bf{36}&0&xxxx&BS4&46.3&0.4&\bf{73}&0&xxxx&BS4&89.1&1.1&\bf{141}&0.5&xxxx&BS4&163.6&1\\
- 		York&1,044&23,774&\bf{32}&0&xxxx&BS4&39.1&0.3&\bf{68}&0&xxxx&BS4&77.6&0.6&\bf{130.4}&0.5&xxxx&BS4&145.8&1.2\\
- 		Belgrade&1,9586&7,561,185&\bf{86.5}&1.5&xxxx&PG&103.4&0.5&\bf{171.1}&2.4&xxxx&PG&197.3&0.9&\bf{341.9}&2.2&xxxx&SG&374.5&1.4\\
- 		Berlin&29,461&9,944,851&\bf{102.1}&1.9&xxxx&PG&125.9&0.5&\bf{204.9}&1.9&xxxx&PG&240.1&1.2&\bf{396.4}&3.1&xxxx&PG&446.2&1.8\\
- 		Boston&44,797&28,164,740&\bf{94.3}&1.9&xxxx&PG&102.7&1.3&\bf{175.4}&2&xxxx&PG&191.6&0.9&\bf{341}&0&xxxx&PG&368.7&1.5\\
- 		Dublin&37,982&21,630,466&\bf{101.5}&1.1&xxxx&PG&113.8&1.2&\bf{193.2}&4.8&xxxx&PG&211.3&2.7&\bf{363}&0&xxxx&PG&390.2&2\\
- 		Minsk&10,487&1,375,618&\bf{102.1}&1.1&xxxx&PG&126&0.9&\bf{200}&1.9&xxxx&PG&240.4&1.4&\bf{387.7}&3.5&xxxx&PG&457.6&2.4\\
+ 		Bath&910&18560&\bf{38}&0&29.2&BS4&44.6&0.9&\bf{71.1}&0.3&313.6&BS1&89&1.4&\bf{140.1}&0.7&352.9&BS4&160&1.1\\
+ 		Belfast&1700&62617&\bf{39}&0&91&BS4&50.2&1.5&\bf{76.3}&0.5&817.5&BS4&97.6&1&\bf{148.3}&0.7&1158.7&BS4&179.6&2\\
+ 		Brighton&976&35012&\bf{21}&0&203.5&BS4&28.2&0.6&\bf{40.1}&0.3&586.6&BS4&49.4&0.5&\bf{78}&0.5&768.2&BS4&94.8&1.9\\
+ 		Bristol&1569&47522&\bf{37}&0&75.6&BS2&47.4&1&\bf{73.8}&0.4&486.5&BS4&94&1.4&\bf{146.6}&1.1&1003.2&BS4&176.4&0.8\\
+ 		Cardiff&1127&23155&\bf{39}&0&46.2&BS4&50.6&1&\bf{78.3}&0.5&345.7&BS4&95.6&1.6&\bf{157.5}&0.8&328.3&BS4&183.2&1.4\\
+ 		Coventry&1175&26689&\bf{38}&0&341.3&BS4&44.8&0.4&\bf{73}&0&280.3&BS4&85.1&0.7&\bf{149.2}&0.9&333.1&BS4&172.6&1.4\\
+ 		Exeter&1250&31997&\bf{38}&0&56.9&BS4&50.6&0.5&\bf{77}&0&370.2&BS4&95.7&1&\bf{158.1}&0.7&573.9&BS4&182.3&0.6\\
+ 		Glasgow&1137&24323&\bf{50.1}&0.3&310.5&BS4&59.2&0.7&\bf{94}&0.5&236.1&BS4&110.6&1.7&\bf{175.2}&0.9&474.5&BS4&199.8&1.6\\
+ 		Leeds&1647&56511&\bf{40}&0&290.4&BS4&52.4&0.8&\bf{79.5}&0.5&1032.2&BS4&99.6&1&\bf{152.8}&0.8&939.3&BS4&187.1&0.7\\
+ 		Leicester&1531&48219&\bf{38}&0&205.5&BS4&51.5&0.5&\bf{75}&0&586.1&BS4&94.1&0.8&\bf{149.3}&0.7&1033.3&BS4&177.7&1.8\\
+ 		Liverpool&1273&42564&\bf{28}&0&443.8&BS4&38.4&0.5&\bf{57}&0.5&393.8&BS4&72&0.8&\bf{112.8}&0.6&845.5&BS4&133&0.8\\
+ 		Manchester&1991&77286&\bf{38.3}&0.7&617.7&BS4&45.9&0.5&\bf{77.9}&0.3&994.5&BS4&91.5&0.9&\bf{155.2}&0.6&1446.7&BS4&178.5&1\\
+ 		Newcastle&1109&26614&\bf{44}&0&222.4&BS4&52.6&1.1&\bf{83.6}&0.5&506&BS4&95.4&1.1&\bf{152.4}&0.5&626.3&BS2&171.5&1.2\\
+ 		Nottingham&1739&51595&\bf{44}&0&80.7&BS4&56.6&0.8&\bf{84.7}&0.5&1218.7&BS4&103.3&0.8&\bf{164.2}&0.8&993.7&BS4&195.2&1.2\\
+ 		Oxford&479&8396&\bf{24}&0&42.8&BS4&27.9&0.5&\bf{47}&0&8.3&BS4&54.9&0.7&\bf{89}&0&70.5&BS2&100.8&0.9\\
+ 		Plymouth&1122&35070&\bf{31}&0&44.6&BS4&40.3&0.8&\bf{61.3}&0.5&767.7&BS4&75&1.1&\bf{115.6}&0.5&643.1&BS4&137&1.2\\
+ 		Sheffield&1582&50534&\bf{42}&0&118&BS4&52.5&0.7&\bf{84.6}&0.5&523.3&BS4&98.9&1.3&\bf{161.4}&0.8&1047.1&BS4&182.2&1.2\\
+ 		Southampton&796&19942&\bf{25}&0&7.4&BS4&29.6&0.8&\bf{49.2}&0.4&311.1&BS4&61.1&0.7&\bf{97.6}&0.5&289.2&BS4&113.2&1.4\\
+ 		Sunderland&1346&42013&\bf{36}&0&88.1&BS4&46.3&0.4&\bf{73}&0&211.4&BS4&89.1&1.1&\bf{141}&0.5&840.9&BS4&163.6&1\\
+ 		York&1044&23774&\bf{32}&0&35.8&BS4&39.1&0.3&\bf{68}&0&26.2&BS4&77.6&0.6&\bf{130.4}&0.5&250.3&BS4&145.8&1.2\\
+ 		Belgrade&19586&7561185&\bf{86.5}&1.5&1493.9&PG&103.4&0.5&\bf{171.1}&2.4&1564&PG&197.3&0.9&\bf{341.9}&2.2&1680.7&SG&374.5&1.4\\
+ 		Berlin&29461&9944851&\bf{102.1}&1.9&2056.6&PG&125.9&0.5&\bf{204.9}&1.9&1309&PG&240.1&1.2&\bf{396.4}&3.1&1763.4&PG&446.2&1.8\\
+ 		Boston&44797&28164740&\bf{94.3}&1.9&1408.3&PG&102.7&1.3&\bf{175.4}&2&1445.8&PG&191.6&0.9&\bf{341}&0&3819.2&PG&368.7&1.5\\
+ 		Dublin&37982&21630466&\bf{101.5}&1.1&1437.8&PG&113.8&1.2&\bf{193.2}&4.8&1705&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
+ 		Minsk&10487&1375618&\bf{102.1}&1.1&1293.9&PG&126&0.9&\bf{200}&1.9&1517.4&PG&240.4&1.4&\bf{387.7}&3.5&1636.5&PG&457.6&2.4\\
  		\hline
  				
  	\end{tabular}
