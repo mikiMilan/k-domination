@@ -552,10 +552,10 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
  
  \emph{Testing environment}. Experiments were performed on a computer running \textcolor{red}{Intel(R) Core(TM) i5-8265U CPU @1.60GHz 1.80GHz with 16GB RAM}, under Microsoft Windows 11 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
  PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
- 
+   
   The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
   
-  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU\fxnote{Procesorska brzina treba da stoji ovdje kao najrelevantniji kriterij.}. The  terminating criterion of SG, PG and BS is when matching the first feasible solution.}
+  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 seconds for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU\fxnote{Procesorska brzina treba da stoji ovdje kao najrelevantniji kriterij.}. The  terminating criterion of SG, PG and BS is when matching the first feasible solution.}
    
 
    \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended in  ~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:}
@@ -569,27 +569,28 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
 	\textcolor{red}{A sample of 20 instances for grid search by width was chosen randomly from the set of small and medium instances and for  $k\in \{1, 2, 4\}$. A grid search by height was performed on a set of 180 configurations. For each instance and each configuration, the value of the fitness function was calculated. VNS was limited to 100 iterations. The best configuration   was obtained using the rank method and is as follows: $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$.}
 
 \subsection{Experimental results }
- Tables~\ref{tab:k124} contain the experimental results for $k \in \{1, 2,4\}$.\textcolor{red}{Treba popraviti ostatak} The first column gives the name of the instance (city) for which the results are reported. The next block contains the results of VNS -- the best result and the average solution quality over ten runs. The third block reports the results of the best approach from the literature for each instance -- the name of the approach, the best obtained result and average solution quality over ten runs. Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. 
+{ \color{red} Table~\ref{tab:k124} contains the results for $k \in \{1, 2,4\}$.  The first column gives the name of the instance (city) for which the results are reported. The next block contains the information about instance size. Next three blocks report the results for $k=1,2,4$ for \textsc{Vns} and the best results so-far from literature, respectively.  More in details, each of these (three) blocks consists of 6 columns. The first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$).  The other three columns report  the results of the best approach from the literature:   name of the approach,  the best obtained  result ($\overline{|D|}$) and average solution quality over ten runs ($\overline{t}$) of that approach.  Note that the labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. }
+ 
  
 The following conclusions can be drawn from these results. 
    
 \begin{itemize}
-  		\item  For $k=1$, VNS outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for the large-sized instances.  
-  		\item Concerning the results for $k=2$, VNS outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: VNS produces $\approx$ 5--15\% improvement rate over the second best PG approach. 
-  		\item The situation is similar for $k=4$. VNS outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where VNS achieved a score 165 over BS4 which achieved a score 193). For the large instances, VNS again outperforms PG in all cases. 
-  		
+  		\item  For $k=1$, \textsc{Vns} outperformed all competing approaches for small to medium sized instances. VNS also outperformed the PG approach for the large-sized instances. {\color{red}The same holds for the large-sized instances. }
+  		\item Concerning the results for $k=2$, \textsc{Vns} outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: \textsc{Vns} produces $\approx$ 5--16\% improvement rate over the second best, PG approach. 
+  		\item The similar {\color{red}conclusions are drawn} for $k=4$. \textsc{Vns} outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved a score 164.2 over BS4 which achieved a score 195.2). For the large instances, \textsc{Vns} again outperforms PG in all cases. 
+  		\item \fxnote{TODO: Comments on average running times of the approaches missing}
 \end{itemize}
 
  
    \begin{table*}[t]
-   \scriptsize
+
  	\caption{Results}
- 	\label{tab:k124}  
+ 	\label{tab:k124}      \scalebox{0.7}{
  	\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
  		\hline
- 		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Dimension} & \multicolumn{6}{c|}{ Results for k=1 } & \multicolumn{6}{c|}{ Results for k=2 } & \multicolumn{6}{c}{ Results for k=4 }\\ 
+ 		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
  		\hline
- 		City & $|V|$ & $|E|$ & Avg. & SD& t & Alg. & Avg. & SD & Avg. & SD & t& Alg. & Avg.& SD & Avg. & SD & t& Alg. & Avg. & SD \\ \hline
+ 		\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
  		Bath& 910& 18,560 &\bf{38}&0&xxxx&BS4&44.6&0.9&\bf{71.1}&0.3&xxxx&BS1&89&1.4&\bf{140.1}&0.7&xxxx&BS4&160&1.1\\
  		Belfast&1,700&62,617&\bf{39}&0&xxxx&BS4&50.2&1.5&\bf{76.3}&0.5&xxxx&BS4&97.6&1&\bf{148.3}&0.7&xxxx&BS4&179.6&2\\
  		Brighton&976&35,012&\bf{21}&0&xxxx&BS4&28.2&0.6&\bf{40.1}&0.3&xxxx&BS4&49.4&0.5&\bf{78}&0.5&xxxx&BS4&94.8&1.9\\
@@ -609,7 +610,7 @@ The following conclusions can be drawn from these results.
  		Sheffield&1,582&50,534&\bf{42}&0&xxxx&BS4&52.5&0.7&\bf{84.6}&0.5&xxxx&BS4&98.9&1.3&\bf{161.4}&0.8&xxxx&BS4&182.2&1.2\\
  		Southampton&796&19,942&\bf{25}&0&xxxx&BS4&29.6&0.8&\bf{49.2}&0.4&xxxx&BS4&61.1&0.7&\bf{97.6}&0.5&xxxx&BS4&113.2&1.4\\
  		Sunderland&1,346&42,013&\bf{36}&0&xxxx&BS4&46.3&0.4&\bf{73}&0&xxxx&BS4&89.1&1.1&\bf{141}&0.5&xxxx&BS4&163.6&1\\
- 		York&1,044&23,774&\bf{32}&0&xxxx&BS4&39.1&0.3&\bf{68}&0&xxxx&BS4&77.6&0.6&\bf{130.4}&0.5&xxxx&BS4&145.8&1.2\\
+ 		York&1,044&23,774&\bf{32}&0&xxxx&BS4&39.1&0.3&\bf{68}&0&xxxx&BS4&77.6&0.6&\bf{130.4}&0.5&xxxx&BS4&145.8&1.2\\ \hline \hline
  		Belgrade&1,9586&7,561,185&\bf{86.5}&1.5&xxxx&PG&103.4&0.5&\bf{171.1}&2.4&xxxx&PG&197.3&0.9&\bf{341.9}&2.2&xxxx&SG&374.5&1.4\\
  		Berlin&29,461&9,944,851&\bf{102.1}&1.9&xxxx&PG&125.9&0.5&\bf{204.9}&1.9&xxxx&PG&240.1&1.2&\bf{396.4}&3.1&xxxx&PG&446.2&1.8\\
  		Boston&44,797&28,164,740&\bf{94.3}&1.9&xxxx&PG&102.7&1.3&\bf{175.4}&2&xxxx&PG&191.6&0.9&\bf{341}&0&xxxx&PG&368.7&1.5\\
@@ -617,7 +618,7 @@ The following conclusions can be drawn from these results.
  		Minsk&10,487&1,375,618&\bf{102.1}&1.1&xxxx&PG&126&0.9&\bf{200}&1.9&xxxx&PG&240.4&1.4&\bf{387.7}&3.5&xxxx&PG&457.6&2.4\\
  		\hline
  				
- 	\end{tabular}
+ 	\end{tabular}}
  \end{table*}
  
 The average times (in seconds) for reaching the best solution in VNS \textcolor{red}{are also shown in ~\ref{tab:k124}}.
