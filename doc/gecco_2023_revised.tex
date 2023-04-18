@@ -583,14 +583,14 @@ The following conclusions can be drawn from these results.
 
  
    \begin{table*}[t]
-
+	\tiny
  	\caption{Results}
- 	\label{tab:k124}      \scalebox{0.7}{
+ 	\label{tab:k124}      %\scalebox{0.7}{
  	\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
  		\hline
  		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
  		\hline
- 		\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
+ 		\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ &$\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
  		Bath& 910& 18,560 &\bf{38}&0&xxxx&BS4&44.6&0.9&\bf{71.1}&0.3&xxxx&BS1&89&1.4&\bf{140.1}&0.7&xxxx&BS4&160&1.1\\
  		Belfast&1,700&62,617&\bf{39}&0&xxxx&BS4&50.2&1.5&\bf{76.3}&0.5&xxxx&BS4&97.6&1&\bf{148.3}&0.7&xxxx&BS4&179.6&2\\
  		Brighton&976&35,012&\bf{21}&0&xxxx&BS4&28.2&0.6&\bf{40.1}&0.3&xxxx&BS4&49.4&0.5&\bf{78}&0.5&xxxx&BS4&94.8&1.9\\
@@ -618,7 +618,7 @@ The following conclusions can be drawn from these results.
  		Minsk&10,487&1,375,618&\bf{102.1}&1.1&xxxx&PG&126&0.9&\bf{200}&1.9&xxxx&PG&240.4&1.4&\bf{387.7}&3.5&xxxx&PG&457.6&2.4\\
  		\hline
  				
- 	\end{tabular}}
+ 	\end{tabular}%}
  \end{table*}
  
 The average times (in seconds) for reaching the best solution in VNS \textcolor{red}{are also shown in ~\ref{tab:k124}}.
