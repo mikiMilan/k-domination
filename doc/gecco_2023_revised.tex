@@ -161,7 +161,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
+In this paper we {\color{red}tackle} a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new best results for all considered problem instances with $k \in \{1, 2, 4\}$.
   
 \end{abstract}
 
@@ -211,7 +211,7 @@ The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that ev
  
 Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small to medium sized real-world instances. 
  
-MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-dominating set in these systems is a set of processors such that each processor outside \textcolor{red}{this set} must have at least $k$ neighbors in the set.
+MkDP has applications in distributed systems~\cite{wang2013minimising}, where a $k$-dominating set {\color{red}represents} a set of processors such that each processor outside \textcolor{red}{this set} must have at least $k$ neighbors in the set.
 
 We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
 \begin{comment}
@@ -222,8 +222,8 @@ The main algorithm components of this algorithm are:
 	\item An efficient swap--based  best-improvement local search mechanism   has been applied. It is equipped with an quick partial evaluation of the fitness function, executed in linear time.
 \end{itemize}
 \end{comment}
-The contributions of our work can be summarized as follows:
-($i$) \textsc{Vns} for MkDPA significantly improves the state-of-the-art results for all considered problem instances, where $k \in \{1, 2, 4\}$; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
+%The contributions of our work can be summarized as follows:
+ {\color{red}The main contribution of our work is that the proposed \textsc{Vns}} significantly improves the state-of-the-art results for all considered problem instances, in case of $k \in \{1, 2, 4\}$.  %; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
 
 \section{Formal problem definition }
     
@@ -555,7 +555,7 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 \end{itemize}
 
  
-   \begin{table*}[t]
+   \begin{table*}[!htb]
 	\tiny
  	\caption{Results}
  	\label{tab:k124}      %\scalebox{0.7}{
