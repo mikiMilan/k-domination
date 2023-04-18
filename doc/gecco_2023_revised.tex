@@ -161,7 +161,7 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we {\color{red}tackle} a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new best results for all considered problem instances with $k \in \{1, 2, 4\}$.
+In this paper we  are concerned of solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
   
 \end{abstract}
 
@@ -200,10 +200,8 @@ In this paper we {\color{red}tackle} a generalized version of the well-known min
 \maketitle
 
 \section{Introduction}
-A graph $G=(V,E)$ is an abstract mathematical structure 
-in which $V$ represents a set of elements called vertices (or nodes) and a set of pairs $e = uv =(u, v)  \in E \subseteq V \times V$ called edges of $G$. In this paper, we are concerned with simple undirected graphs that have no loops and where the edges have no directions, i.e., $e = \{u,v\} = uv = vu \in E$.   Graphs serve as models for many real-world problems describing relationships among various objects in biology, physics, social networks,  etc.~\cite{mashaghi2004investigation,pirzada2007applications,shah2019characterizing,doi:10.1137/S0895480100375831}. 
-
-One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if each vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
+ 
+ One of the best known classes of problems studied from theoretical, computational and practical points of view are domination problems on graphs~ \cite{haynes2013fundamentals}. The basic problem of this class is the \textit{minimum dominating set problem}. The subset $D \subset V$ is called \emph{dominating set} if each vertex $v\in V$ belongs to $D$ or there is at least one vertex $w\in D$ such that $uw\in E$. The search for the smallest possible dominating set $D$ of the graph $G$ is called \emph{the minimum dominating set problem} (MDSP)~\cite{grandoni2006note}. This problem has many applications, for example, in biological networks~\cite{nacher2016minimum}, document summarization~\cite{shen2010multi}, graph mining~\cite{chalupa2018order}, etc. From an algorithmic point of view, this problem is NP-hard. It is solved by various exact approaches, such as branch-and-reduce algorithms~\cite{van2011exact}, an approach that uses the fundamental cut-sets of the graph~\cite{karci2020new}, etc. Heuristic approaches are more common in the literature, e.g., a genetic algorithm~\cite{hedar2010hybrid}, simulated annealing~\cite{hedar2012simulated}, ant colony optimization~\cite{ho2006enhanced}, to name a few. Several generalizations of MDSP, arising from practical experience, are proposed in the literature: the minimum weight dominating set problem~\cite{romania2010ant}, the minimum total dominating set problem~\cite{yuan2019novel}, the minimum connected dominating set problem~\cite{butenko2004new}, etc.
 
 
 In this paper, we study the \emph{minimum k-domination problem} (MkDP)~\cite{corcoran2021heuristics}, for a fixed $k \in \mathbf{N}$. 
@@ -213,17 +211,7 @@ Regarding previous solutions to this problem, several greedy approaches have bee
  
 MkDP has applications in distributed systems~\cite{wang2013minimising}, where a $k$-dominating set {\color{red}represents} a set of processors such that each processor outside \textcolor{red}{this set} must have at least $k$ neighbors in the set.
 
-We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
-\begin{comment}
-The main algorithm components of this algorithm are:
-\begin{itemize}
-	\item A carefully designed fitness function that evaluates solutions  including also unfeasible ones; it takes into consideration two scores ($i$) the size of dominating set and ($ii$) a measure of penalization that evaluates how far is the considered set from being a $k$--dominating. 
-	\item A shaking procedure that systematically destructs feasible solutions and ensures escaping the algorithm from a local optima. It is based on swap operations. 
-	\item An efficient swap--based  best-improvement local search mechanism   has been applied. It is equipped with an quick partial evaluation of the fitness function, executed in linear time.
-\end{itemize}
-\end{comment}
-%The contributions of our work can be summarized as follows:
- {\color{red}The main contribution of our work is that the proposed \textsc{Vns}} significantly improves the state-of-the-art results for all considered problem instances, in case of $k \in \{1, 2, 4\}$.  %; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
+We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. {\color{red}The main contribution of our work is that the proposed \textsc{Vns}} significantly improves the state-of-the-art results for all considered problem instances, in case of $k \in \{1, 2, 4\}$.  %; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
 
 \section{Formal problem definition }
     
@@ -245,15 +233,11 @@ In this section, we first give an overview of the variable neighborhood search (
   \subsection{Variable neighborhood search}
  \emph{Variable neighborhood search} is a single-based solution metaheuristic proposed by Mladenović and Hansen~\cite{mladenovic1997variable}. The basic idea of the approach is to systematically exchange neighborhoods of the current best solution (incumbent solution) to avoid getting stuck in a local optimum. \textsc{Vns} has proven to be one of the most powerful metaheuristic, achieving excellent results on diverse classes of problems, such as scheduling problems~\cite{fleszar2004solving}, vehicle routing problems~\cite{rezgui2019application}, median problems~\cite{herran2019variable}, etc.  
   
- The \textsc{Vns} for solving the MkDP is given in Algorithm~\ref{alg:vns}. 
- 
- \textsc{Vns} generally requires at least two control parameters $d_{min}, d_{max} \in \mathbb{N}$, which define the increasing sizes of the neighborhood structures $\mathcal{N}_{d_{min}}(D), \ldots, \mathcal{N}_{d_{max}}(D)$ around given solution $D$. A solution $D'$ belongs to the neighborhood $\mathcal{N}_{d}(D)$ of the solution $D$ if it can be obtained from $D$ by removing $\min(d, |D|)$ vertices from $D$ and then adding $d$ vertices from $V \setminus D$ into $D$.
- 
- The third parameter commonly used in \textsc{Vns} is $p_{move} \in [0, 1]$. This parameter corresponds to the probability of moving to a new solution if it has the same quality (fitness) as the incumbent solution. 
- Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-dominating set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
+ The \textsc{Vns} for solving the MkDP is given in Algorithm~\ref{alg:vns}. \textsc{Vns} generally requires at least two control parameters $d_{min}, d_{max} \in \mathbb{N}$, which define the increasing sizes of the neighborhood structures $\mathcal{N}_{d_{min}}(D), \ldots, \mathcal{N}_{d_{max}}(D)$ around given solution $D$. A solution $D'$ belongs to the neighborhood $\mathcal{N}_{d}(D)$ of the solution $D$ if it can be obtained from $D$ by removing $\min(d, |D|)$ vertices from $D$ and then adding $d$ vertices from $V \setminus D$ into $D$. The third parameter commonly used in \textsc{Vns} is $p_{move} \in [0, 1]$. This parameter corresponds to the probability of moving to a new solution if it has the same quality (fitness) as the incumbent solution. Finally, the fourth control parameter \emph{penalty} is specific to MkDP. It is real-valued and is used to define the relative influence of solution feasibility and solution quality (size of $k$-dominating set) on the overall value of the fitness function (more details are given in Section~\ref{subsec:fit}).
  The return value of \textsc{Vns} is called $D_{best}$ -- it is the incumbent solution. 
   
      \begin{algorithm}[!t] 
+     	\scriptsize
   	\caption{\textsc{Vns} scheme for solving MkDP}\label{alg:vns}
   	\begin{algorithmic}[1]
   		\STATE \textbf{Input:} $d_{\min}$, $d_{\max}$, $p_{move}$, \emph{penalty}
@@ -297,16 +281,15 @@ In this section, we first give an overview of the variable neighborhood search (
    with   $viols(D) = \sum_{v \in V \setminus D}{k-C(D, v)},$  $C(D, v) = \min(k, |N(v) \cap D|)$.
    
 
-It can be seen that $viols(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate dominating set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. 
-
-Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
+It can be seen that $viols(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate dominating set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. 
+\begin{comment}Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
 \begin{itemize}
  		\item For sufficiently small values of the parameter \emph{penalty}, the feasibility of the solution is relatively preferred over the cardinality of the solution. This means that when comparing feasible and infeasible solutions, the feasible solution is favored. 
  
      	\item When comparing two infeasible solutions of the same cardinality, the \emph{less infeasible} solution is preferred, i.e. the one with the lower $viols(\cdot)$ value.  
         
         \item When comparing two feasible solutions, the one with the lower cardinality is preferred.
-\end{itemize}
+\end{itemize}\end{comment}
 
 \subsection{Local search}\label{sec:local_search}
 The goal of local search (LS) is to improve the solution $D'$ obtained in the shaking phase by applying multiple local improvements to the structure of the solution. 
@@ -545,6 +528,45 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 
 \subsection{Experimental results }
 { \color{red} Table~\ref{tab:k124} contains the results for $k \in \{1, 2,4\}$.  The first column gives the name of the instance (city) for which the results are reported. The next block contains   instance size information. Next three blocks report the results in case of $k=1,2,4$ for \textsc{Vns} and the best results so-far from literature, respectively.  More in details, each of these (three) blocks consists of 6 columns. The first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$).  The other three columns report  the results of the best approach from the literature:   name of the approach,  the best obtained  result ($\overline{|D|}$) and average solution quality over ten runs ($\overline{t}$).  Note that   labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. } The following conclusions can be drawn from these results. 
+
+
+\begin{table*}[!h]
+	\tiny
+	\caption{Results}
+	\label{tab:k124}      %\scalebox{0.7}{
+		\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
+			\hline
+			\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
+			\hline
+			\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
+			Belfast&1700&62617&\bf{39}&0&91&BS4&50.2&1.5&\bf{76.3}&0.5&817.5&BS4&97.6&1&\bf{148.3}&0.7&1158.7&BS4&179.6&2\\
+			Brighton&976&35012&\bf{21}&0&203.5&BS4&28.2&0.6&\bf{40.1}&0.3&586.6&BS4&49.4&0.5&\bf{78}&0.5&768.2&BS4&94.8&1.9\\
+			Bristol&1569&47522&\bf{37}&0&75.6&BS2&47.4&1&\bf{73.8}&0.4&486.5&BS4&94&1.4&\bf{146.6}&1.1&1003.2&BS4&176.4&0.8\\
+			Cardiff&1127&23155&\bf{39}&0&46.2&BS4&50.6&1&\bf{78.3}&0.5&345.7&BS4&95.6&1.6&\bf{157.5}&0.8&328.3&BS4&183.2&1.4\\
+			Coventry&1175&26689&\bf{38}&0&341.3&BS4&44.8&0.4&\bf{73}&0&280.3&BS4&85.1&0.7&\bf{149.2}&0.9&333.1&BS4&172.6&1.4\\
+			Exeter&1250&31997&\bf{38}&0&56.9&BS4&50.6&0.5&\bf{77}&0&370.2&BS4&95.7&1&\bf{158.1}&0.7&573.9&BS4&182.3&0.6\\
+			Glasgow&1137&24323&\bf{50.1}&0.3&310.5&BS4&59.2&0.7&\bf{94}&0.5&236.1&BS4&110.6&1.7&\bf{175.2}&0.9&474.5&BS4&199.8&1.6\\
+			Leeds&1647&56511&\bf{40}&0&290.4&BS4&52.4&0.8&\bf{79.5}&0.5&1032.2&BS4&99.6&1&\bf{152.8}&0.8&939.3&BS4&187.1&0.7\\
+			Leicester&1531&48219&\bf{38}&0&205.5&BS4&51.5&0.5&\bf{75}&0&586.1&BS4&94.1&0.8&\bf{149.3}&0.7&1033.3&BS4&177.7&1.8\\
+			Liverpool&1273&42564&\bf{28}&0&443.8&BS4&38.4&0.5&\bf{57}&0.5&393.8&BS4&72&0.8&\bf{112.8}&0.6&845.5&BS4&133&0.8\\
+			Manchester&1991&77286&\bf{38.3}&0.7&617.7&BS4&45.9&0.5&\bf{77.9}&0.3&994.5&BS4&91.5&0.9&\bf{155.2}&0.6&1446.7&BS4&178.5&1\\
+			Newcastle&1109&26614&\bf{44}&0&222.4&BS4&52.6&1.1&\bf{83.6}&0.5&506&BS4&95.4&1.1&\bf{152.4}&0.5&626.3&BS2&171.5&1.2\\
+			Nottingham&1739&51595&\bf{44}&0&80.7&BS4&56.6&0.8&\bf{84.7}&0.5&1218.7&BS4&103.3&0.8&\bf{164.2}&0.8&993.7&BS4&195.2&1.2\\
+			Oxford&479&8396&\bf{24}&0&42.8&BS4&27.9&0.5&\bf{47}&0&8.3&BS4&54.9&0.7&\bf{89}&0&70.5&BS2&100.8&0.9\\
+			Plymouth&1122&35070&\bf{31}&0&44.6&BS4&40.3&0.8&\bf{61.3}&0.5&767.7&BS4&75&1.1&\bf{115.6}&0.5&643.1&BS4&137&1.2\\
+			Sheffield&1582&50534&\bf{42}&0&118&BS4&52.5&0.7&\bf{84.6}&0.5&523.3&BS4&98.9&1.3&\bf{161.4}&0.8&1047.1&BS4&182.2&1.2\\
+			Southampton&796&19942&\bf{25}&0&7.4&BS4&29.6&0.8&\bf{49.2}&0.4&311.1&BS4&61.1&0.7&\bf{97.6}&0.5&289.2&BS4&113.2&1.4\\
+			Sunderland&1346&42013&\bf{36}&0&88.1&BS4&46.3&0.4&\bf{73}&0&211.4&BS4&89.1&1.1&\bf{141}&0.5&840.9&BS4&163.6&1\\
+			York&1044&23774&\bf{32}&0&35.8&BS4&39.1&0.3&\bf{68}&0&26.2&BS4&77.6&0.6&\bf{130.4}&0.5&250.3&BS4&145.8&1.2\\
+			Belgrade&19586&7561185&\bf{86.5}&1.5&1493.9&PG&103.4&0.5&\bf{171.1}&2.4&1564&PG&197.3&0.9&\bf{341.9}&2.2&1680.7&SG&374.5&1.4\\
+			Berlin&29461&9944851&\bf{102.1}&1.9&2056.6&PG&125.9&0.5&\bf{204.9}&1.9&1309&PG&240.1&1.2&\bf{396.4}&3.1&1763.4&PG&446.2&1.8\\
+			Boston&44797&28164740&\bf{94.3}&1.9&1408.3&PG&102.7&1.3&\bf{175.4}&2&1445.8&PG&191.6&0.9&\bf{341}&0&3819.2&PG&368.7&1.5\\
+			Dublin&37982&21630466&\bf{101.5}&1.1&1437.8&PG&113.8&1.2&\bf{193.2}&4.8&1705&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
+			Minsk&10487&1375618&\bf{102.1}&1.1&1293.9&PG&126&0.9&\bf{200}&1.9&1517.4&PG&240.4&1.4&\bf{387.7}&3.5&1636.5&PG&457.6&2.4\\
+			\hline
+			
+		\end{tabular}%}
+\end{table*}
    
 \begin{itemize}
   		\item  For $k=1$, \textsc{Vns} outperformed all competing approaches for small to medium sized instances. \textsc{Vns} also outperformed the PG approach for the large-sized instances. {\color{red}The same holds for the large-sized instances. }
@@ -555,46 +577,7 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 \end{itemize}
 
  
-   \begin{table*}[!htb]
-	\tiny
- 	\caption{Results}
- 	\label{tab:k124}      %\scalebox{0.7}{
- 	\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
- 		\hline
- 		\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
- 		\hline
- 		\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
- 		Belfast&1700&62617&\bf{39}&0&91&BS4&50.2&1.5&\bf{76.3}&0.5&817.5&BS4&97.6&1&\bf{148.3}&0.7&1158.7&BS4&179.6&2\\
- 		Brighton&976&35012&\bf{21}&0&203.5&BS4&28.2&0.6&\bf{40.1}&0.3&586.6&BS4&49.4&0.5&\bf{78}&0.5&768.2&BS4&94.8&1.9\\
- 		Bristol&1569&47522&\bf{37}&0&75.6&BS2&47.4&1&\bf{73.8}&0.4&486.5&BS4&94&1.4&\bf{146.6}&1.1&1003.2&BS4&176.4&0.8\\
- 		Cardiff&1127&23155&\bf{39}&0&46.2&BS4&50.6&1&\bf{78.3}&0.5&345.7&BS4&95.6&1.6&\bf{157.5}&0.8&328.3&BS4&183.2&1.4\\
- 		Coventry&1175&26689&\bf{38}&0&341.3&BS4&44.8&0.4&\bf{73}&0&280.3&BS4&85.1&0.7&\bf{149.2}&0.9&333.1&BS4&172.6&1.4\\
- 		Exeter&1250&31997&\bf{38}&0&56.9&BS4&50.6&0.5&\bf{77}&0&370.2&BS4&95.7&1&\bf{158.1}&0.7&573.9&BS4&182.3&0.6\\
- 		Glasgow&1137&24323&\bf{50.1}&0.3&310.5&BS4&59.2&0.7&\bf{94}&0.5&236.1&BS4&110.6&1.7&\bf{175.2}&0.9&474.5&BS4&199.8&1.6\\
- 		Leeds&1647&56511&\bf{40}&0&290.4&BS4&52.4&0.8&\bf{79.5}&0.5&1032.2&BS4&99.6&1&\bf{152.8}&0.8&939.3&BS4&187.1&0.7\\
- 		Leicester&1531&48219&\bf{38}&0&205.5&BS4&51.5&0.5&\bf{75}&0&586.1&BS4&94.1&0.8&\bf{149.3}&0.7&1033.3&BS4&177.7&1.8\\
- 		Liverpool&1273&42564&\bf{28}&0&443.8&BS4&38.4&0.5&\bf{57}&0.5&393.8&BS4&72&0.8&\bf{112.8}&0.6&845.5&BS4&133&0.8\\
- 		Manchester&1991&77286&\bf{38.3}&0.7&617.7&BS4&45.9&0.5&\bf{77.9}&0.3&994.5&BS4&91.5&0.9&\bf{155.2}&0.6&1446.7&BS4&178.5&1\\
- 		Newcastle&1109&26614&\bf{44}&0&222.4&BS4&52.6&1.1&\bf{83.6}&0.5&506&BS4&95.4&1.1&\bf{152.4}&0.5&626.3&BS2&171.5&1.2\\
- 		Nottingham&1739&51595&\bf{44}&0&80.7&BS4&56.6&0.8&\bf{84.7}&0.5&1218.7&BS4&103.3&0.8&\bf{164.2}&0.8&993.7&BS4&195.2&1.2\\
- 		Oxford&479&8396&\bf{24}&0&42.8&BS4&27.9&0.5&\bf{47}&0&8.3&BS4&54.9&0.7&\bf{89}&0&70.5&BS2&100.8&0.9\\
- 		Plymouth&1122&35070&\bf{31}&0&44.6&BS4&40.3&0.8&\bf{61.3}&0.5&767.7&BS4&75&1.1&\bf{115.6}&0.5&643.1&BS4&137&1.2\\
- 		Sheffield&1582&50534&\bf{42}&0&118&BS4&52.5&0.7&\bf{84.6}&0.5&523.3&BS4&98.9&1.3&\bf{161.4}&0.8&1047.1&BS4&182.2&1.2\\
- 		Southampton&796&19942&\bf{25}&0&7.4&BS4&29.6&0.8&\bf{49.2}&0.4&311.1&BS4&61.1&0.7&\bf{97.6}&0.5&289.2&BS4&113.2&1.4\\
- 		Sunderland&1346&42013&\bf{36}&0&88.1&BS4&46.3&0.4&\bf{73}&0&211.4&BS4&89.1&1.1&\bf{141}&0.5&840.9&BS4&163.6&1\\
- 		York&1044&23774&\bf{32}&0&35.8&BS4&39.1&0.3&\bf{68}&0&26.2&BS4&77.6&0.6&\bf{130.4}&0.5&250.3&BS4&145.8&1.2\\
- 		Belgrade&19586&7561185&\bf{86.5}&1.5&1493.9&PG&103.4&0.5&\bf{171.1}&2.4&1564&PG&197.3&0.9&\bf{341.9}&2.2&1680.7&SG&374.5&1.4\\
- 		Berlin&29461&9944851&\bf{102.1}&1.9&2056.6&PG&125.9&0.5&\bf{204.9}&1.9&1309&PG&240.1&1.2&\bf{396.4}&3.1&1763.4&PG&446.2&1.8\\
- 		Boston&44797&28164740&\bf{94.3}&1.9&1408.3&PG&102.7&1.3&\bf{175.4}&2&1445.8&PG&191.6&0.9&\bf{341}&0&3819.2&PG&368.7&1.5\\
- 		Dublin&37982&21630466&\bf{101.5}&1.1&1437.8&PG&113.8&1.2&\bf{193.2}&4.8&1705&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
- 		Minsk&10487&1375618&\bf{102.1}&1.1&1293.9&PG&126&0.9&\bf{200}&1.9&1517.4&PG&240.4&1.4&\bf{387.7}&3.5&1636.5&PG&457.6&2.4\\
- 		\hline
- 				
- 	\end{tabular}%}
- \end{table*}
  
- 
-
 %(see Table~\ref{tab:big_instances_chars}).  
 
 \begin{comment}
@@ -648,7 +631,7 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 \section{Conclusions and future work}
 
  
- In this paper we have studied the $k$-domination problem, $k \in \mathbb{N}$,  a generalized version of the prominent minimum dominating set problem. This problem has been solved so far by several constructive and incremental approaches. We proposed the variable neighborhood search (VNS) metaheuristic to solve this problem. It is equipped with an effective fitness function that evaluates both feasible and infeasible solutions. Moreover, an efficient local search procedure with best-improvement strategy and fast fitness function evaluation plays an important role in obtaining high-quality solutions. The efficiency of our \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperform all existing heuristic state-of-the-art approaches. 
+ In this paper we have \textcolor{red}{solved} the $k$-domination problem, a generalized version of the prominent minimum dominating set problem with the variable neighborhood search \textcolor{red}{(\textsc{Vns})} metaheuristic. The efficiency of \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperform all existing heuristic state-of-the-art approaches. 
  
  For future work, one could consider improving the \textsc{Vns} to work more efficiently with very large graphs, such as social networks.  \textsc{Vns} could be compared to exact approaches such as integer linear programming models, solved by {\color{red} general-purpose solvers}, i.e.  Cplex or Gurobi. 
   
