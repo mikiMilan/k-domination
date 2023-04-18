@@ -211,7 +211,7 @@ The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that ev
  
 Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small to medium sized real-world instances. 
  
-MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-dominating set in these systems is a set of processors such that each processor outside the must have at least $k$ neighbors in the set.
+MkDP has applications in distributed systems ~\cite{wang2013minimising}, where a $k$-dominating set in these systems is a set of processors such that each processor outside \textcolor{red}{this set} must have at least $k$ neighbors in the set.
 
 We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. 
 \begin{comment}
@@ -227,7 +227,6 @@ The contributions of our work can be summarized as follows:
 	\item VNS for MkDPA significantly improves the state-of-the-art results for all considered problem instances, where $k \in \{1, 2, 4\}$.
 	
 	\item VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
-	%\item  VNS approach scales better with increase in the instance size than so-far leading literature approaches. 
 \end{itemize}
 
 \section{Formal problem definition }
@@ -553,9 +552,9 @@ In this section we analyze the quality of the proposed VNS method.\footnote{\tex
  \emph{Testing environment}. Experiments were performed on a computer running \textcolor{red}{Intel(R) Core(TM) i5-8265U CPU @1.60GHz 1.80GHz with 16GB RAM}, under Microsoft Windows 11 Pro OS. VNS is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics} as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (obtained from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include this algorithm in the large instance comparison.  
  PG and VNS algorithms are run ten times (using different random seeds) per each problem instance. 
    
-  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. 
+  The termination criteria of the VNS are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). This means that VNS can take more than 30~minutes to finish for some very large instances, such as Dublin and Boston. More precisely, in these situations, after initialization, the most important steps of the VNS (shaking and subsequent local search) are not even performed due to an expired time limit.
   
-  \textcolor{red}{This choice of termination criteria is inspired by the running times presented in the literature ~\cite{corcoran2021heuristics}. Namely, the best results were given by the BS configuration BS4, where 4 stands for the beam width. For this algorithms in case of $k=2$, the average running times reported in the literature are 1736, 8834, 1257, 7156 and 3327 for the instances Bath, Belfast, Brighton, Bristol and Cardiff, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, all algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU @3.20GHz. The terminating criterion of SG, PG and BS is when matching the first feasible solution.}
+  \textcolor{red}{The termination criteria were chosen in a way that allows similar running times to those reported by comparison algorithms ~\cite{corcoran2021heuristics}. Namely, the best results were obtained with the BS configuration BS4, where 4 stands for the beam width. For this algorithm, in the case of $k=2$, the average running times in seconds are 1736, 8834, 1257, 7156 and 3327 for the Bath, Belfast, Brighton, Bristol and Cardiff instances, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, the comparison algorithms were also implemented in  Python and executed on a desktop computer with an Intel Core i7-8700 CPU @3.20GHz. The algorithms SG, PG and BS terminate their execution as soon as the first feasible solution is reached.}
    
 
    \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, VNS for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We decided to use on a simple method of tuning the parameters, that is, a grid search. As recommended in  ~\cite{mladenovic1997variable}, we fixed the parameter $d_{min}$ with a value 1. The sets of parameters used for tuning are:}
