@@ -59,7 +59,7 @@
 \begin{document}
 \maketitle 
 
-We thank the reviewers for their   comments. All comments have been carefully considered. Below we address all comments and describe the respective changes we have made to the manuscript. The reviewers' comments are quoted for clarity. All changes we made to the paper are highlighted in red.
+We thank the reviewers for their comments. All comments have been carefully considered. Below we address them all and describe the respective changes we have made to the manuscript. The reviewers' comments are quoted for clarity. All changes we made to the paper are highlighted in red.
   
 \begin{center} 
 Comments from \textit{Reviewer\ \#1}
@@ -90,7 +90,7 @@ The main contributions of the paper are summarized in the introduction (Sec. 1).
 	\textbf{Answer}. \\
 	In the new version of the paper, a single parameter configuration was used for all instances. The configuration was obtained by the grid search method for a random sample of 20 instances (out of 60 small to medium instances in total: 20 cities for $k \in \{1,2,4\}$).
 	
-	The source code of BS algorithm proposed in~\cite{corcoran2021heuristics} was not available and therefore we could not make direct comparison for the small to medium instances on the same computer. Therefore, we used the results reported in the paper and come up with a termination criteria similar to those in the cited paper. 
+	The source code of BS algorithm proposed in~\cite{corcoran2021heuristics} was not available and therefore we could not make direct comparison for the small to medium instances on the same computer. Therefore, we used the results reported in the paper and come up with a termination criteria effectively similar to those in the cited paper. 
 	In our paper, we added a following discussion justifying the termination criteria:\\
 	
 	"The algorithms SG, PG and BS terminate their execution as soon as the first feasible solution is reached. Therefore, we decided to use termination criteria which allow similar running times to those reported by comparison algorithms ~\cite{corcoran2021heuristics}. Namely, the best results were obtained with the BS configuration BS4, where 4 stands for the beam width. For this algorithm, in the case of $k=2$, the average running times in seconds are 1736, 8834, 1257, 7156 and 3327 for the Bath, Belfast, Brighton, Bristol and Cardiff instances, respectively. As stated in ~\cite{corcoran2021heuristics}, the comparison algorithms were also implemented in  Python and executed on a desktop computer with somewhat better CPU: Intel Core i7-8700 @3.20GHz."
@@ -102,7 +102,7 @@ The main contributions of the paper are summarized in the introduction (Sec. 1).
 	\item Regarding the third conclusion, which states that "VNS is able to quickly produce solutions of reasonable quality which is not the case for approaches proposed in the literature", the paper only shows the quality of the final solutions and the running time required by the VNS to find them, but no information about the solutions found during the execution is given. It would be interesting to visualize the performance profile of some runs, identifying the best solutions found over time, comparing with the same visualizations for the literature approaches (and then argue that the VNS is the only approach that finds good solutions quickly). Moreover, Figures 3 and 4 show running times larger than 30 minutes (i.e., larger than the termination criterion) for most instances and values of k, which cannot be considered "quickly" without a more informed discussion.
 	\end{leftbar}
 	\textbf{Answer}. \\
-	This paper is accepted as a poster limited to four pages. For this reason, we are not able to provide a detailed analysis of the requested points. Thus, we omitted this sentence from the conclusions. 
+	This paper is accepted as a poster limited to four pages. For this reason, we are not able to provide a detailed analysis of the requested points. We have removed this sentence from the conclusions. 
 \end{enumerate}
 
 \begin{leftbar}	
@@ -112,7 +112,7 @@ According to Section 3, the proposed VNS algorithm explores neighborhoods with d
 	\textbf{Answer}. \\
 	The proposed VNS is well defined in the literature ~\cite{mladenovic1997variable}. 
 	The shaking step generally deals with diversification, while the local search step (as part of the VNS) is used for intensification. So, the shaking relocates the solution to its parameterized neighborhood, while local search further investigates this neighborhood thoroughly. 
-	There are several variants of VNS (see, for example, Chapter 12, devoted to VNS, in ~\ref{burke2014search}). The variant we use is called Basic VNS. General VNS, for example, uses Variable neighborhood descent (VND) as the local search step, which offers a richer set of neighborhoods. 
+	There are several variants of VNS (see, for example, Chapter 12, devoted to VNS, in ~\cite{burke2014search}). The variant we use is called Basic VNS. General VNS, for example, uses Variable neighborhood descent (VND) as the local search step, which offers a richer set of neighborhoods. 
 	In our case, Basic VNS performs well, but we might consider General VNS or Skewed VNS in a future study. 
 
 \begin{leftbar}
@@ -163,9 +163,9 @@ Minor issues:
 \begin{enumerate}
 	
 \item Unfortunately, we do not have enough space for a more detailed description.
-\item We did it now in a much restricted format. 
+\item We did it now in a more condensed form. 
 \item Unfortunately, due to space limitations on the poster, we had to remove all the figures. But the running times can now be found in Table 1.
-\item Now, when running times are included in Table 1, we think it is clear that they are averages for ten runs. There is a sentence that mentions that VNS was run ten times:\\ 
+\item Now, when running times are included in Table 1. We think it is clear that they are averages for ten runs, because there is a sentence that mentions this:\\ 
 "PG and VNS algorithms are run ten times (using different random seeds) per each problem instance."
 \item The source code (or executables) for BS was not available, so the results for small to medium instances were simply copied from the corresponding paper. For large instances, we ran the original algorithm PG and reported the results.
 \item That's a good appetizer, thank you. We merged all the results into a single table (Table 1).
@@ -186,14 +186,14 @@ You are absolutely right, it was unfortunate to fit on per instance basis.
 In the new version of the paper, we use a random (training) sample of instances to find a single combination of control parameters using grid search (instead of GA) -- see Reviewer 1's comments.
 
 For BS we did not have the source code (or binaries), so we could not tune it.
-Of course, the algorithm can be re-implemented, but we would like to leave that to future research, since our work was accepted in a form of   a poster and not a full paper.
+Of course, the algorithm can be re-implemented, but we would like to leave that to future research, since our work was accepted in a form of   a poster and not as a full paper.
 
 \begin{leftbar}
 The approach makes even less sense in the case of parameters such as dmin and dmax that have a strong effect in constraining the set of solutions that are searched. Moreover, a wrong value of those parameters can effectively make impossible finding an infeasible solution. Thus tuning them only makes sense if one knows the actual optimal solution, which is not generally true. For unseen instances of a given size, one could calculate good values based on the properties of the graph.	
 \end{leftbar}
 
 \textbf{Answer}. \\
-We agree, $d_{min}$ and $d_{max}$ have a strong effect on the search trajectory.  Tuning on per instance basis was very wrong idea. 
+We agree, $d_{min}$ and $d_{max}$ have a strong effect on the search trajectory.  Tuning on per instance basis was very bad idea. 
 
 
 \begin{leftbar}
@@ -256,7 +256,7 @@ We make this clear in the paper with a sentence:\\
  
 Since this is a poster paper now, it is by definition a work in-progress, so some aspect may be incomplete or may change in the future. 
 
-On poster papers from conference website https://gecco-2023.sigevo.org/Call-for-Papers: ``Such papers should still present work in genetic and evolutionary computation that is original and new, but has not yet reached the stage of the more mature, complete research results that are typically published in full papers at GECCO. " 
+Information on poster paper from https://gecco-2023.sigevo.org/Call-for-Papers: \\"Such papers should still present work in genetic and evolutionary computation that is original and new, but has not yet reached the stage of the more mature, complete research results that are typically published in full papers at GECCO. " 
 
 \begin{leftbar}
 "each processor outside the must have" -> the dominating set?

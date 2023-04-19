@@ -182,7 +182,7 @@ In this paper we  are concerned with solving a generalized version of the well-k
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Variable neighborhood search, graph domination, metaheuristics, combinatorial optimization}
+\keywords{Variable neighborhood search, graph domination, \textcolor{red}{metaheuristics, combinatorial optimization}}
 
 %% A "teaser" image appears between the author and affiliation
 %% information and the body of the document, and typically spans the
@@ -210,9 +210,9 @@ The $k$-\emph{dominating} set $D$ of a graph $G$ is such a subset of $V$ that ev
  
 Regarding previous solutions to this problem, several greedy approaches have been proposed by Couture et al.~\cite{couture2006incremental}, Gagarin et al.~\cite{gagarin2013randomized}, and Gagarin and Corcoran~\cite{gagarin2018multiple}. Recently, Corcoran and Gagarin proposed a Beam search approach~\cite{corcoran2021heuristics}, which is currently the best-performing heuristic approach for small to medium sized real-world instances. 
  
-MkDP has applications in distributed systems~\cite{wang2013minimising}, where a $k$-dominating set represents a set of processors such that each processor outside this set must have at least $k$ neighbors in the set.
+MkDP has applications in distributed systems~\cite{wang2013minimising}, where a $k$-dominating set {\color{red}represents} a set of processors such that each processor outside \textcolor{red}{this set} must have at least $k$ neighbors in the set.
 
-We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. The main contribution of our work is that the proposed \textsc{Vns} significantly improves the state-of-the-art results for all considered problem instances, in case of $k \in \{1, 2, 4\}$.  %; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
+We propose a variable neighborhood search (VNS) metaheuristic for solving MkDP. {\color{red}The main contribution of our work is that the proposed \textsc{Vns}} significantly improves the state-of-the-art results for all considered problem instances, in case of $k \in \{1, 2, 4\}$.  %; ($ii$) \textsc{Vns} is able almost always quickly produce solutions of reasonable quality which is not the case for approaches previously proposed in the literature.
 
 \section{Formal problem definition }
     
@@ -243,7 +243,7 @@ In this section, we first give an overview of the variable neighborhood search (
   	\begin{algorithmic}[1]
   		\STATE \textbf{Input:} $d_{\min}$, $d_{\max}$, $p_{move}$, \emph{penalty}
   		\STATE \textbf{Output:} best found solution $D_{best}$
-  		\STATE $d \gets  d_{\min}$, $d_{\max} \gets d_{\max\_init}$
+  		\STATE $d \gets  d_{\min}$, $\textcolor{red}{d_{\max} \gets d_{\max\_init}}$
   		\STATE  $D_{best} \gets \texttt{LocalSearch}(\emptyset)$ \label{vns:init}
   		\WHILE{\texttt{TerminationCriteriaNotMet()}}  \label{vns:main_loop_start}
   		\STATE  $D' \gets$  $\texttt{Shaking}(\mathcal{N}_d(D_{best}))$
@@ -373,12 +373,12 @@ In case of a vertex removal, the similar idea is used.
 
 \section{Experimental evaluation}\label{sec:experiments}
 
-In this section we analyze the quality of the proposed \textsc{Vns} method.\footnote{All instances, source codes of the \textsc{Vns} and grid search tuning algorithms, and detailed experimental results are publicly available on the GitHub page of this work: \\\url{https://github.com/mikiMilan/k-domination}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
+In this section we analyze the quality of the proposed \textsc{Vns} method.\footnote{\textcolor{red}{All instances, source codes of the \textsc{Vns} and grid search tuning algorithms, and detailed experimental results are publicly available on the GitHub page of this work: \\\url{https://github.com/mikiMilan/k-domination}}.} For this purpose, we include the competing heuristic approaches from the literature. The following four methods for MkDP are compared:  
  ($i$) The standard greedy method from~\cite{parekh1991analysis,gagarin2013randomized}, denoted by SG; ($ii$) Greedy method from~\cite{gagarin2018multiple}, denoted by PG; ($iii$) Beam search approach from~\cite{corcoran2021heuristics}, denoted by BS; ($iv$) \textsc{Vns} approach, as described in Section~\ref{sec:vns} .  
  
 
 
-\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled through reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: \texttt{Belgrade}, \texttt{Berlin}, \texttt{Boston}, \texttt{Dublin}, and \texttt{Minsk}. Since the road networks change over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}. Unlike the five large networks, these 20 instances are the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
+\emph{Benchmark instances}. For comparison, we consider the benchmark introduced in~\cite{corcoran2021heuristics}. It consists of 20 small to medium sized instances, where all instances represent road networks of different cities modeled through reachability graphs. In addition to these, the authors have provided the program that generate road networks for five large cities: \texttt{Belgrade}, \texttt{Berlin}, \texttt{Boston}, \texttt{Dublin}, and \texttt{Minsk}. Since the road networks \textcolor{red}{change} over time, the obtained graphs do not fully match those used in the \cite{corcoran2021heuristics}. Unlike the five large networks, these 20 instances are the same as in ~\cite{corcoran2021heuristics} -- we obtained them directly from the authors.
 
 %, so their properties are given in %Table~\ref{tab:big_instances_chars}.  
 
@@ -513,20 +513,21 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 \end{figure}
 \end{comment}}
  
- \emph{Testing environment}. Experiments were performed on a computer with Intel(R) Core(TM) i5-8265U CPU 1.80GHz and 16GB RAM, under Microsoft Windows 11 Pro OS. \textsc{Vns} is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are taken from~\cite{corcoran2021heuristics}, as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (acquired from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include it in the large instance comparison.  
+ \emph{Testing environment}. Experiments were performed on a computer \textcolor{red}{with Intel(R) Core(TM) i5-8265U CPU 1.80GHz and 16GB RAM}, under Microsoft Windows 11 Pro OS. \textsc{Vns} is implemented in Python 3.9. The results of SG, PG and BS for small to medium sized instances are \textcolor{red}{taken} from~\cite{corcoran2021heuristics}, as reported in their experimental section. The results for the five large instances were obtained by running the original implementation of PG (\textcolor{red}{acquired} from the authors). According to the same authors, BS was inefficient for the large instances due to its high computational complexity. Therefore, we did not include it in the large instance comparison.  
  PG and \textsc{Vns} algorithms are run ten times (using different random seeds) per each problem instance. 
    
   The termination criteria of the \textsc{Vns} are: ($i$) the maximum running time of 30~minutes, and ($ii$) the maximum number of 20000 iterations. The time limit of 30~minutes is not checked during initialization (line~\ref{vns:init} in Algorithm~\ref{alg:vns}). It means that \textsc{Vns} can take more than 30~minutes to finish for some very large instances, such as \texttt{Dublin} and \texttt{Boston}. More precisely, in these situations, after initialization, the most important steps of \textsc{Vns} (shaking and subsequent local search) are not even performed due to an expired time limit.
   
-  The algorithms SG, PG and BS terminate their execution as soon as the first feasible solution is reached. Therefore, we decided to use termination criteria which allow similar running times to those reported by comparison algorithms ~\cite{corcoran2021heuristics}. Namely, the best results were obtained with the BS configuration BS4, where 4 stands for the beam width. For this algorithm, in the case of $k=2$, the average running times in seconds are 1736, 8834, 1257, 7156 and 3327 for the Bath, Belfast, Brighton, Bristol and Cardiff instances, respectively. As stated in ~\cite{corcoran2021heuristics}, the comparison algorithms were also implemented in  Python and executed on a desktop computer with somewhat better CPU: Intel Core i7-8700 @3.20GHz. 
+  \textcolor{red}{The algorithms SG, PG and BS terminate their execution as soon as the first feasible solution is reached. Therefore, we decided to use termination criteria which allow similar running times to those reported by comparison algorithms ~\cite{corcoran2021heuristics}. Namely, the best results were obtained with the BS configuration BS4, where 4 stands for the beam width. For this algorithm, in the case of $k=2$, the average running times in seconds are 1736, 8834, 1257, 7156 and 3327 for the Bath, Belfast, Brighton, Bristol and Cardiff instances, respectively.} \textcolor{red}{As stated in ~\cite{corcoran2021heuristics}, the comparison algorithms were also implemented in  Python and executed on a desktop computer with somewhat better CPU: Intel Core i7-8700 @3.20GHz. }
    
 
-   \emph{Parameters tuning}. As mentioned earlier, \textsc{Vns} for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We chose a grid search method for tuning these parameters. As recommended in  ~\cite{mladenovic1997variable}, we set the parameter $d_{min}$ with the value 1. The possible values of parameters during tuning were:
-  $d_{max}\in{\left\lbrace 5, 10, 15, 20, 25, 30, 40, 50, 100\right\rbrace }$,  $p_{move}\in{\left\lbrace 0, 0.25, 0.5, 0.75, 1\right\rbrace }$, and $penalty\in{\left\lbrace 0.005, 0.01, 0.015, 0.02\right\rbrace }$. The parameter space thus consists of 180 $(d_{max}, p_{move}, penalty)$ parameter configurations. From 60 small to medium sized instances (20 cities for $k \in \{1, 2, 4\}$), 20 instances were randomly selected for parameter tuning. For each of the 20 instances and each configuration, the \textsc{Vns} was run for 100 iterations. The best configuration, selected according to the best average rank over these 20 instances, is $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$.
+   \textcolor{red}{\emph{Parameters tuning}. As mentioned earlier, \textsc{Vns} for MkDPA involves four control parameters: $d_{min}, d_{max}, p_{move}$ and \emph{penalty}. We chose a grid search method for tuning these parameters. As recommended in  ~\cite{mladenovic1997variable}, we set the parameter $d_{min}$ with the value 1. The possible values of parameters during tuning were:
+  $d_{max}\in{\left\lbrace 5, 10, 15, 20, 25, 30, 40, 50, 100\right\rbrace }$,  $p_{move}\in{\left\lbrace 0, 0.25, 0.5, 0.75, 1\right\rbrace }$, and $penalty\in{\left\lbrace 0.005, 0.01, 0.015, 0.02\right\rbrace }$. The parameter space thus consists of 180 $(d_{max}, p_{move}, penalty)$ parameter configurations. From 60 small to medium sized instances (20 cities for $k \in \{1, 2, 4\}$), 20 instances were randomly selected for parameter tuning. For each of the 20 instances and each configuration, the \textsc{Vns} was run for 100 iterations. The best configuration, selected according to the best average rank over these 20 instances, is $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$.}
 
 \subsection{Experimental results }
-Table~\ref{tab:k124} contains the overall results. The first column gives the name of the city road network. The next block contains network size information. The next three blocks give the \textsc{Vns} results and the best results from the literature so far, for $k=1,2,4$, respectively. Each of these (three) blocks consists of 6 columns, where the first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$). The other three columns report  the results of the best approach from the literature:  name of the approach (Alg.), average solution quality over ten runs ($\overline{|D|}$) and the corresponding standard deviation ($\sigma(|D|)$).  Note that labels BS1, BS2 or BS4 correspond to the BS approach with beam widths of 1,2 and 4, respectively. 
+{ \color{red} Table~\ref{tab:k124} contains the \textcolor{red}{overall results}. The first column gives the name of the city road network. The next block contains network size information. The next three blocks give the \textsc{Vns} results and the best results from the literature so far, for $k=1,2,4$, respectively. Each of these (three) blocks consists of 6 columns, where the first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$). The other three columns report  the results of the best approach from the literature:  name of the approach (Alg.), average solution quality over ten runs ($\overline{|D|}$) and the corresponding standard deviation ($\sigma(|D|)$).  Note that labels BS1, BS2 or BS4 correspond to the BS approach with beam widths of 1,2 and 4, respectively. } 
 
+\textcolor{red}{
 \begin{table*}[!h]
 	\tiny
 	\caption{Results}
@@ -564,12 +565,13 @@ Table~\ref{tab:k124} contains the overall results. The first column gives the na
 			\hline
 		\end{tabular}%}
 \end{table*}
+}
 
 The following conclusions can be drawn from these results. 
 \begin{itemize}
   		\item  For $k=1$, \textsc{Vns} outperformed all competing approaches for small to medium sized instances. \textsc{Vns} also outperformed the PG approach for the large-sized instances. 
   		\item Concerning the results for $k=2$, \textsc{Vns} outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: \textsc{Vns} produces $\approx$ 5--16\% improvement rate over the second best, PG approach. 
-  		\item The similar conclusions hold for $k=4$. \textsc{Vns} outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved a score 164.2 over BS4 which achieved a score 195.2). For the large instances, \textsc{Vns}   outperforms PG in all cases. 
+  		\item The similar {\color{red}conclusions hold} for $k=4$. \textsc{Vns} outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved a score 164.2 over BS4 which achieved a score 195.2). For the large instances, \textsc{Vns}   outperforms PG in all cases. 
   		%\item {\color{red} The average times (in seconds) of \textsc{Vns}  range from 254.4 seconds for $k=4$ and city \texttt{Oxford} to 3819.2 seconds for $k=4$ and city \texttt{Boston}.}
   		%Clearly as $k$ grows, the average times of \textsc{Vns} increase rapidly. In case of the instances size growth, similar behavior of the average times can be noticed. }
 \end{itemize}
@@ -629,13 +631,13 @@ The following conclusions can be drawn from these results.
 \section{Conclusions and future work}
 
  
- In this paper we have solved the $k$-domination problem, a generalized version of the prominent minimum dominating set problem, with the variable neighborhood search (\textsc{Vns}) metaheuristic. The efficiency of \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperforms all existing heuristic state-of-the-art approaches. 
+ In this paper we have \textcolor{red}{solved} the $k$-domination problem, a generalized version of the prominent minimum dominating set problem, with the variable neighborhood search \textcolor{red}{(\textsc{Vns})} metaheuristic. The efficiency of \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperforms all existing heuristic state-of-the-art approaches. 
  
- For future work, one could consider improving the \textsc{Vns} to work more efficiently with very large graphs, such as social networks. \textsc{Vns} could be compared to exact approaches such as integer linear programming models, solved by general-purpose solvers such as Cplex or Gurobi. 
+ For future work, one could consider improving the \textsc{Vns} to work more efficiently with very large graphs, such as social networks. \textsc{Vns} could be compared to exact approaches such as integer linear programming models, solved by {\color{red} general-purpose solvers such as} Cplex or Gurobi. 
   
 \section*{Acknowledgments} 
 We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations.\\  
-A.~Kartelj was supported by grant 451-03-47/2023-01/200104 funded by Ministry of Science Technological Development and Innovations of the Republic of Serbia.
+\textcolor{red}{A.~Kartelj was supported by grant 451-03-47/2023-01/200104 funded by Ministry of Science Technological Development and Innovations of the Republic of Serbia.}
 %%
 %% The next two lines define the bibliography style to be used, and
 %% the bibliography file.
