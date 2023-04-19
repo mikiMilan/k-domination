@@ -65,7 +65,7 @@ for k, v in kdom.items():
 
         for l in vp:
             len_res.append(int(l[1]))
-            time_best_res.append(float(l[2]))
+            time_best_res.append(float(l[4]))
             sol_true.append(bool(l[3]))
         
         kdom_new[k].append([kp, min(len_res), mean(len_res), stdev(len_res), mean(time_best_res), all(sol_true)])
