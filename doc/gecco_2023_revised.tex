@@ -283,14 +283,14 @@ In this section, we first give an overview of the variable neighborhood search (
    
 
 It can be seen that $viols(D)$ quantifies the overall degree of solution $D$ inadmissibility, i.e., for each vertex $v$ that does not belong to a candidate dominating set $D$, $k-C(D, v)$ measures how strongly vertex $v$ locally violates the $k$-domination condition. Thus, $C(D, v)$ quantifies the opposite -- how strongly the vertex $v$ satisfies the $k$-domination condition. In particular, when vertex $v$ has $k$ or more vertex neighbors in $D$, the value of $k - \min(k, |N(v) \cap D|)$ is zero. Otherwise, $C(D, v)$ is positive and at most $k$. Therefore, the proposed fitness function evaluates both feasible and infeasible solutions. 
-\begin{comment}Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
+Since the fitness function is to be minimized, the following three observations can be made about the values of the fitness function:
 \begin{itemize}
  		\item For sufficiently small values of the parameter \emph{penalty}, the feasibility of the solution is relatively preferred over the cardinality of the solution. This means that when comparing feasible and infeasible solutions, the feasible solution is favored. 
  
      	\item When comparing two infeasible solutions of the same cardinality, the \emph{less infeasible} solution is preferred, i.e. the one with the lower $viols(\cdot)$ value.  
         
         \item When comparing two feasible solutions, the one with the lower cardinality is preferred.
-\end{itemize}\end{comment}
+\end{itemize}
 
 \subsection{Local search}\label{sec:local_search}
 The goal of local search (LS) is to improve the solution $D'$ obtained in the shaking phase by applying multiple local improvements to the structure of the solution. 
@@ -525,18 +525,18 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
   $d_{max}\in{\left\lbrace 5, 10, 15, 20, 25, 30, 40, 50, 100\right\rbrace }$,  $p_{move}\in{\left\lbrace 0, 0.25, 0.5, 0.75, 1\right\rbrace }$, and $penalty\in{\left\lbrace 0.005, 0.01, 0.015, 0.02\right\rbrace }$. The parameter space thus consists of 180 $(d_{max}, p_{move}, penalty)$ parameter configurations. From 60 small to medium sized instances (20 cities for $k \in \{1, 2, 4\}$), 20 instances were randomly selected for parameter tuning. For each of the 20 instances and each configuration, the \textsc{Vns} was run for 100 iterations. The best configuration, selected according to the best average rank over these 20 instances, is $(d_{max}, p_{move}, penalty )=(50,0.5, 0.005)$.}
 
 \subsection{Experimental results }
-{ \color{red} Table~\ref{tab:k124} contains the results for $k \in \{1, 2,4\}$.  The first column gives the name of the instance (city) for which the results are reported. The next block contains   instance size information. Next three blocks report the results in case of $k=1,2,4$ for \textsc{Vns} and the best results so-far from literature, respectively.  More in details, each of these (three) blocks consists of 6 columns. The first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$).  The other three columns report  the results of the best approach from the literature:   name of the approach,  the best obtained  result ($\overline{|D|}$) and average solution quality over ten runs ($\overline{t}$).  Note that   labels BS1, BS2 or BS4 correspond to BS approach with beam widths of 1,2 and 4, respectively. } The following conclusions can be drawn from these results. 
+{ \color{red} Table~\ref{tab:k124} contains the \textcolor{red}{overall results}. The first column gives the name of the city road network. The next block contains network size information. The next three blocks give the \textsc{Vns} results and the best results from the literature so far, for $k=1,2,4$, respectively. Each of these (three) blocks consists of 6 columns, where the first three columns show the results of \textsc{Vns}: average solution quality ($\overline{|D|}$), standard deviation ($\sigma(|D|)$) and average running time ($\overline{t}$). The other three columns report  the results of the best approach from the literature:  name of the approach (Alg.), average solution quality over ten runs ($\overline{|D|}$) and the corresponding standard deviation ($\sigma(|D|)$).  Note that labels BS1, BS2 or BS4 correspond to the BS approach with beam widths of 1,2 and 4, respectively. } 
 
-
+\textcolor{red}{
 \begin{table*}[!h]
 	\tiny
 	\caption{Results}
 	\label{tab:k124}      %\scalebox{0.7}{
 		\begin{tabular}{l|rr|rrr|rlr|rrr|rlr|rrr|rlr}
 			\hline
-			\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
+			\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Network size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
 			\hline
-			\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
+			\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
 		Bath&910&18560&\bf{38}&0&661.7&BS4&44.6&0.9&\bf{71.1}&0.3&720.7&BS1&89&1.4&\bf{140.1}&0.7&644.8&BS4&160&1.1\\
 		Belfast&1700&62617&\bf{39}&0&1800.1&BS4&50.2&1.5&\bf{76.3}&0.5&1800.3&BS4&97.6&1&\bf{148.3}&0.7&1800.1&BS4&179.6&2\\
 		Brighton&976&35012&\bf{21}&0&1334&BS4&28.2&0.6&\bf{40.1}&0.3&1789.7&BS4&49.4&0.5&\bf{78}&0.5&1800.1&BS4&94.8&1.9\\
@@ -563,16 +563,17 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 		Dublin&37982&21630466&\bf{101.5}&1.1&1819.8&PG&113.8&1.2&\bf{193.2}&4.8&1815.9&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
 		Minsk&10487&1375618&\bf{102.1}&1.1&1801.5&PG&126&0.9&\bf{200}&1.9&1800.5&PG&240.4&1.4&\bf{387.7}&3.5&1801&PG&457.6&2.4\\
 			\hline
-			
 		\end{tabular}%}
 \end{table*}
-   
+}
+
+The following conclusions can be drawn from these results. 
 \begin{itemize}
-  		\item  For $k=1$, \textsc{Vns} outperformed all competing approaches for small to medium sized instances. \textsc{Vns} also outperformed the PG approach for the large-sized instances. {\color{red}The same holds for the large-sized instances. }
+  		\item  For $k=1$, \textsc{Vns} outperformed all competing approaches for small to medium sized instances. \textsc{Vns} also outperformed the PG approach for the large-sized instances. 
   		\item Concerning the results for $k=2$, \textsc{Vns} outperformed all competing approaches by nearly 15\% in terms of the average solution quality. Similar conclusions hold for the large instances: \textsc{Vns} produces $\approx$ 5--16\% improvement rate over the second best, PG approach. 
-  		\item The similar {\color{red}conclusions are drawn} for $k=4$. \textsc{Vns} outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved a score 164.2 over BS4 which achieved a score 195.2). For the large instances, \textsc{Vns}   outperforms PG in all cases. 
-  		\item {\color{red} The average times (in seconds) of \textsc{Vns}  range from 46 seconds for $k=1$ and a small-sized instance (\texttt{Cardiff}) to 3819 seconds for $k=4$ and a large-size instance (\texttt{Boston}).
-         Clearly as $k$ grows, the average times of \textsc{Vns} increase rapidly. In case of the instances size growth, similar behavior of the average times can be noticed. }
+  		\item The similar {\color{red}conclusions hold} for $k=4$. \textsc{Vns} outperforms the second-best algorithm by more than 15\% in some cases (see, for example,  the instance \texttt{Nottingham} where \textsc{Vns} achieved a score 164.2 over BS4 which achieved a score 195.2). For the large instances, \textsc{Vns}   outperforms PG in all cases. 
+  		\item {\color{red} The average times (in seconds) of \textsc{Vns}  range from 254.4 seconds for $k=4$ and city \texttt{Oxford} to 3819.2 seconds for $k=4$ and city \texttt{Boston}.}
+  		%Clearly as $k$ grows, the average times of \textsc{Vns} increase rapidly. In case of the instances size growth, similar behavior of the average times can be noticed. }
 \end{itemize}
 
  
@@ -630,12 +631,12 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 \section{Conclusions and future work}
 
  
- In this paper we have \textcolor{red}{solved} the $k$-domination problem, a generalized version of the prominent minimum dominating set problem with the variable neighborhood search \textcolor{red}{(\textsc{Vns})} metaheuristic. The efficiency of \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperform all existing heuristic state-of-the-art approaches. 
+ In this paper we have \textcolor{red}{solved} the $k$-domination problem, a generalized version of the prominent minimum dominating set problem, with the variable neighborhood search \textcolor{red}{(\textsc{Vns})} metaheuristic. The efficiency of \textsc{Vns} has been validated on the real-world benchmark, where it has been shown that \textsc{Vns} outperforms all existing heuristic state-of-the-art approaches. 
  
- For future work, one could consider improving the \textsc{Vns} to work more efficiently with very large graphs, such as social networks.  \textsc{Vns} could be compared to exact approaches such as integer linear programming models, solved by {\color{red} general-purpose solvers}, i.e.  Cplex or Gurobi. 
+ For future work, one could consider improving the \textsc{Vns} to work more efficiently with very large graphs, such as social networks. \textsc{Vns} could be compared to exact approaches such as integer linear programming models, solved by {\color{red} general-purpose solvers such as} Cplex or Gurobi. 
   
 \section*{Acknowledgments} 
-We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations.  
+We thank Padraig Corcoran and Andrei Gagarin for providing problem instances and their algorithm implementations.\\  
 \textcolor{red}{A.~Kartelj was supported by grant 451-03-47/2023-01/200104 funded by Ministry of Science Technological Development and Innovations of the Republic of Serbia.}
 %%
 %% The next two lines define the bibliography style to be used, and
