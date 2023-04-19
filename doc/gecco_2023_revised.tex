@@ -110,7 +110,7 @@
 \author{Milan Predojević}
  
 \email{milan.predojevic@pmf.unibl.org}
-\orcid{xxxx-xxxx-xxxx}
+\orcid{0009-0008-6881-0196}
 \author{M.P.}
 %\authornotemark[1]
 %\email{webmaster@marysville-ohio.com}
@@ -124,6 +124,7 @@
 }
 
 \author{Aleksandar Kartelj}
+\orcid{0000-0001-9839-6039}
 \author{A.K.}
 \email{ aleksandar.kartelj@matf.bg.ac.rs}
 \affiliation{%
@@ -135,7 +136,7 @@
 \author{Marko Djukanović}
  
 \email{marko.djukanovic@pmf.unibl.org}
-\orcid{xxxx-xxxx-xxxx}
+\orcid{0000-0003-1358-3789}
 \author{M.Dj.}
 %\authornotemark[1]
 %\email{webmaster@marysville-ohio.com}
@@ -161,8 +162,8 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-In this paper we  are concerned of solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
-  
+In this paper we  are concerned with solving a generalized version of the well-known minimum dominating set problem, the so-called $k$-domination problem, $k \in \mathbb{N}$. This problem is about finding a minimal cardinality subset $D$ of vertices of a graph  $G=(V, E) $ such that every $v \in V$ belongs to $D$ or has at least $k$ neighbors from $D$. The $k$-domination problem has applications in distributed systems, biological networks etc. We propose a variable neighborhood search (VNS) metaheuristic for solving the $k$-domination problem. The \textsc{Vns} is equipped with an efficient fitness function that allows it to consider both feasible and infeasible solutions, while appropriately penalizing infeasible solutions. The control parameters of the \textsc{Vns} are tuned using a grid search approach. The method is compared to the best known heuristic approaches from the literature: the beam search and several greedy approaches. Experimental evaluations are performed on a real-world benchmark set whose instances represent the road networks of different cities. The \textsc{Vns} provided new state-of-the-art results for all considered problem instances with $k \in \{1, 2, 4\}$.
+
 \end{abstract}
 
 \begin{CCSXML}
@@ -539,30 +540,31 @@ In this section we analyze the quality of the proposed \textsc{Vns} method.\foot
 			\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Instance size} & \multicolumn{6}{c|}{ Results for $k=1$ } & \multicolumn{6}{c|}{ Results for $k=2$ } & \multicolumn{6}{c}{ Results for $k=4$ }\\ 
 			\hline
 			\emph{City} & $|V|$ & $|E|$ & $\overline{|D|}$ & $\sigma(|D|)$& $\overline{t}$ & Alg. & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{|D|}$ & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$& $\sigma(|D|)$ & Avg. & $\sigma(|D|)$ & $\overline{t}$& Alg. & $\overline{|D|}$ & $\sigma(|D|)$ \\ \hline
-			Belfast&1700&62617&\bf{39}&0&91&BS4&50.2&1.5&\bf{76.3}&0.5&817.5&BS4&97.6&1&\bf{148.3}&0.7&1158.7&BS4&179.6&2\\
-			Brighton&976&35012&\bf{21}&0&203.5&BS4&28.2&0.6&\bf{40.1}&0.3&586.6&BS4&49.4&0.5&\bf{78}&0.5&768.2&BS4&94.8&1.9\\
-			Bristol&1569&47522&\bf{37}&0&75.6&BS2&47.4&1&\bf{73.8}&0.4&486.5&BS4&94&1.4&\bf{146.6}&1.1&1003.2&BS4&176.4&0.8\\
-			Cardiff&1127&23155&\bf{39}&0&46.2&BS4&50.6&1&\bf{78.3}&0.5&345.7&BS4&95.6&1.6&\bf{157.5}&0.8&328.3&BS4&183.2&1.4\\
-			Coventry&1175&26689&\bf{38}&0&341.3&BS4&44.8&0.4&\bf{73}&0&280.3&BS4&85.1&0.7&\bf{149.2}&0.9&333.1&BS4&172.6&1.4\\
-			Exeter&1250&31997&\bf{38}&0&56.9&BS4&50.6&0.5&\bf{77}&0&370.2&BS4&95.7&1&\bf{158.1}&0.7&573.9&BS4&182.3&0.6\\
-			Glasgow&1137&24323&\bf{50.1}&0.3&310.5&BS4&59.2&0.7&\bf{94}&0.5&236.1&BS4&110.6&1.7&\bf{175.2}&0.9&474.5&BS4&199.8&1.6\\
-			Leeds&1647&56511&\bf{40}&0&290.4&BS4&52.4&0.8&\bf{79.5}&0.5&1032.2&BS4&99.6&1&\bf{152.8}&0.8&939.3&BS4&187.1&0.7\\
-			Leicester&1531&48219&\bf{38}&0&205.5&BS4&51.5&0.5&\bf{75}&0&586.1&BS4&94.1&0.8&\bf{149.3}&0.7&1033.3&BS4&177.7&1.8\\
-			Liverpool&1273&42564&\bf{28}&0&443.8&BS4&38.4&0.5&\bf{57}&0.5&393.8&BS4&72&0.8&\bf{112.8}&0.6&845.5&BS4&133&0.8\\
-			Manchester&1991&77286&\bf{38.3}&0.7&617.7&BS4&45.9&0.5&\bf{77.9}&0.3&994.5&BS4&91.5&0.9&\bf{155.2}&0.6&1446.7&BS4&178.5&1\\
-			Newcastle&1109&26614&\bf{44}&0&222.4&BS4&52.6&1.1&\bf{83.6}&0.5&506&BS4&95.4&1.1&\bf{152.4}&0.5&626.3&BS2&171.5&1.2\\
-			Nottingham&1739&51595&\bf{44}&0&80.7&BS4&56.6&0.8&\bf{84.7}&0.5&1218.7&BS4&103.3&0.8&\bf{164.2}&0.8&993.7&BS4&195.2&1.2\\
-			Oxford&479&8396&\bf{24}&0&42.8&BS4&27.9&0.5&\bf{47}&0&8.3&BS4&54.9&0.7&\bf{89}&0&70.5&BS2&100.8&0.9\\
-			Plymouth&1122&35070&\bf{31}&0&44.6&BS4&40.3&0.8&\bf{61.3}&0.5&767.7&BS4&75&1.1&\bf{115.6}&0.5&643.1&BS4&137&1.2\\
-			Sheffield&1582&50534&\bf{42}&0&118&BS4&52.5&0.7&\bf{84.6}&0.5&523.3&BS4&98.9&1.3&\bf{161.4}&0.8&1047.1&BS4&182.2&1.2\\
-			Southampton&796&19942&\bf{25}&0&7.4&BS4&29.6&0.8&\bf{49.2}&0.4&311.1&BS4&61.1&0.7&\bf{97.6}&0.5&289.2&BS4&113.2&1.4\\
-			Sunderland&1346&42013&\bf{36}&0&88.1&BS4&46.3&0.4&\bf{73}&0&211.4&BS4&89.1&1.1&\bf{141}&0.5&840.9&BS4&163.6&1\\
-			York&1044&23774&\bf{32}&0&35.8&BS4&39.1&0.3&\bf{68}&0&26.2&BS4&77.6&0.6&\bf{130.4}&0.5&250.3&BS4&145.8&1.2\\
-			Belgrade&19586&7561185&\bf{86.5}&1.5&1493.9&PG&103.4&0.5&\bf{171.1}&2.4&1564&PG&197.3&0.9&\bf{341.9}&2.2&1680.7&SG&374.5&1.4\\
-			Berlin&29461&9944851&\bf{102.1}&1.9&2056.6&PG&125.9&0.5&\bf{204.9}&1.9&1309&PG&240.1&1.2&\bf{396.4}&3.1&1763.4&PG&446.2&1.8\\
-			Boston&44797&28164740&\bf{94.3}&1.9&1408.3&PG&102.7&1.3&\bf{175.4}&2&1445.8&PG&191.6&0.9&\bf{341}&0&3819.2&PG&368.7&1.5\\
-			Dublin&37982&21630466&\bf{101.5}&1.1&1437.8&PG&113.8&1.2&\bf{193.2}&4.8&1705&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
-			Minsk&10487&1375618&\bf{102.1}&1.1&1293.9&PG&126&0.9&\bf{200}&1.9&1517.4&PG&240.4&1.4&\bf{387.7}&3.5&1636.5&PG&457.6&2.4\\
+		Bath&910&18560&\bf{38}&0&661.7&BS4&44.6&0.9&\bf{71.1}&0.3&720.7&BS1&89&1.4&\bf{140.1}&0.7&644.8&BS4&160&1.1\\
+		Belfast&1700&62617&\bf{39}&0&1800.1&BS4&50.2&1.5&\bf{76.3}&0.5&1800.3&BS4&97.6&1&\bf{148.3}&0.7&1800.1&BS4&179.6&2\\
+		Brighton&976&35012&\bf{21}&0&1334&BS4&28.2&0.6&\bf{40.1}&0.3&1789.7&BS4&49.4&0.5&\bf{78}&0.5&1800.1&BS4&94.8&1.9\\
+		Bristol&1569&47522&\bf{37}&0&1800.1&BS2&47.4&1&\bf{73.8}&0.4&1800.1&BS4&94&1.4&\bf{146.6}&1.1&1797.8&BS4&176.4&0.8\\
+		Cardiff&1127&23155&\bf{39}&0&968.2&BS4&50.6&1&\bf{78.3}&0.5&900.5&BS4&95.6&1.6&\bf{157.5}&0.8&660.8&BS4&183.2&1.4\\
+		Coventry&1175&26689&\bf{38}&0&1098.1&BS4&44.8&0.4&\bf{73}&0&1002.5&BS4&85.1&0.7&\bf{149.2}&0.9&827.3&BS4&172.6&1.4\\
+		Exeter&1250&31997&\bf{38}&0&1365.8&BS4&50.6&0.5&\bf{77}&0&1544.2&BS4&95.7&1&\bf{158.1}&0.7&943.2&BS4&182.3&0.6\\
+		Glasgow&1137&24323&\bf{50.1}&0.3&920.6&BS4&59.2&0.7&\bf{94}&0.5&1068.4&BS4&110.6&1.7&\bf{175.2}&0.9&745.6&BS4&199.8&1.6\\
+		Leeds&1647&56511&\bf{40}&0&1800.1&BS4&52.4&0.8&\bf{79.5}&0.5&1800.1&BS4&99.6&1&\bf{152.8}&0.8&1800.1&BS4&187.1&0.7\\
+		Leicester&1531&48219&\bf{38}&0&1800.1&BS4&51.5&0.5&\bf{75}&0&1800.1&BS4&94.1&0.8&\bf{149.3}&0.7&1759&BS4&177.7&1.8\\
+		Liverpool&1273&42564&\bf{28}&0&1800.1&BS4&38.4&0.5&\bf{57}&0.5&1800.1&BS4&72&0.8&\bf{112.8}&0.6&1800.1&BS4&133&0.8\\
+		Manchester&1991&77286&\bf{38.3}&0.7&1800.2&BS4&45.9&0.5&\bf{77.9}&0.3&1800.1&BS4&91.5&0.9&\bf{155.2}&0.6&1800.1&BS4&178.5&1\\
+		Newcastle&1109&26614&\bf{44}&0&1146.4&BS4&52.6&1.1&\bf{83.6}&0.5&1020.5&BS4&95.4&1.1&\bf{152.4}&0.5&951.3&BS2&171.5&1.2\\
+		Nottingham&1739&51595&\bf{44}&0&1799.1&BS4&56.6&0.8&\bf{84.7}&0.5&1800.2&BS4&103.3&0.8&\bf{164.2}&0.8&1800.2&BS4&195.2&1.2\\
+		Oxford&479&8396&\bf{24}&0&263.1&BS4&27.9&0.5&\bf{47}&0&298&BS4&54.9&0.7&\bf{89}&0&254.4&BS2&100.8&0.9\\
+		Plymouth&1122&35070&\bf{31}&0&1398.8&BS4&40.3&0.8&\bf{61.3}&0.5&1694.2&BS4&75&1.1&\bf{115.6}&0.5&1688&BS4&137&1.2\\
+		Sheffield&1582&50534&\bf{42}&0&1800.2&BS4&52.5&0.7&\bf{84.6}&0.5&1747.7&BS4&98.9&1.3&\bf{161.4}&0.8&1800&BS4&182.2&1.2\\
+		Southampton&796&19942&\bf{25}&0&750.1&BS4&29.6&0.8&\bf{49.2}&0.4&807.2&BS4&61.1&0.7&\bf{97.6}&0.5&1129&BS4&113.2&1.4\\
+		Sunderland&1346&42013&\bf{36}&0&1559.3&BS4&46.3&0.4&\bf{73}&0&1049&BS4&89.1&1.1&\bf{141}&0.5&1438.3&BS4&163.6&1\\
+		York&1044&23774&\bf{32}&0&856.8&BS4&39.1&0.3&\bf{68}&0&573&BS4&77.6&0.6&\bf{130.4}&0.5&784.5&BS4&145.8&1.2\\
+		Belgrade&19586&7561185&\bf{86.5}&1.5&1805.9&PG&103.4&0.5&\bf{171.1}&2.4&1803.8&PG&197.3&0.9&\bf{341.9}&2.2&1802.3&SG&374.5&1.4\\
+		Berlin&29461&9944851&\bf{102.1}&1.9&1817.9&PG&125.9&0.5&\bf{204.9}&1.9&1878.7&PG&240.1&1.2&\bf{396.4}&3.1&1804.8&PG&446.2&1.8\\
+		Boston&44797&28164740&\bf{94.3}&1.9&2391.9&PG&102.7&1.3&\bf{175.4}&2&2007&PG&191.6&0.9&\bf{341}&0&3819.2&PG&368.7&1.5\\
+		Dublin&37982&21630466&\bf{101.5}&1.1&1819.8&PG&113.8&1.2&\bf{193.2}&4.8&1815.9&PG&211.3&2.7&\bf{363}&0&3002.4&PG&390.2&2\\
+		Minsk&10487&1375618&\bf{102.1}&1.1&1801.5&PG&126&0.9&\bf{200}&1.9&1800.5&PG&240.4&1.4&\bf{387.7}&3.5&1801&PG&457.6&2.4\\
 			\hline
 			
 		\end{tabular}%}
