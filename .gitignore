@@ -1,15 +1,7 @@
 algorithms/.idea
 algorithms/.vscode/
 algorithms/__pycache__
-algorithms/new
-algorithms/old
-results/test
-results/VNS_test
-results/reimplBS
-results/test
-results/comparison_old.xlsx
 instances/cities_big_instances
-instances/random_instances
 *.aux
 *.bbl
 *.blg
