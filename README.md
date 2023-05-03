@@ -4,10 +4,10 @@ In this repository you can see the proposed VNS algorithm for solving the k-domi
 
 ## Organization on the repository:
 - algorithms - Source code of the VNS algorithm for the k-dominance problem,
-- corcoran2021 - The source codes we got from the author of the paper [2],
-- doc - The source code of the paper named *Variable neighborhood search for solving the 𝑘-domination problem*,
+- corcoran2021 - The source codes we obtained from the author of the paper [2],
+- doc - The source code of the paper titled *Variable neighborhood search for solving the 𝑘-domination problem*,
 - instances - Instances that we received from the authors of the paper [2],
-- results - Source results of the Grid Search and VNS algorithm for the k-dominance problem.
+- results - Results of the Grid Search and VNS algorithm for the k-dominance problem.
 
 
 [1] James K Lan and Gerard Jennhwa Chang. 2013. Algorithmic aspects of the k-domination
