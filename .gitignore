@@ -2,6 +2,10 @@ algorithms/.idea
 algorithms/.vscode/
 algorithms/__pycache__
 instances/cities_big_instances
+results/ILPvsVNS/compose.py
+results/ILPvsVNS/composeVNS.py
+results/ILPvsVNS/compose.xlsx
+results/ILPvsVNS/composeVNS.xlsx
 *.aux
 *.bbl
 *.blg
