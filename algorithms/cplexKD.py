@@ -15,7 +15,7 @@ else:
     cplex_path= r'/home/marko/Desktop/CPLEX_Studio127/cplex/bin/x86-64_linux/cplex'
 
 
-def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
+def ILP(graph: Graph or DiGraph, k: int, timelimit: float, ind: int):
 
     model = LpProblem("k-domination", LpMinimize)
     y = LpVariable.dicts("x", list(graph.nodes),  0, 1, LpBinary)
@@ -27,7 +27,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
         model += (k * y[i] + lpSum([y[j] for j in list(graph[i])]) >= k)
 
     # run model:
-    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info.log", msg=True)
+    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info"+str(ind)+".log", msg=False, threads=1)
     model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
     solution = []
@@ -40,21 +40,21 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float):
     #print("Solution status: ", LpSolution[model.sol_status])
     
     # retrieve gap: 
-    logs_dict = orloge.get_info_solver("log_info.log", "CPLEX" ) # Orloge returns a dict with all logs info
+    logs_dict = orloge.get_info_solver("log_info"+str(ind)+".log", "CPLEX" ) # Orloge returns a dict with all logs info
     best_bound, best_solution, status = logs_dict["best_bound"], logs_dict["best_solution"], logs_dict["status"]
     #print("Best bound: ", best_bound) 
     #print(logs_dict)
-    remove("log_info.log")
+    remove("log_info"+str(ind)+".log")
     
     return best_solution, ceil(best_bound), int(status == "MIP - Integer optimal")#"MIP - Time limit exceeded" --if not optimal
 
 
 if __name__ == '__main__':
-    timelimit: float = 3600 #sec
+    timelimit: float = 1800.0 #sec
     # g = read_graph("cities_big_instances/berlin.txt")
-    g = read_graph("random_instances/NEW-V1000-P0.1-G0.txt")
+    g = read_graph("../instances/random_instances/NEW-V1000-P0.1-G0.txt")
     curr = time()
-    primal, dual, status = ILP(g, 4, timelimit)
+    primal, dual, status = ILP(g, 4, timelimit, 0)
     time_execute = time() - curr
     print(time_execute, primal, dual, status)
     

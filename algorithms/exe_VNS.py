@@ -13,64 +13,67 @@ def task(instance_name, g, k, d_min, d_max, time_limit, iteration_max, prob, pen
 
 
 if __name__ == '__main__':
-    paralellism = 5
-    iteration_max = 20000
-    time_limit = 1800
+    paralellism = 2
+    iteration_max = 200000
+    time_limit = 18
     d_min = 1
     d_max = 50
     prob = 0.5
     penalty =  0.005
     # seed = 12345
-    
-    
-    instance_dir = 'cities_small_instances'
-    instances = ['bath.txt', 'belfast.txt', 'brighton.txt', 'bristol.txt',
-                'cardiff.txt', 'coventry.txt', 'exeter.txt', 'glasgow.txt',
-                'leeds.txt', 'leicester.txt', 'liverpool.txt', 'manchester.txt',
-                'newcastle.txt', 'nottingham.txt', 'oxford.txt', 'plymouth.txt',
-                'sheffield.txt', 'southampton.txt', 'sunderland.txt', 'york.txt']
 
-    seeds = [12345, 22411, 25233, 52331, 54278, 54433, 66655, 68531, 87744, 98811]
+    number_vertex = [200, 500, 1000, 2000]
+    probability = [0.025, 0.05, 0.1, 0.2, 0.5, 0.8]
+    number_graphs = 10
+    instance_dir = '../instances/random_instances'
+
+    seeds = [12345, 68531]
 
     batches = ceil(len(seeds)/paralellism)
 
-    for k in [1.2,4]:
-        file_name_res = 'results/VNS/new_k_' + str(k) + '.txt'
-        for instance in instances:
-            graph_open = instance_dir+'/'+instance
-            print("Reading graph!")
-            g = read_graph(graph_open)
-            print("-------", instance, k, "-------")
+    for k in [1]:
 
-            times = []
-            results = []
-            manager = Manager()
-            return_dict = manager.dict()
-            procs = []
+        file_name_res = '../results/VNS_random/random_k_' + str(k) + '.txt'
 
-            for seed in seeds:
-                print("Creating process: ", seed)
+        for i in range(number_graphs):
+            for pro in probability:
+                for n in number_vertex:
+                    instance = "NEW-V"+str(n)+"-P"+str(pro)+"-G"+str(i)+".txt"
+                 
+                    graph_open = instance_dir+'/'+instance
+                    print("Reading graph!")
+                    g = read_graph(graph_open)
+                    print("-------", instance, k, "-------")
 
-                p = Process(target=task, args=(instance, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed, return_dict, seed))
-                procs.append(p)
+                    times = []
+                    results = []
+                    manager = Manager()
+                    return_dict = manager.dict()
+                    procs = []
 
-            for b in range(batches):
-                print("Doing batch "+str(b))
-                for i in range(len(procs)):
-                    if i%batches==b:
-                        print("Starting process "+str(i) +". seed: "+str(seeds[i]))
-                        procs[i].start()
-                        
-                for i in range(len(procs)):
-                    if i%batches==b:
-                        procs[i].join()
-                        print("Process "+str(i)+" finished")
+                    for seed in seeds:
+                        print("Creating process: ", seed)
 
-                print("Printing batch "+str(b)+" results")
-                with open(file_name_res, 'a') as f:
-                    for i in range(len(seeds)):
-                        seed2 = seeds[i]
-                        if i%batches!=b:
-                            continue
-                        f.write('{}, {}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, seed2, return_dict[seed2][0], return_dict[seed2][1], return_dict[seed2][2], return_dict[seed2][3]))
+                        p = Process(target=task, args=(instance, g, k, d_min, d_max, time_limit, iteration_max, prob, penalty, seed, return_dict, seed))
+                        procs.append(p)
+
+                    for b in range(batches):
+                        print("Doing batch "+str(b))
+                        for i in range(len(procs)):
+                            if i%batches==b:
+                                print("Starting process "+str(i) +". seed: "+str(seeds[i]))
+                                procs[i].start()
+                                
+                        for i in range(len(procs)):
+                            if i%batches==b:
+                                procs[i].join()
+                                print("Process "+str(i)+" finished")
+
+                        print("Printing batch "+str(b)+" results")
+                        with open(file_name_res, 'a') as f:
+                            for i in range(len(seeds)):
+                                seed2 = seeds[i]
+                                if i%batches!=b:
+                                    continue
+                                f.write('{}, {}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, seed2, return_dict[seed2][0], return_dict[seed2][1], return_dict[seed2][2], return_dict[seed2][3]))
 
