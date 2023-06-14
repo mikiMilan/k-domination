@@ -27,7 +27,7 @@ def ILP(graph: Graph or DiGraph, k: int, timelimit: float, ind: int):
         model += (k * y[i] + lpSum([y[j] for j in list(graph[i])]) >= k)
 
     # run model:
-    solver = pl.CPLEX_CMD(path=cplex_path, timelimit=timelimit, logPath="log_info"+str(ind)+".log", msg=False, threads=1)
+    solver = pl.CPLEX_CMD(path=cplex_path, timeLimit=timelimit, logPath="log_info"+str(ind)+".log", msg=False, threads=1)
     model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
     # stats:
     solution = []
