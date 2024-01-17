@@ -1,0 +1,61 @@
+from time import time
+from networkx import DiGraph, Graph
+from pulp import LpProblem, lpSum, LpVariable, LpMinimize, LpBinary, PULP_CBC_CMD, LpStatus, value, LpSolution
+from read_graph import read_graph
+import pulp as pl 
+import orloge # pip install orloge
+from os import remove
+from math import ceil
+from os import name
+
+# define cplex path
+if name == 'nt': # windows
+    cplex_path = r'C:\Program Files\IBM\ILOG\CPLEX_Studio221\cplex\bin\x64_win64\cplex.exe'
+else:
+    cplex_path= r'/home/marko/Desktop/CPLEX_Studio127/cplex/bin/x86-64_linux/cplex'
+
+
+def ILP(graph: Graph or DiGraph, k: int, timelimit: float, ind: int):
+
+    model = LpProblem("k-domination", LpMinimize)
+    y = LpVariable.dicts("x", list(graph.nodes),  0, 1, LpBinary)
+
+    # objective function:
+    model += lpSum([y[i] for i in list(graph.nodes)])
+    # constraints for each vertex i in V:
+    for i in list(graph.nodes):
+        model += (k * y[i] + lpSum([y[j] for j in list(graph[i])]) >= k)
+
+    # run model:
+    solver = pl.CPLEX_CMD(path=cplex_path, timeLimit=timelimit, logPath="log_info"+str(ind)+".log", msg=False, threads=1)
+    model.solve(solver)   #PULP_CBC_CMD(maxSeconds=timelimit, msg=True, fracGap=0))
+    # stats:
+    solution = []
+    for i in range(len(model.variables())):
+    	if y[i].varValue == 1: 
+    		solution.append(i)
+    		#print(y[i].name)
+    #print(solution)
+    #print("Problem status: ", LpStatus[model.status])
+    #print("Solution status: ", LpSolution[model.sol_status])
+    
+    # retrieve gap: 
+    logs_dict = orloge.get_info_solver("log_info"+str(ind)+".log", "CPLEX" ) # Orloge returns a dict with all logs info
+    best_bound, best_solution, status = logs_dict["best_bound"], logs_dict["best_solution"], logs_dict["status"]
+    #print("Best bound: ", best_bound) 
+    #print(logs_dict)
+    remove("log_info"+str(ind)+".log")
+    
+    return best_solution, ceil(best_bound), int(status == "MIP - Integer optimal"), solution#"MIP - Time limit exceeded" --if not optimal
+
+
+if __name__ == '__main__':
+    timelimit: float = 10.0 #sec
+    g = read_graph("instances/cities_small_instances/bath.txt")
+    # g = read_graph("../instances/random_instances/NEW-V1000-P0.1-G0.txt")
+    curr = time()
+    primal, dual, status, sol = ILP(g, 4, timelimit, 0)
+    time_execute = time() - curr
+    print(time_execute, primal, dual, status, sol)
+    
+    

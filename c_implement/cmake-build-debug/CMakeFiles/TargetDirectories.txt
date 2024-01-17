@@ -1,0 +1,3 @@
+D:/radovi/kdom/cmake-build-debug/CMakeFiles/kdom.dir
+D:/radovi/kdom/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/radovi/kdom/cmake-build-debug/CMakeFiles/rebuild_cache.dir

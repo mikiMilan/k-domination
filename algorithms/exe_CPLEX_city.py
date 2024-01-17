@@ -29,7 +29,7 @@ if __name__ == '__main__':
         manager = Manager()
         return_dict = manager.dict()
         procs = []
-        k_range = [1, 2]
+        k_range = [7,10,11,16]
 
         for k in range(len(k_range)):
             print("Creating process: ", k_range[k])
@@ -45,7 +45,7 @@ if __name__ == '__main__':
             print("Process "+str(k)+" finished")
 
         for k in range(len(k_range)):
-            file_name_res = '../results/ILP_city/k_' + str(k_range[k]) + ".txt"
+            file_name_res = '../results/ILPvsVNS_city/ILP/k_' + str(k_range[k]) + ".txt"
             with open(file_name_res, 'a') as f:
                 instance = city
                 f.write('{}, {}, {}, {}, {:.2f}\n'.format(instance, return_dict[k][0], return_dict[k][1], return_dict[k][2], return_dict[k][3]))

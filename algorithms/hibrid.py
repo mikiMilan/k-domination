@@ -1,15 +1,17 @@
 from time import time
-from random import shuffle, random, seed
+from random import shuffle, random, seed, randint
 from read_graph import read_graph
 from networkx import DiGraph, Graph
 from unit import fitness, fitness_rec_rem, fitness_rec_add, cache_rec_add, cache_rec_rem
 import sys
+from cplexKH import ILP
+from numpy import full
 
 
 class VNS:
-    def __init__(self, instance_name, graph: DiGraph or Graph, k: int, d_min: int, d_max_init: int, time_limit: int, iteration_max: int, prob: float, penalty: float, rseed : int):
+    def __init__(self, instance_name, graph_dict, k: int, d_min: int, d_max_init: int, time_limit: int, iteration_max: int, prob: float, penalty: float, rseed : int):
         self.instance_name = instance_name
-        self.graph = graph
+        self.graphD = graph_dict
         self.k = k
         self.d_min = d_min
         self.d_max_init = d_max_init
@@ -18,26 +20,35 @@ class VNS:
         self.iteration_max = iteration_max
         self.prob = prob
         self.penalty = penalty
-        self.nodes = list(self.graph.nodes) # kopiram cvorove zbog MJESANJA - necu da mjesam original
         self.rseed = rseed
         seed(self.rseed)
-        # prepare neighbor matrices and sets
-        self.neighbors = {}
-        self.neighb_matrix = [[] for _ in range(len(self.graph.nodes))]
-        for v in self.graph.nodes:
-            self.neighbors[v] = set(self.graph[v])
-            self.neighb_matrix[v] = [False]*len(self.graph.nodes)
+        # copy the graph in multiple shapes for efficiency
+        self.graph_nodes = set(graph_dict)
+        self.nodes = list(self.graph_nodes) # kopiram cvorove zbog funk shaking
+        self.n = len(self.nodes)
+        self.neighborsSET = {}
+        self.neighborsLIST = {}
+        self.graphM = full((self.n, self.n), False)
+        for v in self.graphD:
+            self.neighborsSET[v] = set(self.graph[v].values())
+            self.neighborsLIST[v] = list(self.graph[v].values())
             for u in self.graph[v]:
-                self.neighb_matrix[v][u] = True
+                self.graphM[v][u] = True
 
     def shaking(self, s: set, d: int) -> set:
         sl = list(s)
         shuffle(sl)
+
+        deleted = sl[len(sl)-d:]
             
         shak = set(sl[:len(sl)-d])
 
         shuffle(self.nodes)
         shak.union(set(self.nodes[:d]))
+
+        for i in deleted:
+            max_rand =len(self.neighborsSET[i])
+            shak.add(self.neighborsSET[i][randint(0,max_rand)])
 
         return shak
 
@@ -62,17 +73,16 @@ class VNS:
 
             for v in self.nodes:
                 if v not in s:
-                    new_fit = fitness_rec_add(s, v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
+                    new_fit = fitness_rec_add(s, v, curr_fit, self.graph, self.neighborsSET, self.graphM, self.k, cache)
                     if self.first_fitness_better(new_fit, best_fit):
                         best_fit = new_fit
                         best_v = v
                         improved = True
             
             if improved:
-                cache_rec_add(s, best_v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
+                cache_rec_add(s, best_v, curr_fit, self.graph, self.neighborsSET, self.graphM, self.k, cache)
                 s.add(best_v)
                 curr_fit = best_fit
-
 
         # now simple removal
         improved = True
@@ -83,14 +93,14 @@ class VNS:
 
             for v in self.nodes:
                 if v in s:
-                    new_fit = fitness_rec_rem(s, v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
+                    new_fit = fitness_rec_rem(s, v, curr_fit, self.graph, self.neighborsSET, self.graphM, self.k, cache)
                     if self.first_fitness_better(new_fit, best_fit):
                         best_fit = new_fit
                         best_v = v
                         improved = True
             
             if improved:
-                cache_rec_rem(s, best_v, curr_fit, self.graph, self.neighbors, self.neighb_matrix, self.k, cache)
+                cache_rec_rem(s, best_v, curr_fit, self.graph, self.neighborsSET, self.graphM, self.k, cache)
                 s.remove(best_v)
                 curr_fit = best_fit
 
@@ -100,25 +110,20 @@ class VNS:
     def run(self) -> list:
         start_time = time()
         best_time = 0
-        s_accept = set([])
+        print("ILP start")
+        _, _, _, sol = ILP(self.graph, self.k, 30, 10)
+        print("End ILP")
+        print("ILP solve len: ", len(sol))
+        s_accept = set(sol)
         fit = self.local_search_best(s_accept)
         if fit[0]==0:
             best_time = time() - start_time
         iteration = 1
         d = self.d_min
 
-        sum_time_shaking = 0
-        sum_time_lsb = 0
-
         while iteration < self.iteration_max and time()-start_time < self.time_limit:
-
-            start_time_shaking = time()
             s_new = self.shaking(s_accept, d)
-            sum_time_shaking += time() - start_time_shaking
-            start_time_lsb = time()
             fit_new = self.local_search_best(s_new)
-            sum_time_lsb += time() - start_time_lsb
-            
 
             if (self.first_fitness_better(fit_new, fit) or (self.fitness_equal(fit, fit_new) and random() < self.prob)) and fit_new[0]==0: #and len(s_new.intersection(s))!=len(s_new) and
                 #if self.fitness_equal(fit_new, fit):
@@ -136,8 +141,8 @@ class VNS:
                     d = self.d_min
 
             iteration += 1
-            if iteration%10== 0:
-                print("it={:4d}\tt={:2d}\tbest={}\tst={:.4f}\tlsbt={:.4f}".format(iteration, int(time() - start_time),fit, sum_time_shaking, sum_time_lsb))
+            if iteration%20== 0:
+                print("it={:4d}\tt={:2d}\td={:2d}\tdmin={}\tdmax={}\tprob={:.2f}\tpen={:.4f}\tbest={}\tnew={}\tk={}\tinst={}".format(iteration, int(time() - start_time),d,self.d_min, self.d_max, self.prob, self.penalty, fit, fit_new, self.k, self.instance_name))
         tot_time = time()-start_time
         
         return s_accept, best_time, fit[0]==0, tot_time
@@ -145,29 +150,35 @@ class VNS:
 
 if __name__ == '__main__':
 
-    k=4
-    instance_dir = '../instances/cities_small_instances'
+    k = 4
+    instance_dir = 'instances/cities_small_instances'
     instance = 'manchester.txt'
+    time_limit = 1800
+    iteration_max = 20000
     rseed = 12345
     d_min = 1
     d_max_init = 50
     prob = 0.5
     penalty = 0.005
-  
-    iteration_max = 200000
-    time_limit = 1800
 
     graph_open = instance_dir + '/' + instance
     print("Reading graph!")
-    start_time = time()
     g = read_graph(graph_open)
-    print("Graph loaded: " + str(time()-start_time))
+    graph_dict = {}
+    for v in g:
+        graph_dict[v] = {}
+        i = 0
+        for u in set(g[v]):
+           graph_dict[v][i] = u
+           i+=1 
+            
+    print("Graph loaded: ", graph_open)
 
-    vns = VNS(instance, g, k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
+    vns = VNS(instance, graph_dict, k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
     sol, time, feasible, tot_time = vns.run()
     
     # + '_dmin'+str(d_min)+'_dmax'+str(d_max_init)+'_prob'+str(prob)+'_pen'+str(penalty)
-    file_name_res = 'results/VNS/k' + str(k) +'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
-    with open(file_name_res, 'a') as f:
-        f.write('{}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, len(sol),  time, feasible, tot_time))
+    # file_name_res = 'results/VNS/k' + str(k) +'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
+    # with open(file_name_res, 'a') as f:
+    #     f.write('{}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, len(sol),  time, feasible, tot_time))
 

@@ -1,23 +1,15 @@
-from time import time
-from random import shuffle, random, seed
-from read_graph import read_graph
-from networkx import DiGraph, Graph
-from unit import fitness, fitness_rec_rem, fitness_rec_add, cache_rec_add, cache_rec_rem
-import sys
+import networkx as nx
 
+G = nx.barbell_graph(5, 1)
 
-def dfs(visited, graph, node):  #function for dfs 
-    if node not in visited:
-        if len(visited)%100==0:
-            print(len(visited))
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour)
+communities_generator = nx.community.girvan_newman(G)
 
-graph_open = "instances/cities_big_instances/belgrade.txt"
-print("Reading graph!")
-g = read_graph(graph_open)
-print("Graph loaded: ", graph_open)
+top_level_communities = next(communities_generator)
 
-visited = set()
-dfs(visited, g, 0)
+print(top_level_communities)
+next_level_communities = next(communities_generator)
+print(next_level_communities)
+
+sorted(map(sorted, next_level_communities))
+
+print(next_level_communities)

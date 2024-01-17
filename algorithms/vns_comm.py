@@ -4,6 +4,7 @@ from read_graph import read_graph
 from networkx import DiGraph, Graph
 from unit import fitness, fitness_rec_rem, fitness_rec_add, cache_rec_add, cache_rec_rem
 import sys
+import networkx as nx
 
 
 class VNS:
@@ -52,7 +53,7 @@ class VNS:
     def local_search_best(self, s: set):
         improved = True
         cache = {}
-        curr_fit = fitness(s, self.graph, self.k, cache)
+        curr_fit = fitness(s, self.graph, self.nodes, self.k, cache)
 
         # adding nodes to achieve feasibility
         while improved:
@@ -145,7 +146,7 @@ class VNS:
 
 if __name__ == '__main__':
 
-    k=4
+    k = 1
     instance_dir = '../instances/cities_small_instances'
     instance = 'manchester.txt'
     rseed = 12345
@@ -155,19 +156,24 @@ if __name__ == '__main__':
     penalty = 0.005
   
     iteration_max = 200000
-    time_limit = 1800
+    time_limit = 30
 
     graph_open = instance_dir + '/' + instance
     print("Reading graph!")
-    start_time = time()
-    g = read_graph(graph_open)
-    print("Graph loaded: " + str(time()-start_time))
+    G = read_graph(graph_open)
+    print("Graph loaded: ", graph_open)
 
-    vns = VNS(instance, g, k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
-    sol, time, feasible, tot_time = vns.run()
+    global_sol = set()
+
+    S = [G.subgraph(c).copy() for c in nx.connected_components(G)]
     
-    # + '_dmin'+str(d_min)+'_dmax'+str(d_max_init)+'_prob'+str(prob)+'_pen'+str(penalty)
-    file_name_res = 'results/VNS/k' + str(k) +'_tl'+str(time_limit)+'_it'+str(iteration_max)+'_seed'+str(rseed)+'.txt'
-    with open(file_name_res, 'a') as f:
-        f.write('{}, {}, {:.2f}, {}, {:.2f}\n'.format(instance, len(sol),  time, feasible, tot_time))
+    for g in S:
+        if len(g)>200:
+            comm = nx.algorithms.community.asyn_fluidc(g, 7, max_iter=100, seed=None)
 
+            for gi in comm:
+                vns = VNS(instance, G.subgraph(list(gi)).copy(), k=k, d_min=d_min, d_max_init=d_max_init, time_limit=time_limit, iteration_max=iteration_max, prob=prob, penalty=penalty, rseed=rseed)
+                sol, time, feasible, tot_time = vns.run()
+                global_sol.union(sol)
+
+    print(global_sol)

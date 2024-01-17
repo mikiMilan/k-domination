@@ -1,0 +1,27 @@
+# ninja log v5
+5	347	7233406430252153	CMakeFiles/kdom.dir/main.c.obj	abbc15d2a95ef101
+3	235	7233414064046516	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+6	156	7230808831553139	CMakeFiles/kdom.dir/readGraph.c.obj	727b6ad58ad58de4
+235	437	7233414066257560	kdom.exe	e0f8afe2b84baf21
+16	237	7230893694099583	CMakeFiles/kdom.dir/graph.c.obj	4b2d1a275b98d1a5
+19	141	7233251330579742	CMakeFiles/kdom.dir/unit.c.obj	893dd0cf37212cd5
+5	331	7233415149631540	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+331	520	7233415151530630	kdom.exe	e0f8afe2b84baf21
+4	220	7233419653620403	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+220	408	7233419655361872	kdom.exe	e0f8afe2b84baf21
+4	181	7233420514349895	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+181	375	7233420516096725	kdom.exe	e0f8afe2b84baf21
+3	218	7233421104490260	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+219	417	7233421106430572	kdom.exe	e0f8afe2b84baf21
+6	298	7233421415237424	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+298	527	7233421417472882	kdom.exe	e0f8afe2b84baf21
+3	239	7233422153840460	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+239	447	7233422156100428	kdom.exe	e0f8afe2b84baf21
+6	225	7233425581060736	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+226	479	7233425582797710	kdom.exe	e0f8afe2b84baf21
+6	529	7233426202034912	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+529	754	7233426204152413	kdom.exe	e0f8afe2b84baf21
+3	226	7233429614604338	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+226	411	7233429616395885	kdom.exe	e0f8afe2b84baf21
+5	207	7233430762704893	CMakeFiles/kdom.dir/kdomination.c.obj	ca73c55431d3d7e1
+207	421	7233430764687279	kdom.exe	e0f8afe2b84baf21

@@ -24,11 +24,11 @@ def number_same_elements(nv: set, d: set) -> int:
     return counter
 
 # TODO: speed up this because of intensive usage in swap
-def fitness(s: set, g: Graph or DiGraph, k: int, cache={}) -> float:
+def fitness(s: set, g: Graph or DiGraph, nodes, k: int, cache={}) -> float:
     viol = 0
     ineff =0
     max_ineff = 0
-    for v in g.nodes:
+    for v in nodes:
         if v not in s:
             neighbors = set(g[v])
             nse = number_same_elements(neighbors, s)
