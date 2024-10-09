@@ -1,4 +1,4 @@
-# Install script for directory: D:/radovi/kdom
+# Install script for directory: D:/radovi/K-domination/k-domination/c_implement
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/radovi/kdom/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/radovi/K-domination/k-domination/c_implement/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

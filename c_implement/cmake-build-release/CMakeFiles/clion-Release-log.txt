@@ -1,4 +1,10 @@
-"C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.2.2/bin/ninja/win/x64/ninja.exe" -G Ninja -S D:\radovi\kdom -B D:\radovi\kdom\cmake-build-release
--- Configuring done (0.4s)
+"C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2023.2.2/bin/ninja/win/x64/ninja.exe" -G Ninja -S D:\radovi\K-domination\k-domination\c_implement -B D:\radovi\K-domination\k-domination\c_implement\cmake-build-release
+-- The C compiler identification is GNU 13.1.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/JetBrains/CLion 2023.2.2/bin/mingw/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done (9.7s)
 -- Generating done (0.0s)
--- Build files have been written to: D:/radovi/kdom/cmake-build-release
+-- Build files have been written to: D:/radovi/K-domination/k-domination/c_implement/cmake-build-release

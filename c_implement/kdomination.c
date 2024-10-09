@@ -273,7 +273,8 @@ void local_search_bestADD_firstREM(struct Graph *g, struct Problem *p, int dom[]
 //    }
 
 
-    local_search_remove_more(g, p, dom, &current_len, dom_cache, fit_cache, &current_viol, indikator);
+//    local_search_remove_more(g, p, dom, &current_len, dom_cache, fit_cache, &current_viol, indikator);
+    local_search_remove_one(g, p, dom, &current_len, dom_cache, fit_cache, &current_viol);
 
     *viol = current_viol;
     *dom_len = current_len;

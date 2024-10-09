@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "d:/radovi/kdom/cmake-build-release"
+			"value" : "d:/radovi/K-domination/k-domination/c_implement/cmake-build-release"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -431,7 +431,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/radovi/kdom/cmake-build-release/CMakeFiles/pkgRedirects"
+			"value" : "D:/radovi/K-domination/k-domination/c_implement/cmake-build-release/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -503,7 +503,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "D:/radovi/kdom"
+			"value" : "D:/radovi/K-domination/k-domination/c_implement"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1131,7 +1131,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/radovi/kdom/cmake-build-release"
+			"value" : "D:/radovi/K-domination/k-domination/c_implement/cmake-build-release"
 		},
 		{
 			"name" : "kdom_IS_TOP_LEVEL",
@@ -1155,7 +1155,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/radovi/kdom"
+			"value" : "D:/radovi/K-domination/k-domination/c_implement"
 		}
 	],
 	"kind" : "cache",

@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/radovi/kdom/cmake-build-release",
-		"source" : "D:/radovi/kdom"
+		"build" : "D:/radovi/K-domination/k-domination/c_implement/cmake-build-release",
+		"source" : "D:/radovi/K-domination/k-domination/c_implement"
 	},
 	"version" : 
 	{

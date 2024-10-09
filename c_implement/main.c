@@ -8,12 +8,12 @@
 int main() {
 
     struct Problem p;
-    p.k=4;
-    p.d_min = 4;
+    p.k=1;
+    p.d_min = 1;
     p.d_max_init = 50;
-    p.prob = 0.2;
-    p.penalty = 0.005;
-    p.time_limit = 7200;
+    p.prob = 0.5;
+    p.penalty = 0.01;
+    p.time_limit = 3600;
     p.iteration_max = 1000000;
     p.rand_seed = 287311465;
     srand(p.rand_seed);
@@ -21,8 +21,8 @@ int main() {
 
     struct Graph g;
     int numVertices;
-    char location[] = "../cities_small_instances/manchester.txt";
-//    char location[] = "../cities_big_instances/belgrade.txt";
+//    char location[] = "../../instances/cities_small_instances/manchester.txt";
+    char location[] = "../../instances/cities_big_instances/boston.txt";
     copy_string(g.name, location, 60);
     g.matrix = loadGraphFromFile(location, &numVertices);
     g.numVertices = numVertices;
